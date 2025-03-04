@@ -1,11 +1,14 @@
 ﻿#pragma once
 
+
 template <typename Derived>
 class Singleton
 {
-protected:
+private:
+    friend Derived;
+
     static Derived* Instance;
-    Singleton();
+    Singleton() = default;
 
 public:
     ~Singleton();
