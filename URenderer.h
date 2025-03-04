@@ -3,8 +3,10 @@
 #include <Windows.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <map>
 
 #include "FVector3.h"
+#include "enum.h"
 
 struct FVertexSimple
 {
@@ -39,6 +41,7 @@ public:
 
     /** 셰이더를 준비 합니다. */
     void PrepareShader() const;
+    void PrepareViewport(EWorld World);
     
     ID3D11Buffer* CreateVertexBuffer(const FVertexSimple* Vertices, UINT ByteWidth) const;
 
@@ -90,7 +93,8 @@ protected:
     ID3D11Buffer* ConstantBuffer = nullptr;                 // 쉐이더에 데이터를 전달하기 위한 상수 버퍼
 
     FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f }; // 화면을 초기화(clear)할 때 사용할 색상 (RGBA)
-    D3D11_VIEWPORT ViewportInfo = {};                       // 렌더링 영역을 정의하는 뷰포트 정보
+
+    std::map<EWorld , D3D11_VIEWPORT> viewports;             // 렌더링 영역을 정의하는 뷰포트 정보
 
     // Shader를 렌더링할 때 사용되는 변수들
     ID3D11VertexShader* SimpleVertexShader = nullptr;       // Vertex 데이터를 처리하는 Vertex 셰이더

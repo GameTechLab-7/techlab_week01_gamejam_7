@@ -1,12 +1,9 @@
 #pragma once
 #include <d3d11.h>
+#include <memory>
 #include "FVector3.h"
 #include "URenderer.h"
-
-enum World {
-	first,
-	second,
-};
+#include "enum.h"
 
 enum Dir {
 	left,
@@ -15,13 +12,14 @@ enum Dir {
 	bottom,
 };
 
-class CircleObject {
+class CircleObject : public std::enable_shared_from_this<CircleObject>
+{
 public:
 	FVector3 Location;
 	FVector3 Velocity;
 	float Radius = 0.f;
 
-	World MyWorld;
+	EWorld MyWorld;
 	
 	int WorldWalls[ 2 ][ 4 ] = {
 		{-1, 0, -1, 1}, //left right top bottom
@@ -32,7 +30,7 @@ public:
 	FVector3 MyPosition = FVector3();
 
 public:
-	CircleObject(World SelectedWorld);
+	CircleObject(EWorld SelectedWorld);
 
 	//virtual void Update(float DeltaTime) = 0;
 	//virtual void FixedUpdate(float FixedTime) = 0;

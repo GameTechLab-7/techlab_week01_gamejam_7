@@ -2611,7 +2611,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	int ArrSize = 1;
 	int ArrCap = 4;
 	CircleObject** CircleObjects = new CircleObject*[ArrCap];
-	World world = World::first;
+	EWorld world = EWorld::first;
 	auto Ball = new Player(world);
 
 	int NumOfBalls = 1;
@@ -2677,6 +2677,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     		//CircleObjects[i]->Render(Renderer);
     		//Renderer.RenderPrimitive(VertexBufferSphere, NumOfVertices);
     	//}
+
+		Renderer.PrepareViewport(EWorld::second);
 		Ball->Render(Renderer);
 		Renderer.RenderPrimitive(VertexBufferSphere , NumOfVertices);
 

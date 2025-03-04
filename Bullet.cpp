@@ -2,7 +2,7 @@
 
 class Bullet : public CircleObject {
 public:
-	Bullet(World selectedWorld) : CircleObject(selectedWorld) {
+	Bullet(EWorld selectedWorld) : CircleObject(selectedWorld) {
 
 	};
 	void HandleWallCollision(const FVector3& WallNormal)

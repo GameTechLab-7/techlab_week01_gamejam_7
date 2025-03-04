@@ -120,16 +120,20 @@ void URenderer::Prepare() const
     // InputAssembler의 Vertex 해석 방식을 설정
     DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    // Rasterization할 Viewport를 설정 
-    DeviceContext->RSSetViewports(1 , &ViewportInfo);
-    DeviceContext->RSSetState(RasterizerState);
-
     /**
      * OutputMerger 설정
      * 렌더링 파이프라인의 최종 단계로써, 어디에 그릴지(렌더 타겟)와 어떻게 그릴지(블렌딩)를 지정
      */
     DeviceContext->OMSetRenderTargets(1 , &FrameBufferRTV , nullptr);
     DeviceContext->OMSetBlendState(nullptr , nullptr , 0xffffffff);
+}
+
+void URenderer::PrepareViewport(EWorld World) {
+    auto viewPort = viewports.at(World);
+    // Rasterization할 Viewport를 설정 
+    DeviceContext->RSSetViewports(1 , &viewPort);
+    DeviceContext->RSSetState(RasterizerState);
+
 }
 
 /** 셰이더를 준비 합니다. */
@@ -256,11 +260,17 @@ ID3D11DeviceContext* URenderer::GetDeviceContext() const { return DeviceContext;
         SwapChain->GetDesc(&SwapChainDesc);
 
         // 뷰포트 정보 설정
-        ViewportInfo = {
-            0.0f, 0.0f,
+        viewports.insert({ EWorld::first, {
+            -( static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f ), 0.0f,
             static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
             0.0f, 1.0f
-        };
+        } });
+
+        viewports.insert({ EWorld::second, {
+            static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f, 0.0f,
+            static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
+            0.0f, 1.0f
+        } });
     }
 
     /** Direct3D Device 및 SwapChain을 해제합니다.  */

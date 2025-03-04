@@ -4,7 +4,7 @@
 
 class Player : public CircleObject {
 public:
-	Player(World selectedWorld) : CircleObject(selectedWorld) {
+	Player(EWorld selectedWorld) : CircleObject(selectedWorld) {
 		Radius = 0.5;
 	};
 

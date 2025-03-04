@@ -1,3 +1,3 @@
 #include "CircleObject.h"
 
-CircleObject::CircleObject(World SelectedWorld) : MyWorld(SelectedWorld) {};
+CircleObject::CircleObject(EWorld SelectedWorld) : MyWorld(SelectedWorld) {};

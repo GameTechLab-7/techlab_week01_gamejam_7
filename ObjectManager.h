@@ -4,23 +4,24 @@
 #include "Singleton.h"
 #include <vector>
 #include <map>
+#include <memory>
 
 class ObjectManager : Singleton< ObjectManager> {
 public:
-
+	
 	// Update, FixedUpdate
-	std::map<World, std::vector<CircleObject*>> objectsMap;
-	std::vector<CircleObject*> destroyList;
+	std::map<EWorld, std::vector<CircleObject*>> objectsMap;
+	std::vector <std::shared_ptr<CircleObject>> destroyList;
 	URenderer* URenderer;
 
 
 	// 라이프사이클
-	void Render(World world);
+	//void Render(World world);
 	void Update(float DeltaTime);
 	void FixedUpdate(float FixedTime);
 
 	// 일회성
-	void RegistObject(CircleObject* CircleObject, World world);
+	void RegistObject(CircleObject* CircleObject, EWorld world);
 	void Destory(CircleObject* CircleObject);
 
 private:

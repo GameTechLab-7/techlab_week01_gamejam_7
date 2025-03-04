@@ -1,14 +1,10 @@
 #include "ObjectManager.h"
 
 
-void ObjectManager::Render(World world)
-{
-}
-
 void ObjectManager::Update(float DeltaTime) {
 		ProcessMove(DeltaTime);
 		ProcessCheckCollision();
-		//ProcessRender();
+		ProcessRender();
 
 		ProcessDestroy();
 	}
@@ -17,7 +13,7 @@ void ObjectManager::Update(float DeltaTime) {
 
 	}
 
-	void ObjectManager::RegistObject(CircleObject* circleObject , World world) {
+	void ObjectManager::RegistObject(CircleObject* circleObject , EWorld world) {
 		if (objectsMap.find(world) == objectsMap.end()) {
 			objectsMap.insert({ world, std::vector<CircleObject*>()});
 		}
@@ -27,7 +23,10 @@ void ObjectManager::Update(float DeltaTime) {
 	}
 
 	void ObjectManager::Destory(CircleObject* CircleObject) {
-		destroyList.push_back(CircleObject);
+		destroyList.emplace_back( CircleObject );
+		auto vector = objectsMap.at(CircleObject->MyWorld);
+		auto it = std::find(vector.begin() , vector.end() , CircleObject);
+		objectsMap.at(CircleObject->MyWorld).erase(it);
 	}
 
 	// 라이프 사이클에 의해 Update 이후에 사용
@@ -36,8 +35,8 @@ void ObjectManager::Update(float DeltaTime) {
 		{
 			// 이따가 destroy를 직접 시키는 게 좋을 지 어떻게 하는게 좋을지 물어보자.
 			destroyObject->OnDestroy();
-			delete destroyObject;
 		}
+		destroyList.clear();
 	}
 
 	void ObjectManager::ProcessMove(const float tick) {
@@ -68,12 +67,14 @@ void ObjectManager::Update(float DeltaTime) {
 	}
 
 	void ObjectManager::ProcessRender() {
-		for ( auto vectors : objectsMap ) {
+		for (auto vectors : objectsMap) {
+			URenderer->PrepareViewport(vectors.first);
 			for (auto vector : vectors.second) {
 				vector->Render(*URenderer);
 			}
 		}
 	}
+
 
 	bool ObjectManager::CheckCollision(const CircleObject& A , const CircleObject& B)
 	{
