@@ -2649,11 +2649,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
             }
         }
 
-		// Update 로직
-		for (int i = 0; i < ArrSize; ++i)
-		{
-			Balls[i]->Update(DeltaTime);
-		}
+		// TODO: Update 로직 추가
 
 
     	// FixedTimeStep 만큼 업데이트
@@ -2762,7 +2758,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		        		ArrSize--;
 		        	}
         		}
-        	}
+        	}*/
         }
         ImGui::End();
 

@@ -132,6 +132,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="CircleObject.cpp" />
+    <ClCompile Include="FVector3.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
@@ -142,8 +144,10 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGameScene.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PresetScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="URenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderW0.hlsl">
@@ -153,6 +157,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="CircleObject.h" />
+    <ClInclude Include="enum.h" />
+    <ClInclude Include="FVector3.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -163,9 +170,11 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="MainGameScene.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PresetScene.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="URenderer.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
