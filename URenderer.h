@@ -2,8 +2,7 @@
 
 #include <Windows.h>
 #include <d3d11.h>
-#include <d3dcompiler.h>
-#include <map>
+#include <unordered_map>
 
 #include "Math/FVector3.h"
 #include "Enum.h"
@@ -94,7 +93,7 @@ protected:
 
     FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f }; // 화면을 초기화(clear)할 때 사용할 색상 (RGBA)
 
-    std::map<EWorld , D3D11_VIEWPORT> viewports;             // 렌더링 영역을 정의하는 뷰포트 정보
+    std::unordered_map<EWorld , D3D11_VIEWPORT> viewports;             // 렌더링 영역을 정의하는 뷰포트 정보
 
     // Shader를 렌더링할 때 사용되는 변수들
     ID3D11VertexShader* SimpleVertexShader = nullptr;       // Vertex 데이터를 처리하는 Vertex 셰이더

@@ -1,6 +1,4 @@
 #pragma once
-
-#include <cstdint>
 #include <concepts>
 #include <memory>
 
@@ -14,11 +12,9 @@
 class GameManager : public Singleton<GameManager>
 {
 private:
-
     std::unique_ptr<BaseScene> CurrentScene;
-    
-public:
 
+public:
     template <typename Scene>
         requires std::derived_from<Scene, BaseScene>
     void ChangeScene();
@@ -42,4 +38,3 @@ void GameManager::ChangeScene()
     CurrentScene = std::make_unique<Scene>();
     CurrentScene->LoadScene();
 }
-

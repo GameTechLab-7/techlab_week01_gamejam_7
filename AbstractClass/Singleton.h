@@ -21,12 +21,6 @@ public:
 
 
 template <typename Derived>
-Singleton<Derived>::Singleton()
-{
-    
-}
-
-template <typename Derived>
 Singleton<Derived>::~Singleton()
 {
     delete Instance;

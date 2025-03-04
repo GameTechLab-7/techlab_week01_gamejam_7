@@ -1,6 +1,7 @@
-#include <iostream>
-#include "Manager/GameManager.h"
+#include "GameManager.h"
 #include "Scene/TitleScene.h"
+
+#include <iostream>
 
 void GameManager::Init()
 {

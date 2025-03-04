@@ -1,4 +1,5 @@
 #include "URenderer.h"
+#include <d3dcompiler.h>
 
 
 struct alignas( 16 ) URenderer::FConstants

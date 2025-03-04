@@ -1,3 +1,7 @@
-#include "GameObject/CircleObject.h"
+#include "CircleObject.h"
 
-CircleObject::CircleObject(EWorld SelectedWorld) : MyWorld(SelectedWorld) {};
+
+CircleObject::CircleObject(EWorld SelectedWorld)
+    : MyWorld(SelectedWorld)
+{
+}

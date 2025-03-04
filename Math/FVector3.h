@@ -1,43 +1,36 @@
 #pragma once
-#include "math.h"
-struct FVector3 {
-	float x, y, z;
-	FVector3();
-	FVector3(float x, float y, float z);
 
-	static float DotProduct(const FVector3& A, const FVector3& B);
 
-	static FVector3 CrossProduct(const FVector3& A, const FVector3& B);
+struct FVector3
+{
+    float x, y, z;
 
-	float Length() const;
+    FVector3();
+    FVector3(float x , float y , float z);
 
-	float LengthSquared() const;
+    static float DotProduct(const FVector3& A , const FVector3& B);
+    static FVector3 CrossProduct(const FVector3& A , const FVector3& B);
 
-	FVector3 Normalize() const;
+    float Length() const;
+    float LengthSquared() const;
+    FVector3 Normalize() const;
+    float Dot(const FVector3& Other) const;
+    FVector3 Cross(const FVector3& Other) const;
 
-	float Dot(const FVector3& Other) const;
+    FVector3 operator+(const FVector3& Other) const;
+    FVector3& operator+=(const FVector3& Other);
 
-	FVector3 Cross(const FVector3& Other) const;
+    FVector3 operator-(const FVector3& Other) const;
+    FVector3& operator-=(const FVector3& Other);
 
-	FVector3 operator+(const FVector3& Other) const;
+    FVector3 operator*(const FVector3& Other) const;
+    FVector3 operator*(float Scalar) const;
 
-	FVector3& operator+=(const FVector3& Other);
+    FVector3& operator*=(float Scalar);
+    FVector3 operator/(const FVector3& Other) const;
 
-	FVector3 operator-(const FVector3& Other) const;
+    FVector3 operator/(float Scalar) const;
+    FVector3& operator/=(float Scalar);
 
-	FVector3& operator-=(const FVector3& Other);
-
-	FVector3 operator*(const FVector3& Other) const;
-
-	FVector3 operator*(float Scalar) const;
-
-	FVector3& operator*=(float Scalar);
-
-	FVector3 operator/(const FVector3& Other) const;
-
-	FVector3 operator/(float Scalar) const;
-
-	FVector3& operator/=(float Scalar);
-
-	FVector3 operator-() const;
+    FVector3 operator-() const;
 };

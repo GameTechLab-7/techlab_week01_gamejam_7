@@ -3,20 +3,19 @@
 #pragma comment(lib, "d3dcompiler")
 
 #include <Windows.h>
+#include <iostream>
 
 #include "ImGui/imgui.h"
 #include "Imgui/imgui_internal.h"
 #include "ImGui/imgui_impl_win32.h"
 #include "ImGui/imgui_impl_dx11.h"
 
-#include <iostream>
-
 #include "GameObject/CircleObject.h"
 #include "URenderer.h"
-#include "Math/FVector3.h"
 #include "Manager/GameManager.h"
 #include "GameObject/Player.h"
 #include "Manager/ObjectManager.h"
+
 
 enum class EPrimitiveType : UINT8
 {
@@ -2497,8 +2496,6 @@ FVertexSimple SphereVertices[] = {
 
 
 
-
-
 // ImGui WndProc 정의
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -2623,8 +2620,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	float timer = 0.f;
     // Main Loop
     bool bIsExit = false;
-
-	int GameState = -1;
     while (bIsExit == false)
     {
         // DeltaTime 계산 (초 단위)
@@ -2678,6 +2673,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 			auto objecta = new Player(EWorld::first);
 			auto objectb = new Player(EWorld::second);
 			// new랑 poisition, velocity, radius
+			// new랑 position, velocity, radius
 			objectManager.RegistObject(objecta);
 			objectManager.RegistObject(objectb);
 		}

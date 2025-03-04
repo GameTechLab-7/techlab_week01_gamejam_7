@@ -16,7 +16,7 @@ public:
 
 	virtual void LoadScene() = 0;
 	virtual void ExitScene() = 0;
-	virtual void Update(float deltaTime);
+	virtual void Update(float DeltaTime);
 	virtual void Render() = 0;
 
 

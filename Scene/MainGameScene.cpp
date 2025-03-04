@@ -1,5 +1,6 @@
 #include "MainGameScene.h"
 
+
 void MainGameScene::LoadScene()
 {
 	// !TODO : 플레이어 두 개 받아와서 캐시
@@ -17,7 +18,7 @@ void MainGameScene::ExitScene()
 	
 }
 
-void MainGameScene::Update(float deltaTime)
+void MainGameScene::Update(float DeltaTime)
 {
 }
 
