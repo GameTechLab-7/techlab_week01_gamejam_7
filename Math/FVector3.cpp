@@ -1,4 +1,4 @@
-#include "FVector3.h"
+#include "Math/FVector3.h"
 
 	float x, y, z;
 	FVector3::FVector3() : x(0), y(0), z(0) {}

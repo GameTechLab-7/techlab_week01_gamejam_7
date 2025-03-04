@@ -4,8 +4,8 @@
 #include <concepts>
 #include <memory>
 
-#include "BaseScene.h"
-#include "Singleton.h"
+#include "Scene/BaseScene.h"
+#include "AbstractClass/Singleton.h"
 
 
 /**

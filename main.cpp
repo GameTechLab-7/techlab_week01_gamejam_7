@@ -11,12 +11,12 @@
 
 #include <iostream>
 
-#include "CircleObject.h"
+#include "GameObject/CircleObject.h"
 #include "URenderer.h"
-#include "FVector3.h"
-#include "GameManager.h"
-#include "Player.h"
-#include "ObjectManager.h"
+#include "Math/FVector3.h"
+#include "Manager/GameManager.h"
+#include "GameObject/Player.h"
+#include "Manager/ObjectManager.h"
 
 enum class EPrimitiveType : UINT8
 {

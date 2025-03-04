@@ -1,7 +1,7 @@
 #pragma once
 
-#include "CircleObject.h"
-#include "Singleton.h"
+#include "GameObject/CircleObject.h"
+#include "AbstractClass/Singleton.h"
 #include <vector>
 #include <map>
 #include <memory>

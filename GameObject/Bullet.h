@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CircleObject.h"
+#include "GameObject/CircleObject.h"
 
 class Bullet : public CircleObject
 {

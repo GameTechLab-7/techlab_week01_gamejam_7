@@ -5,8 +5,8 @@
 #include <d3dcompiler.h>
 #include <map>
 
-#include "FVector3.h"
-#include "enum.h"
+#include "Math/FVector3.h"
+#include "Enum.h"
 
 struct FVertexSimple
 {

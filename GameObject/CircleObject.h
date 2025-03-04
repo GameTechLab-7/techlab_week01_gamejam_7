@@ -1,9 +1,9 @@
 #pragma once
 #include <d3d11.h>
 #include <memory>
-#include "FVector3.h"
+#include "Math/FVector3.h"
 #include "URenderer.h"
-#include "enum.h"
+#include "Enum.h"
 
 enum Dir {
 	left ,

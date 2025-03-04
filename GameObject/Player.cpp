@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "GameObject/Player.h"
 
 
 	// 문제 1. 벽 겹침 보정을 언제 어디서 해주냐
