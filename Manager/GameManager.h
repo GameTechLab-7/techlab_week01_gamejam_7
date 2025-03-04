@@ -19,7 +19,7 @@ public:
         requires std::derived_from<Scene, BaseScene>
     void ChangeScene();
 
-    BaseScene* GetCurrentScene()
+    BaseScene* GetCurrentScene() const
     {
         return CurrentScene.get();
     }
