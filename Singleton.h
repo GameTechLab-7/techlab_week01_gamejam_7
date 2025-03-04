@@ -41,3 +41,6 @@ Derived& Singleton<Derived>::GetInstance()
     }
     return *Instance;
 }
+
+template <typename Derived>
+Derived* Singleton<Derived>::Instance = nullptr;
