@@ -1,40 +1,30 @@
 #pragma once
-#include <d3d11.h>
+#include <cstdint>
 #include <memory>
+
 #include "Math/FVector3.h"
-#include "URenderer.h"
 #include "Enum.h"
 
-enum Dir {
-	left ,
-	right ,
-	top ,
-	bottom ,
+// forward declaration
+class URenderer;
+
+
+/** 방향 열거체 */
+enum Direction : uint8_t
+{
+	Left,
+	Right,
+	Top,
+	Bottom,
 };
+
 
 class CircleObject : public std::enable_shared_from_this<CircleObject>
 {
-public:
-	FVector3 Location;
-	FVector3 Velocity;
-	float Radius = 0.f;
-
-	EWorld MyWorld;
-
-	int WorldWalls[ 2 ][ 4 ] = {
-		{0, 1, -1, 1}, //left right top bottom
-		{-1, 0, -1, 1},
-	};
-
-	FVector3 WorldOffsets[ 2 ] = {
-		FVector3(0.5f,0.0f,0.0f), FVector3(-0.5f, 0.0f,0.0f)
-	};
-
-	FVector3 MyRadian = FVector3(); //0 == top radian으로 다룸
-	FVector3 MyPosition = FVector3();
 
 public:
 	CircleObject(EWorld SelectedWorld);
+	virtual ~CircleObject() = default;
 
 	//virtual void Update(float DeltaTime) = 0;
 	//virtual void FixedUpdate(float FixedTime) = 0;
@@ -43,13 +33,42 @@ public:
 
 	virtual void Render(const URenderer& Renderer) const = 0;
 
-	virtual void SetAngle(FVector3 Radian) {
-		MyRadian = Radian;
-	}
+	float GetAngle() const { return MyRadian; }
+	void SetAngle(float Radian)	{ MyRadian = Radian; }
 
-	virtual FVector3 GetAngle() {
-		return MyRadian;
-	}
-	virtual void Move(const float tick) = 0;
+	virtual void Move(float DeltaTime) = 0;
 	virtual void OnDestroy() = 0;	// CircleObject에 의해 부가적으로 발생한 메모리만 삭제, CircleObject 객체는 ObjectManager에 의해 삭제.
+
+public:
+	FVector3 GetLocation() const { return Location; }
+	void SetLocation(const FVector3& NewLocation) { Location = NewLocation; }
+
+	FVector3 GetVelocity() const { return Velocity; }
+	void SetVelocity(const FVector3& NewVelocity) { Velocity = NewVelocity; }
+
+	float GetRadius() const { return Radius; }
+	void SetRadius(float NewRadius) { Radius = NewRadius; }
+
+	float GetMyRadian() const { return MyRadian; }
+	void SetMyRadian(float NewMyRadian) { MyRadian = NewMyRadian; }
+
+	EWorld GetWorld() const { return MyWorld; }
+
+protected:
+	FVector3 Location;
+	FVector3 Velocity;
+	float Radius = 0.0f;
+	float MyRadian = 0.0f; // 0 == top radian으로 다룸
+
+	EWorld MyWorld;
+
+	int WorldWalls[2][4] = {
+		{ 0 , 1 , -1 , 1},  // left right top bottom
+		{-1 , 0 , -1 , 1},
+	};
+
+	FVector3 WorldOffsets[2] = {
+		FVector3(0.5f , 0.0f , 0.0f),
+		FVector3(-0.5f , 0.0f , 0.0f)
+	};
 };
