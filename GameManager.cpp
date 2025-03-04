@@ -1,48 +1,47 @@
-#include "GameManager.h"
+ï»¿#include "GameManager.h"
 #include <iostream>
-/// <summary>
-/// ¸ŞÀÎ·çÇÁ¿¡¼­ Äİ. ½ºÅ×ÀÌÆ® ¹Ù²î¸é ·ÎÁ÷ ½ÇÇà
-/// </summary>
+
+
 void GameManager::HandleState()
 {
-	if (PrevState == CurrentState)
-		return;
+    if (PrevState == CurrentState) return;
+    PrevState = CurrentState;
 
-	PrevState = CurrentState;
+    switch (CurrentState)
+    {
+    case EGameState::Init:
+        // !TODO : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-	switch (CurrentState)
-	{
-	case EGameState::Init:
-		// !TODO : °ÔÀÓ ½ÃÀÛ ½Ã ·ÎÁ÷
+        std::cout << "init" << std::endl;
+        // CurrentState = EGameState::MainMenu;
+        break;
 
-		std::cout << "init" << std::endl;
-		//CurrentState = EGameState::MainMenu;
-		break;
-	case EGameState::MainMenu:
-		// !TODO : ¸ŞÀÎ¸Ş´º state ÁøÀÔ ½Ã ·ÎÁ÷
-		std::cout << "MainMenu" << std::endl;
+    case EGameState::MainMenu:
+        // !TODO : ï¿½ï¿½ï¿½Î¸Ş´ï¿½ state ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        std::cout << "MainMenu" << std::endl;
+        break;
 
-		break;
-	case EGameState::MainGame:
-		// !TODO : ¸ŞÀÎ°ÔÀÓ state ÁøÀÔ ½Ã ·ÎÁ÷
-		std::cout << "MainGame" << std::endl;
+    case EGameState::MainGame:
+        // !TODO : ï¿½ï¿½ï¿½Î°ï¿½ï¿½ï¿½ state ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        std::cout << "MainGame" << std::endl;
+        break;
 
-		break;
-	case EGameState::Result:
-		// !TODO : °á°úÈ­¸é ÁøÀÔ ½Ã ·ÎÁ÷
-		std::cout << "Result" << std::endl;
+    case EGameState::Result:
+        // !TODO : ï¿½ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        std::cout << "Result" << std::endl;
+        break;
 
-		break;
-	}
-
+    case EGameState::None:
+        break;
+    }
 }
 
 void GameManager::SetGameState(EGameState inState)
 {
-	CurrentState = inState;
+    CurrentState = inState;
 }
 
-EGameState GameManager::GetGameState()
+EGameState GameManager::GetGameState() const
 {
-	return CurrentState;
+    return CurrentState;
 }
