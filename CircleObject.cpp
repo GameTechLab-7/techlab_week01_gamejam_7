@@ -3,17 +3,7 @@
 class CircleObject
 {
 public:
-	FVector3 Location;
-	FVector3 Velocity;
-	float Radius;
-
-	float Friction = 0.01f;      // ¸¶Âû °è¼ö
-	float BounceFactor = 0.85f;  // ¹Ý¹ß °è¼ö
-
-	bool bApplyGravity = false;
-	static float Gravity;
-
-	CircleObject()
+	CircleObject(World SelectedWorld)
 		: Location{
 			static_cast<float>(rand()) / (static_cast<float>(RAND_MAX) / 2.0f) - 1.0f,
 			static_cast<float>(rand()) / (static_cast<float>(RAND_MAX) / 2.0f) - 1.0f,
@@ -25,7 +15,10 @@ public:
 			0.0f
 		}
 		, Radius{ static_cast<float>(rand()) / static_cast<float>(RAND_MAX) * 0.15f + 0.05f }
+		, MyPosition{ FVector3(0, 0, 0) }
+		, MyRadian{ FVector3(0, 0, 0)}
 	{
+		MyWorld = SelectedWorld;
 	}
 
 	static bool CheckCollision(const CircleObject& A, const CircleObject& B)
@@ -42,25 +35,25 @@ public:
 		}
 
 		// Add Velocity
-		if (Location.x - Radius < -1.0f)
+		if (Location.x - Radius < WorldOffset[ MyWorld ][ left ])
 		{
-			Location.x = -1.0f + Radius;
+			Location.x = WorldOffset[ MyWorld ][ left ] + Radius;
 			HandleWallCollision(FVector3(1, 0, 0));
 		}
-		else if (Location.x + Radius > 1.0f)
+		else if (Location.x + Radius > WorldOffset[ MyWorld ][ right ])
 		{
-			Location.x = 1.0f - Radius;
+			Location.x = WorldOffset[ MyWorld ][ right ] - Radius;
 			HandleWallCollision(FVector3(-1, 0, 0));
 		}
 
-		if (Location.y - Radius < -1.0f)
+		if (Location.y - Radius < WorldOffset[ MyWorld ][ top ])
 		{
-			Location.y = -1.0f + Radius;
+			Location.y = WorldOffset[ MyWorld ][ top ] + Radius;
 			HandleWallCollision(FVector3(0, 1, 0));
 		}
-		else if (Location.y + Radius > 1.0f)
+		else if (Location.y + Radius > WorldOffset[ MyWorld ][ bottom ])
 		{
-			Location.y = 1.0f - Radius;
+			Location.y = WorldOffset[ MyWorld ][ bottom ] - Radius;
 			HandleWallCollision(FVector3(0, -1, 0));
 		}
 	}
@@ -80,70 +73,19 @@ public:
 
 	void HandleWallCollision(const FVector3& WallNormal)
 	{
-		// ¼Óµµ¸¦ º®¸é¿¡ ¼öÁ÷ÀÎ ¼ººÐ°ú ÆòÇàÇÑ ¼ººÐÀ¸·Î ºÐÇØ
+		// ì†ë„ë¥¼ ë²½ë©´ì— ìˆ˜ì§ì¸ ì„±ë¶„ê³¼ í‰í–‰í•œ ì„±ë¶„ìœ¼ë¡œ ë¶„í•´
 		FVector3 VelocityNormal = WallNormal * FVector3::DotProduct(Velocity, WallNormal);
 		const FVector3 VelocityTangent = Velocity - VelocityNormal;
 
-		// ¼öÁ÷ ¼Óµµ ¼ººÐ¿¡ ¹Ý¹ß °è¼ö¸¦ Àû¿ëÇÏ¿© ¹Ý»ç
+		// ìˆ˜ì§ ì†ë„ ì„±ë¶„ì— ë°˜ë°œ ê³„ìˆ˜ë¥¼ ì ìš©í•˜ì—¬ ë°˜ì‚¬
 		VelocityNormal = -VelocityNormal * BounceFactor;
 
-		// ¹Ý»çµÈ ¼öÁ÷ ¼Óµµ¿Í ¸¶ÂûÀÌ Àû¿ëµÈ ÆòÇà ¼Óµµ¸¦ ÇÕÇÏ¿© ÃÖÁ¾ ¼Óµµ °è»ê
+		// ë°˜ì‚¬ëœ ìˆ˜ì§ ì†ë„ì™€ ë§ˆì°°ì´ ì ìš©ëœ í‰í–‰ ì†ë„ë¥¼ í•©í•˜ì—¬ ìµœì¢… ì†ë„ ê³„ì‚°
 		Velocity = VelocityNormal + VelocityTangent * (1.0f - Friction);
 	}
 
 	void HandleBallCollision(CircleObject& OtherBall)
 	{
-		// Ãæµ¹ ¹ý¼± º¤ÅÍ¿Í »ó´ë¼Óµµ °è»ê
-		const FVector3 Normal = (OtherBall.Location - Location).Normalize();
-		const FVector3 RelativeVelocity = OtherBall.Velocity - Velocity;
 
-		const float VelocityAlongNormal = FVector3::DotProduct(RelativeVelocity, Normal);
-
-		// ÀÌ¹Ì ¼­·Î ¸Ö¾îÁö°í ÀÖ´Â °æ¿ì ¹«½Ã
-		if (VelocityAlongNormal > 0) return;
-
-		// Ãæ°Ý·® °è»ê
-		const float e = min(BounceFactor, OtherBall.BounceFactor);  // ¹Ý¹ß °è¼ö¸¦ µÑÁß ´õ ÀÛÀº°É·Î ¼³Á¤
-		float j = -(1 + e) * VelocityAlongNormal;
-		j /= 1 / Mass + 1 / OtherBall.Mass;
-
-		// ¼Óµµ ¾÷µ¥ÀÌÆ®
-		const FVector3 Impulse = Normal * j;
-		Velocity -= Impulse / Mass;
-		OtherBall.Velocity += Impulse / OtherBall.Mass;
-
-		// ¸¶Âû Àû¿ë
-		FVector3 Tangent = RelativeVelocity - Normal * VelocityAlongNormal;
-		if (Tangent.LengthSquared() > 0.0001f)  // ÅºÁ¨Æ®ÀÇ ±æÀÌ°¡ ¸Å¿ì ÀÛÀ¸¸é °Ç³Ê¶Ù±â
-		{
-			Tangent = Tangent.Normalize();
-
-			// ÅºÁ¨Æ® Ãæ°Ý·® °è»ê
-			float JT = -FVector3::DotProduct(RelativeVelocity, Tangent);  // Á¢¼± ¹æÇâ »ó´ë ¼Óµµ¿¡ ±â¹ÝÇÑ Ãæ°Ý·® Å©±â
-			JT /= 1 / Mass + 1 / OtherBall.Mass;                               // µÎ ¹°Ã¼ÀÇ À¯È¿ Áú·®
-
-			const float MuT = min(Friction, OtherBall.Friction);
-			FVector3 FrictionImpulse;
-			if (fabsf(JT) < j * MuT)
-			{
-				// ½ÇÁ¦ ¸¶Âû·Â »ç¿ë
-				FrictionImpulse = Tangent * JT;
-			}
-			else
-			{
-				// ÇÑ°èÄ¡¸¦ ÃÊ°ú½Ã j * MuT·Î Á¦ÇÑ
-				FrictionImpulse = Tangent * -j * MuT;
-			}
-
-			// ¸¶Âû·Â Àû¿ë
-			Velocity -= FrictionImpulse / Mass;
-			OtherBall.Velocity += FrictionImpulse / OtherBall.Mass;
-		}
-
-		// °ãÄ§ ÇØ°á
-		const float Penetration = Radius + OtherBall.Radius - (OtherBall.Location - Location).Length();
-		const FVector3 Correction = Normal * Penetration / (Mass + OtherBall.Mass) * 0.8f;
-		Location -= Correction * Mass;
-		OtherBall.Location += Correction * OtherBall.Mass;
 	}
 };

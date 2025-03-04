@@ -2609,7 +2609,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// UBalls 배열
 	int ArrSize = 1;
 	int ArrCap = 4;
-	CircleObject** Balls = new CircleObject*[ArrCap];
+	CircleObject** CircleObjects = new CircleObject*[ArrCap];
 	//Balls[0] = new CircleObject;
 
 	int NumOfBalls = 1;
@@ -2649,32 +2649,19 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		GameManager::GetInstance().HandleState();
 
-		// Update 로직
-		for (int i = 0; i < ArrSize; ++i)
-		{
-			Balls[i]->Update(DeltaTime);
-		}
-
+		// Update 로직 -> ObjectManager에 있는 Update 호출
+		//Update(DeltaTime);
 
     	// FixedTimeStep 만큼 업데이트
     	while (Accumulator >= FixedTimeStep)
     	{
-    		for (int i = 0; i < ArrSize; ++i)
-    		{
-				Balls[i]->FixedUpdate(FixedTimeStep);
-    		}
+			//FixedUpdate(FixedTimeStep); //마찬가지로 ObjectManager에 있는 FixedUpdate
 
-    		// 공 충돌 처리
-    		for (int i = 0; i < ArrSize; ++i)
-    		{
-    			for (int j = i + 1; j < ArrSize; ++j)
-    			{
-    				if (CircleObject::CheckCollision(*Balls[i], *Balls[j]))
-    				{
-    					Balls[i]->HandleBallCollision(*Balls[j]);
-    				}
-    			}
-    		}
+    		// 공 충돌 처리 -> 마찬가지로 ObjectManager에서
+    		//if (CircleObject::CheckCollision(*Balls[i], *Balls[j]))
+    		//{
+    		//	Balls[i]->HandleBallCollision(*Balls[j]);
+    		//}
 
     		Accumulator -= FixedTimeStep;
     	}
@@ -2685,7 +2672,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
     	for (int i = 0; i < ArrSize; ++i)
     	{
-    		Balls[i]->Render(Renderer);
+    		CircleObjects[i]->Render(Renderer);
     		Renderer.RenderPrimitive(VertexBufferSphere, NumOfVertices);
     	}
 
@@ -2766,7 +2753,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		        	}
         		}
         	}*/
-        	}
 			//if (ImGui::InputInt("GameState", &GameState))
 			//{
 			//	GameManager::GetInstance().SetGameState((EGameState)GameState);
@@ -2795,7 +2781,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         } while (ElapsedTime < TargetDeltaTime);
     }
 
-	delete[] Balls;
+	delete[] CircleObjects;
 
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
