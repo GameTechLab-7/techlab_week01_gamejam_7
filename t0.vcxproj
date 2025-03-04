@@ -132,6 +132,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="CircleObject.cpp" />
+    <ClCompile Include="FVector3.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="Bullet.cpp" />
+>>>>>>> origin/3.Scene
     <ClCompile Include="CircleObject.cpp" />
     <ClCompile Include="FVector3.cpp" />
     <ClCompile Include="GameManager.cpp" />
@@ -143,6 +150,10 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="URenderer.cpp" />
     <ClCompile Include="MainGameScene.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PresetScene.cpp" />
@@ -156,6 +167,10 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="CircleObject.h" />
+    <ClInclude Include="enum.h" />
+    <ClInclude Include="FVector3.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="CircleObject.h" />
     <ClInclude Include="enum.h" />
@@ -169,11 +184,29 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="URenderer.h" />
     <ClInclude Include="MainGameScene.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PresetScene.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="URenderer.h" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="ObjectManager.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="URenderer.cpp" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="CircleObject.h" />
+    <ClInclude Include="enum.h" />
+    <ClInclude Include="FVector3.h" />
+    <ClInclude Include="Monster.h" />
+    <ClInclude Include="ObjectManager.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="URenderer.h" />
   </ItemGroup>
   <ItemGroup>
