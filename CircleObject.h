@@ -1,6 +1,6 @@
 #pragma once
-#include "FVector3.h"
 #include <d3d11.h>
+#include "FVector3.h"
 #include "URenderer.h"
 
 enum World {
@@ -19,13 +19,7 @@ class CircleObject {
 public:
 	FVector3 Location;
 	FVector3 Velocity;
-	float Radius;
-
-	float Friction = 0.01f;      // 마찰 계수
-	float BounceFactor = 0.85f;  // 반발 계수
-
-	bool bApplyGravity = false;
-	static float Gravity;
+	float Radius = 0.f;
 
 	World MyWorld;
 	
@@ -34,18 +28,18 @@ public:
 		{0, 1, -1, 1},
 	};
 
-	FVector3 MyRadian; //0 == top radian으로 다룸
-	FVector3 MyPosition;
+	FVector3 MyRadian = FVector3(); //0 == top radian으로 다룸
+	FVector3 MyPosition = FVector3();
 
 public:
-	virtual void Update(float DeltaTime) = 0;
-	virtual void FixedUpdate(float FixedTime) = 0;
+	CircleObject(World SelectedWorld);
+
+	//virtual void Update(float DeltaTime) = 0;
+	//virtual void FixedUpdate(float FixedTime) = 0;
 	virtual void HandleWallCollision(const FVector3& WallNormal) = 0;
 	virtual void HandleBallCollision(CircleObject& OtherBall) = 0;
 
-	virtual void OnCollision() = 0;
-	virtual void Render(const URenderer& Renderer) = 0;
-	virtual void Move() = 0 ;
+	virtual void Render(const URenderer& Renderer) const = 0;
 	
 	virtual void SetAngle(FVector3 Radian) {
 		MyRadian = Radian;
@@ -54,6 +48,6 @@ public:
 	virtual FVector3 GetAngle() {
 		return MyRadian;
 	}
-
-	static bool CheckCollision(const CircleObject& A, const CircleObject& B);
+	virtual void Move(const float tick) = 0 ;
+	virtual void OnDestroy() = 0;	// CircleObject에 의해 부가적으로 발생한 메모리만 삭제, CircleObject 객체는 ObjectManager에 의해 삭제.
 };

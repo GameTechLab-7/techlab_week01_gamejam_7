@@ -1,5 +1,5 @@
 #pragma once
-
+#include "math.h"
 struct FVector3 {
 	float x, y, z;
 	FVector3();

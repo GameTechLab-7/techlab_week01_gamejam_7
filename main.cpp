@@ -9,12 +9,13 @@
 #include "ImGui/imgui_impl_win32.h"
 #include "ImGui/imgui_impl_dx11.h"
 
+#include <iostream>
+
 #include "CircleObject.h"
 #include "URenderer.h"
 #include "FVector3.h"
 #include "GameManager.h"
-#include <iostream>
-
+#include "Player.h"
 
 enum class EPrimitiveType : UINT8
 {
@@ -2610,7 +2611,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	int ArrSize = 1;
 	int ArrCap = 4;
 	CircleObject** CircleObjects = new CircleObject*[ArrCap];
-	//Balls[0] = new CircleObject;
+	World world = World::first;
+	auto Ball = new Player(world);
 
 	int NumOfBalls = 1;
 
@@ -2670,11 +2672,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         Renderer.Prepare();
         Renderer.PrepareShader();
 
-    	for (int i = 0; i < ArrSize; ++i)
-    	{
-    		CircleObjects[i]->Render(Renderer);
-    		Renderer.RenderPrimitive(VertexBufferSphere, NumOfVertices);
-    	}
+    	//for (int i = 0; i < ArrSize; ++i)
+    	//{
+    		//CircleObjects[i]->Render(Renderer);
+    		//Renderer.RenderPrimitive(VertexBufferSphere, NumOfVertices);
+    	//}
+		Ball->Render(Renderer);
+		Renderer.RenderPrimitive(VertexBufferSphere , NumOfVertices);
+
+
 
         // ImGui Frame 생성
         ImGui_ImplDX11_NewFrame();

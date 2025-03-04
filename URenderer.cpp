@@ -1,278 +1,274 @@
 #include "URenderer.h"
 
-class URenderer
+
+struct alignas( 16 ) URenderer::FConstants
 {
-private:
-    struct alignas(16) FConstants
+    FVector3 Offset;
+    float Scale;
+};
+
+/** Rendererë¥¼ ì´ˆê¸°í™” í•©ë‹ˆë‹¤. */
+void URenderer::Create(HWND hWindow)
+{
+    CreateDeviceAndSwapChain(hWindow);
+    CreateFrameBuffer();
+    CreateRasterizerState();
+}
+
+/** Rendererì— ì‚¬ìš©ëœ ëª¨ë“  ë¦¬ì†ŒìŠ¤ë¥¼ í•´ì œí•©ë‹ˆë‹¤. */
+void URenderer::Release()
+{
+    ReleaseRasterizerState();
+
+    // ë Œë” íƒ€ê²Ÿì„ ì´ˆê¸°í™”
+    DeviceContext->OMSetRenderTargets(0 , nullptr , nullptr);
+
+    ReleaseFrameBuffer();
+    ReleaseDeviceAndSwapChain();
+}
+
+void URenderer::CreateShader()
+{
+    /**
+     * ì»´íŒŒì¼ëœ ì…°ì´ë”ì˜ ë°”ì´íŠ¸ì½”ë“œë¥¼ ì €ì¥í•  ë³€ìˆ˜ (ID3DBlob)
+     *
+     * ë²”ìš© ë©”ëª¨ë¦¬ ë²„í¼ë¥¼ ë‚˜íƒ€ë‚´ëŠ” í˜•ì‹
+     *   - ì—¬ê¸°ì„œëŠ” shader object bytecodeë¥¼ ë‹´ê¸°ìœ„í•´ ì“°ì„
+     * ë‹¤ìŒ ë‘ ë©”ì„œë“œë¥¼ ì œê³µí•œë‹¤.
+     *   - LPVOID GetBufferPointer
+     *     - ë²„í¼ë¥¼ ê°€ë¦¬í‚¤ëŠ” void* í¬ì¸í„°ë¥¼ ëŒë ¤ì¤€ë‹¤.
+     *   - SIZE_T GetBufferSize
+     *     - ë²„í¼ì˜ í¬ê¸°(ë°”ì´íŠ¸ ê°¯ìˆ˜)ë¥¼ ëŒë ¤ì¤€ë‹¤
+     */
+    ID3DBlob* VertexShaderCSO;
+    ID3DBlob* PixelShaderCSO;
+
+    // ì…°ì´ë” ì»´íŒŒì¼ ë° ìƒì„±
+    D3DCompileFromFile(L"Shaders/ShaderW0.hlsl" , nullptr , nullptr , "mainVS" , "vs_5_0" , 0 , 0 , &VertexShaderCSO , nullptr);
+    Device->CreateVertexShader(VertexShaderCSO->GetBufferPointer() , VertexShaderCSO->GetBufferSize() , nullptr , &SimpleVertexShader);
+
+    D3DCompileFromFile(L"Shaders/ShaderW0.hlsl" , nullptr , nullptr , "mainPS" , "ps_5_0" , 0 , 0 , &PixelShaderCSO , nullptr);
+    Device->CreatePixelShader(PixelShaderCSO->GetBufferPointer() , PixelShaderCSO->GetBufferSize() , nullptr , &SimplePixelShader);
+
+    // ì…ë ¥ ë ˆì´ì•„ì›ƒ ì •ì˜ ë° ìƒì„±
+    D3D11_INPUT_ELEMENT_DESC Layout[ ] =
     {
-        FVector3 Offset;
-        float Scale;
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-public:
-    /** Renderer¸¦ ÃÊ±âÈ­ ÇÕ´Ï´Ù. */
-    void Create(HWND hWindow)
+    Device->CreateInputLayout(Layout , ARRAYSIZE(Layout) , VertexShaderCSO->GetBufferPointer() , VertexShaderCSO->GetBufferSize() , &SimpleInputLayout);
+
+    VertexShaderCSO->Release();
+    PixelShaderCSO->Release();
+
+    // ì •ì  í•˜ë‚˜ì˜ í¬ê¸°ë¥¼ ì„¤ì • (ë°”ì´íŠ¸ ë‹¨ìœ„)
+    Stride = sizeof(FVertexSimple);
+}
+void URenderer::ReleaseShader()
+{
+    if (SimpleInputLayout)
     {
-        CreateDeviceAndSwapChain(hWindow);
-        CreateFrameBuffer();
-        CreateRasterizerState();
+        SimpleInputLayout->Release();
+        SimpleInputLayout = nullptr;
     }
 
-    /** Renderer¿¡ »ç¿ëµÈ ¸ğµç ¸®¼Ò½º¸¦ ÇØÁ¦ÇÕ´Ï´Ù. */
-    void Release()
+    if (SimplePixelShader)
     {
-        ReleaseRasterizerState();
-
-        // ·»´õ Å¸°ÙÀ» ÃÊ±âÈ­
-        DeviceContext->OMSetRenderTargets(0, nullptr, nullptr);
-
-        ReleaseFrameBuffer();
-        ReleaseDeviceAndSwapChain();
+        SimplePixelShader->Release();
+        SimplePixelShader = nullptr;
     }
 
-    void CreateShader()
+    if (SimpleVertexShader)
     {
-        /**
-         * ÄÄÆÄÀÏµÈ ¼ÎÀÌ´õÀÇ ¹ÙÀÌÆ®ÄÚµå¸¦ ÀúÀåÇÒ º¯¼ö (ID3DBlob)
-         *
-         * ¹ü¿ë ¸Ş¸ğ¸® ¹öÆÛ¸¦ ³ªÅ¸³»´Â Çü½Ä
-         *   - ¿©±â¼­´Â shader object bytecode¸¦ ´ã±âÀ§ÇØ ¾²ÀÓ
-         * ´ÙÀ½ µÎ ¸Ş¼­µå¸¦ Á¦°øÇÑ´Ù.
-         *   - LPVOID GetBufferPointer
-         *     - ¹öÆÛ¸¦ °¡¸®Å°´Â void* Æ÷ÀÎÅÍ¸¦ µ¹·ÁÁØ´Ù.
-         *   - SIZE_T GetBufferSize
-         *     - ¹öÆÛÀÇ Å©±â(¹ÙÀÌÆ® °¹¼ö)¸¦ µ¹·ÁÁØ´Ù
-         */
-        ID3DBlob* VertexShaderCSO;
-        ID3DBlob* PixelShaderCSO;
-
-        // ¼ÎÀÌ´õ ÄÄÆÄÀÏ ¹× »ı¼º
-        D3DCompileFromFile(L"Shaders/ShaderW0.hlsl", nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &VertexShaderCSO, nullptr);
-        Device->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, &SimpleVertexShader);
-
-        D3DCompileFromFile(L"Shaders/ShaderW0.hlsl", nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &PixelShaderCSO, nullptr);
-        Device->CreatePixelShader(PixelShaderCSO->GetBufferPointer(), PixelShaderCSO->GetBufferSize(), nullptr, &SimplePixelShader);
-
-        // ÀÔ·Â ·¹ÀÌ¾Æ¿ô Á¤ÀÇ ¹× »ı¼º
-        D3D11_INPUT_ELEMENT_DESC Layout[] =
-        {
-            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-            { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        };
-
-        Device->CreateInputLayout(Layout, ARRAYSIZE(Layout), VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), &SimpleInputLayout);
-
-        VertexShaderCSO->Release();
-        PixelShaderCSO->Release();
-
-        // Á¤Á¡ ÇÏ³ªÀÇ Å©±â¸¦ ¼³Á¤ (¹ÙÀÌÆ® ´ÜÀ§)
-        Stride = sizeof(FVertexSimple);
+        SimpleVertexShader->Release();
+        SimpleVertexShader = nullptr;
     }
-    void ReleaseShader()
+}
+
+void URenderer::CreateConstantBuffer()
+{
+    D3D11_BUFFER_DESC ConstantBufferDesc = {};
+    ConstantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;                        // ë§¤ í”„ë ˆì„ CPUì—ì„œ ì—…ë°ì´íŠ¸ í•˜ê¸° ìœ„í•´
+    ConstantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;             // ìƒìˆ˜ ë²„í¼ë¡œ ì„¤ì •
+    ConstantBufferDesc.ByteWidth = sizeof(FConstants) + 0xf & 0xfffffff0;  // 16byteì˜ ë°°ìˆ˜ë¡œ ì˜¬ë¦¼
+    ConstantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;            // CPUì—ì„œ ì“°ê¸° ì ‘ê·¼ì´ ê°€ëŠ¥í•˜ê²Œ ì„¤ì •
+
+    Device->CreateBuffer(&ConstantBufferDesc , nullptr , &ConstantBuffer);
+}
+void URenderer::ReleaseConstantBuffer()
+{
+    if (ConstantBuffer)
     {
-        if (SimpleInputLayout)
-        {
-            SimpleInputLayout->Release();
-            SimpleInputLayout = nullptr;
-        }
-
-        if (SimplePixelShader)
-        {
-            SimplePixelShader->Release();
-            SimplePixelShader = nullptr;
-        }
-
-        if (SimpleVertexShader)
-        {
-            SimpleVertexShader->Release();
-            SimpleVertexShader = nullptr;
-        }
+        ConstantBuffer->Release();
+        ConstantBuffer = nullptr;
     }
+}
 
-    void CreateConstantBuffer()
-    {
-        D3D11_BUFFER_DESC ConstantBufferDesc = {};
-        ConstantBufferDesc.Usage = D3D11_USAGE_DYNAMIC;                        // ¸Å ÇÁ·¹ÀÓ CPU¿¡¼­ ¾÷µ¥ÀÌÆ® ÇÏ±â À§ÇØ
-        ConstantBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;             // »ó¼ö ¹öÆÛ·Î ¼³Á¤
-        ConstantBufferDesc.ByteWidth = sizeof(FConstants) + 0xf & 0xfffffff0;  // 16byteÀÇ ¹è¼ö·Î ¿Ã¸²
-        ConstantBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;            // CPU¿¡¼­ ¾²±â Á¢±ÙÀÌ °¡´ÉÇÏ°Ô ¼³Á¤
+/** ìŠ¤ì™‘ ì²´ì¸ì˜ ë°± ë²„í¼ì™€ í”„ë¡ íŠ¸ ë²„í¼ë¥¼ êµì²´í•˜ì—¬ í™”ë©´ì— ì¶œë ¥ */
+void URenderer::SwapBuffer() const
+{
+    SwapChain->Present(1 , 0); // SyncInterval: VSync í™œì„±í™” ì—¬ë¶€
+}
 
-        Device->CreateBuffer(&ConstantBufferDesc, nullptr, &ConstantBuffer);
-    }
-    void ReleaseConstantBuffer()
-    {
-        if (ConstantBuffer)
-        {
-            ConstantBuffer->Release();
-            ConstantBuffer = nullptr;
-        }
-    }
+/** ë Œë”ë§ íŒŒì´í”„ë¼ì¸ì„ ì¤€ë¹„ í•©ë‹ˆë‹¤. */
+void URenderer::Prepare() const
+{
+    // í™”ë©´ ì§€ìš°ê¸°
+    DeviceContext->ClearRenderTargetView(FrameBufferRTV , ClearColor);
 
-    /** ½º¿Ò Ã¼ÀÎÀÇ ¹é ¹öÆÛ¿Í ÇÁ·ĞÆ® ¹öÆÛ¸¦ ±³Ã¼ÇÏ¿© È­¸é¿¡ Ãâ·Â */
-    void SwapBuffer() const
-    {
-        SwapChain->Present(1, 0); // SyncInterval: VSync È°¼ºÈ­ ¿©ºÎ
-    }
+    // InputAssemblerì˜ Vertex í•´ì„ ë°©ì‹ì„ ì„¤ì •
+    DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    /** ·»´õ¸µ ÆÄÀÌÇÁ¶óÀÎÀ» ÁØºñ ÇÕ´Ï´Ù. */
-    void Prepare() const
-    {
-        // È­¸é Áö¿ì±â
-        DeviceContext->ClearRenderTargetView(FrameBufferRTV, ClearColor);
-
-        // InputAssemblerÀÇ Vertex ÇØ¼® ¹æ½ÄÀ» ¼³Á¤
-        DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-        // RasterizationÇÒ Viewport¸¦ ¼³Á¤ 
-        DeviceContext->RSSetViewports(1, &ViewportInfo);
-        DeviceContext->RSSetState(RasterizerState);
-
-        /**
-         * OutputMerger ¼³Á¤
-         * ·»´õ¸µ ÆÄÀÌÇÁ¶óÀÎÀÇ ÃÖÁ¾ ´Ü°è·Î½á, ¾îµğ¿¡ ±×¸±Áö(·»´õ Å¸°Ù)¿Í ¾î¶»°Ô ±×¸±Áö(ºí·»µù)¸¦ ÁöÁ¤
-         */
-        DeviceContext->OMSetRenderTargets(1, &FrameBufferRTV, nullptr);
-        DeviceContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
-    }
-
-    /** ¼ÎÀÌ´õ¸¦ ÁØºñ ÇÕ´Ï´Ù. */
-    void PrepareShader() const
-    {
-        // ±âº» ¼ÎÀÌ´õ¶û InputLayoutÀ» ¼³Á¤
-        DeviceContext->VSSetShader(SimpleVertexShader, nullptr, 0);
-        DeviceContext->PSSetShader(SimplePixelShader, nullptr, 0);
-        DeviceContext->IASetInputLayout(SimpleInputLayout);
-
-        // ¹öÅØ½º ½¦ÀÌ´õ¿¡ »ó¼ö ¹öÆÛ¸¦ ¼³Á¤
-        if (ConstantBuffer)
-        {
-            DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
-        }
-    }
+    // Rasterizationí•  Viewportë¥¼ ì„¤ì • 
+    DeviceContext->RSSetViewports(1 , &ViewportInfo);
+    DeviceContext->RSSetState(RasterizerState);
 
     /**
-     * Buffer¿¡ ÀÖ´Â Vertex¸¦ ±×¸³´Ï´Ù.
-     * @param pBuffer ·»´õ¸µ¿¡ »ç¿ëÇÒ ¹öÅØ½º ¹öÆÛ¿¡ ´ëÇÑ Æ÷ÀÎÅÍ
-     * @param numVertices ¹öÅØ½º ¹öÆÛ¿¡ ÀúÀåµÈ ¹öÅØ½ºÀÇ ÃÑ °³¼ö
+     * OutputMerger ì„¤ì •
+     * ë Œë”ë§ íŒŒì´í”„ë¼ì¸ì˜ ìµœì¢… ë‹¨ê³„ë¡œì¨, ì–´ë””ì— ê·¸ë¦´ì§€(ë Œë” íƒ€ê²Ÿ)ì™€ ì–´ë–»ê²Œ ê·¸ë¦´ì§€(ë¸”ë Œë”©)ë¥¼ ì§€ì •
      */
-    void RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices) const
-    {
-        UINT Offset = 0;
-        DeviceContext->IASetVertexBuffers(0, 1, &pBuffer, &Stride, &Offset);
+    DeviceContext->OMSetRenderTargets(1 , &FrameBufferRTV , nullptr);
+    DeviceContext->OMSetBlendState(nullptr , nullptr , 0xffffffff);
+}
 
-        DeviceContext->Draw(numVertices, 0);
+/** ì…°ì´ë”ë¥¼ ì¤€ë¹„ í•©ë‹ˆë‹¤. */
+void URenderer::PrepareShader() const
+{
+    // ê¸°ë³¸ ì…°ì´ë”ë‘ InputLayoutì„ ì„¤ì •
+    DeviceContext->VSSetShader(SimpleVertexShader , nullptr , 0);
+    DeviceContext->PSSetShader(SimplePixelShader , nullptr , 0);
+    DeviceContext->IASetInputLayout(SimpleInputLayout);
+
+    // ë²„í…ìŠ¤ ì‰ì´ë”ì— ìƒìˆ˜ ë²„í¼ë¥¼ ì„¤ì •
+    if (ConstantBuffer)
+    {
+        DeviceContext->VSSetConstantBuffers(0 , 1 , &ConstantBuffer);
     }
+}
 
-    /**
-     * Á¤Á¡ µ¥ÀÌÅÍ·Î Vertex Buffer¸¦ »ı¼ºÇÕ´Ï´Ù.
-     * @param Vertices ¹öÆÛ·Î º¯È¯ÇÒ Á¤Á¡ µ¥ÀÌÅÍ ¹è¿­ÀÇ Æ÷ÀÎÅÍ
-     * @param ByteWidth ¹öÆÛÀÇ ÃÑ Å©±â (¹ÙÀÌÆ® ´ÜÀ§)
-     * @return »ı¼ºµÈ ¹öÅØ½º ¹öÆÛ¿¡ ´ëÇÑ ID3D11Buffer Æ÷ÀÎÅÍ, ½ÇÆĞ ½Ã nullptr
-     *
-     * @note ÀÌ ÇÔ¼ö´Â D3D11_USAGE_IMMUTABLE »ç¿ë¹ıÀ¸·Î ¹öÆÛ¸¦ »ı¼ºÇÕ´Ï´Ù.
-     */
-    ID3D11Buffer* CreateVertexBuffer(const FVertexSimple* Vertices, UINT ByteWidth) const
+/**
+ * Bufferì— ìˆëŠ” Vertexë¥¼ ê·¸ë¦½ë‹ˆë‹¤.
+ * @param pBuffer ë Œë”ë§ì— ì‚¬ìš©í•  ë²„í…ìŠ¤ ë²„í¼ì— ëŒ€í•œ í¬ì¸í„°
+ * @param numVertices ë²„í…ìŠ¤ ë²„í¼ì— ì €ì¥ëœ ë²„í…ìŠ¤ì˜ ì´ ê°œìˆ˜
+ */
+void URenderer::RenderPrimitive(ID3D11Buffer* pBuffer , UINT numVertices) const
+{
+    UINT Offset = 0;
+    DeviceContext->IASetVertexBuffers(0 , 1 , &pBuffer , &Stride , &Offset);
+
+    DeviceContext->Draw(numVertices , 0);
+}
+
+/**
+ * ì •ì  ë°ì´í„°ë¡œ Vertex Bufferë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
+ * @param Vertices ë²„í¼ë¡œ ë³€í™˜í•  ì •ì  ë°ì´í„° ë°°ì—´ì˜ í¬ì¸í„°
+ * @param ByteWidth ë²„í¼ì˜ ì´ í¬ê¸° (ë°”ì´íŠ¸ ë‹¨ìœ„)
+ * @return ìƒì„±ëœ ë²„í…ìŠ¤ ë²„í¼ì— ëŒ€í•œ ID3D11Buffer í¬ì¸í„°, ì‹¤íŒ¨ ì‹œ nullptr
+ *
+ * @note ì´ í•¨ìˆ˜ëŠ” D3D11_USAGE_IMMUTABLE ì‚¬ìš©ë²•ìœ¼ë¡œ ë²„í¼ë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
+ */
+ID3D11Buffer* URenderer::CreateVertexBuffer(const FVertexSimple* Vertices , UINT ByteWidth) const
+{
+    D3D11_BUFFER_DESC VertexBufferDesc = {};
+    VertexBufferDesc.ByteWidth = ByteWidth;
+    VertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
+    VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+
+    D3D11_SUBRESOURCE_DATA VertexBufferSRD = {};
+    VertexBufferSRD.pSysMem = Vertices;
+
+    ID3D11Buffer* VertexBuffer;
+    const HRESULT Result = Device->CreateBuffer(&VertexBufferDesc , &VertexBufferSRD , &VertexBuffer);
+    if (FAILED(Result))
     {
-        D3D11_BUFFER_DESC VertexBufferDesc = {};
-        VertexBufferDesc.ByteWidth = ByteWidth;
-        VertexBufferDesc.Usage = D3D11_USAGE_IMMUTABLE;
-        VertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-
-        D3D11_SUBRESOURCE_DATA VertexBufferSRD = {};
-        VertexBufferSRD.pSysMem = Vertices;
-
-        ID3D11Buffer* VertexBuffer;
-        const HRESULT Result = Device->CreateBuffer(&VertexBufferDesc, &VertexBufferSRD, &VertexBuffer);
-        if (FAILED(Result))
-        {
-            return nullptr;
-        }
-        return VertexBuffer;
+        return nullptr;
     }
+    return VertexBuffer;
+}
 
-    /** Buffer¸¦ ÇØÁ¦ÇÕ´Ï´Ù. */
-    void ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const
+/** Bufferë¥¼ í•´ì œí•©ë‹ˆë‹¤. */
+void URenderer::ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const
+{
+    pBuffer->Release();
+}
+
+/** Constant Dataë¥¼ ì—…ë°ì´íŠ¸ í•©ë‹ˆë‹¤. */
+void URenderer::UpdateConstant(const FVector3& Offset , float Scale) const
+{
+    if (!ConstantBuffer) return;
+
+    D3D11_MAPPED_SUBRESOURCE ConstantBufferMSR;
+
+    // ìƒìˆ˜ ë²„í¼ë¥¼ CPU ë©”ëª¨ë¦¬ì— ë§¤í•‘
+    // D3D11_MAP_WRITE_DISCARDëŠ” ì´ì „ ë‚´ìš©ì„ ë¬´ì‹œí•˜ê³  ìƒˆë¡œìš´ ë°ì´í„°ë¡œ ë®ì–´ì“°ê¸° ìœ„í•´ ì‚¬ìš©
+    DeviceContext->Map(ConstantBuffer , 0 , D3D11_MAP_WRITE_DISCARD , 0 , &ConstantBufferMSR);
     {
-        pBuffer->Release();
+        // ë§¤í•‘ëœ ë©”ëª¨ë¦¬ë¥¼ FConstants êµ¬ì¡°ì²´ë¡œ ìºìŠ¤íŒ…
+        FConstants* Constants = static_cast< FConstants* >( ConstantBufferMSR.pData );
+        Constants->Offset = Offset;
+        Constants->Scale = Scale;
     }
+    DeviceContext->Unmap(ConstantBuffer , 0);
+}
 
-    /** Constant Data¸¦ ¾÷µ¥ÀÌÆ® ÇÕ´Ï´Ù. */
-    void UpdateConstant(const FVector3& Offset, float Scale) const
+ID3D11Device* URenderer::GetDevice() const { return Device; }
+ID3D11DeviceContext* URenderer::GetDeviceContext() const { return DeviceContext; }
+
+    /** Direct3D Device ë° SwapChainì„ ìƒì„±í•©ë‹ˆë‹¤. */
+    void URenderer::CreateDeviceAndSwapChain(HWND hWindow)
     {
-        if (!ConstantBuffer) return;
+        // ì§€ì›í•˜ëŠ” Direct3D ê¸°ëŠ¥ ë ˆë²¨ì„ ì •ì˜
+        D3D_FEATURE_LEVEL FeatureLevels[ ] = { D3D_FEATURE_LEVEL_11_0 };
 
-        D3D11_MAPPED_SUBRESOURCE ConstantBufferMSR;
-
-        // »ó¼ö ¹öÆÛ¸¦ CPU ¸Ş¸ğ¸®¿¡ ¸ÅÇÎ
-        // D3D11_MAP_WRITE_DISCARD´Â ÀÌÀü ³»¿ëÀ» ¹«½ÃÇÏ°í »õ·Î¿î µ¥ÀÌÅÍ·Î µ¤¾î¾²±â À§ÇØ »ç¿ë
-        DeviceContext->Map(ConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &ConstantBufferMSR);
-        {
-            // ¸ÅÇÎµÈ ¸Ş¸ğ¸®¸¦ FConstants ±¸Á¶Ã¼·Î Ä³½ºÆÃ
-            FConstants* Constants = static_cast<FConstants*>(ConstantBufferMSR.pData);
-            Constants->Offset = Offset;
-            Constants->Scale = Scale;
-        }
-        DeviceContext->Unmap(ConstantBuffer, 0);
-    }
-
-    ID3D11Device* GetDevice() const { return Device; }
-    ID3D11DeviceContext* GetDeviceContext() const { return DeviceContext; }
-
-protected:
-    /** Direct3D Device ¹× SwapChainÀ» »ı¼ºÇÕ´Ï´Ù. */
-    void CreateDeviceAndSwapChain(HWND hWindow)
-    {
-        // Áö¿øÇÏ´Â Direct3D ±â´É ·¹º§À» Á¤ÀÇ
-        D3D_FEATURE_LEVEL FeatureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
-
-        // SwapChain ±¸Á¶Ã¼ ÃÊ±âÈ­
+        // SwapChain êµ¬ì¡°ì²´ ì´ˆê¸°í™”
         DXGI_SWAP_CHAIN_DESC SwapChainDesc = {};
-        SwapChainDesc.BufferDesc.Width = 0;                            // Ã¢ Å©±â¿¡ ¸Â°Ô ÀÚµ¿À¸·Î ¼³Á¤
-        SwapChainDesc.BufferDesc.Height = 0;                           // Ã¢ Å©±â¿¡ ¸Â°Ô ÀÚµ¿À¸·Î ¼³Á¤
-        SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;  // »ö»ó Æ÷¸ä
-        SwapChainDesc.SampleDesc.Count = 1;                            // ¸ÖÆ¼ »ùÇÃ¸µ ºñÈ°¼ºÈ­
-        SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;   // ·»´õ Å¸°ÙÀ¸·Î ¼³Á¤
-        SwapChainDesc.BufferCount = 2;                                 // ´õºí ¹öÆÛ¸µ
-        SwapChainDesc.OutputWindow = hWindow;                          // ·»´õ¸µÇÒ Ã¢ ÇÚµé
-        SwapChainDesc.Windowed = TRUE;                                 // Ã¢ ¸ğµå
-        SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;      // ½º¿Ò ¹æ½Ä
+        SwapChainDesc.BufferDesc.Width = 0;                            // ì°½ í¬ê¸°ì— ë§ê²Œ ìë™ìœ¼ë¡œ ì„¤ì •
+        SwapChainDesc.BufferDesc.Height = 0;                           // ì°½ í¬ê¸°ì— ë§ê²Œ ìë™ìœ¼ë¡œ ì„¤ì •
+        SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;  // ìƒ‰ìƒ í¬ë©§
+        SwapChainDesc.SampleDesc.Count = 1;                            // ë©€í‹° ìƒ˜í”Œë§ ë¹„í™œì„±í™”
+        SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;   // ë Œë” íƒ€ê²Ÿìœ¼ë¡œ ì„¤ì •
+        SwapChainDesc.BufferCount = 2;                                 // ë”ë¸” ë²„í¼ë§
+        SwapChainDesc.OutputWindow = hWindow;                          // ë Œë”ë§í•  ì°½ í•¸ë“¤
+        SwapChainDesc.Windowed = TRUE;                                 // ì°½ ëª¨ë“œ
+        SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;      // ìŠ¤ì™‘ ë°©ì‹
 
-        // Direct3D Device¿Í SwapChainÀ» »ı¼º
+        // Direct3D Deviceì™€ SwapChainì„ ìƒì„±
         D3D11CreateDeviceAndSwapChain(
-            // ÀÔ·Â ¸Å°³º¯¼ö
-            nullptr,                                                       // µğ¹ÙÀÌ½º¸¦ ¸¸µé ¶§ »ç¿ëÇÒ ºñµğ¿À ¾î´ğÅÍ¿¡ ´ëÇÑ Æ÷ÀÎÅÍ
-            D3D_DRIVER_TYPE_HARDWARE,                                      // ¸¸µé µå¶óÀÌ¹ö À¯ÇüÀ» ³ªÅ¸³»´Â D3D_DRIVER_TYPE ¿­°ÅÇü °ª
-            nullptr,                                                       // ¼ÒÇÁÆ®¿ş¾î ·¡½ºÅÍ¶óÀÌÀú¸¦ ±¸ÇöÇÏ´Â DLL¿¡ ´ëÇÑ ÇÚµé
-            D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG,  // »ç¿ëÇÒ ·±Å¸ÀÓ °èÃşÀ» ÁöÁ¤ÇÏ´Â D3D11_CREATE_DEVICE_FLAG ¿­°ÅÇü °ªµéÀÇ Á¶ÇÕ
-            FeatureLevels,                                                 // ¸¸µé·Á´Â ±â´É ¼öÁØÀÇ ¼ø¼­¸¦ °áÁ¤ÇÏ´Â D3D_FEATURE_LEVEL ¹è¿­¿¡ ´ëÇÑ Æ÷ÀÎÅÍ
-            ARRAYSIZE(FeatureLevels),                                      // pFeatureLevels ¹è¿­ÀÇ ¿ä¼Ò ¼ö
-            D3D11_SDK_VERSION,                                             // SDK ¹öÀü. ÁÖ·Î D3D11_SDK_VERSIONÀ» »ç¿ë
-            &SwapChainDesc,                                                // SwapChain ¼³Á¤°ú °ü·ÃµÈ DXGI_SWAP_CHAIN_DESC ±¸Á¶Ã¼¿¡ ´ëÇÑ Æ÷ÀÎÅÍ
+            // ì…ë ¥ ë§¤ê°œë³€ìˆ˜
+            nullptr ,                                                       // ë””ë°”ì´ìŠ¤ë¥¼ ë§Œë“¤ ë•Œ ì‚¬ìš©í•  ë¹„ë””ì˜¤ ì–´ëŒ‘í„°ì— ëŒ€í•œ í¬ì¸í„°
+            D3D_DRIVER_TYPE_HARDWARE ,                                      // ë§Œë“¤ ë“œë¼ì´ë²„ ìœ í˜•ì„ ë‚˜íƒ€ë‚´ëŠ” D3D_DRIVER_TYPE ì—´ê±°í˜• ê°’
+            nullptr ,                                                       // ì†Œí”„íŠ¸ì›¨ì–´ ë˜ìŠ¤í„°ë¼ì´ì €ë¥¼ êµ¬í˜„í•˜ëŠ” DLLì— ëŒ€í•œ í•¸ë“¤
+            D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG ,  // ì‚¬ìš©í•  ëŸ°íƒ€ì„ ê³„ì¸µì„ ì§€ì •í•˜ëŠ” D3D11_CREATE_DEVICE_FLAG ì—´ê±°í˜• ê°’ë“¤ì˜ ì¡°í•©
+            FeatureLevels ,                                                 // ë§Œë“¤ë ¤ëŠ” ê¸°ëŠ¥ ìˆ˜ì¤€ì˜ ìˆœì„œë¥¼ ê²°ì •í•˜ëŠ” D3D_FEATURE_LEVEL ë°°ì—´ì— ëŒ€í•œ í¬ì¸í„°
+            ARRAYSIZE(FeatureLevels) ,                                      // pFeatureLevels ë°°ì—´ì˜ ìš”ì†Œ ìˆ˜
+            D3D11_SDK_VERSION ,                                             // SDK ë²„ì „. ì£¼ë¡œ D3D11_SDK_VERSIONì„ ì‚¬ìš©
+            &SwapChainDesc ,                                                // SwapChain ì„¤ì •ê³¼ ê´€ë ¨ëœ DXGI_SWAP_CHAIN_DESC êµ¬ì¡°ì²´ì— ëŒ€í•œ í¬ì¸í„°
 
-            // Ãâ·Â ¸Å°³º¯¼ö
-            &SwapChain,                                                    // »ı¼ºµÈ IDXGISwapChain ÀÎÅÍÆäÀÌ½º¿¡ ´ëÇÑ Æ÷ÀÎÅÍ
-            &Device,                                                       // »ı¼ºµÈ ID3D11Device ÀÎÅÍÆäÀÌ½º¿¡ ´ëÇÑ Æ÷ÀÎÅÍ
-            nullptr,                                                       // ¼±ÅÃµÈ ±â´É ¼öÁØÀ» ³ªÅ¸³»´Â D3D_FEATURE_LEVEL °ªÀ» ¹İÈ¯
-            &DeviceContext                                                 // »ı¼ºµÈ ID3D11DeviceContext ÀÎÅÍÆäÀÌ½º¿¡ ´ëÇÑ Æ÷ÀÎÅÍ
+            // ì¶œë ¥ ë§¤ê°œë³€ìˆ˜
+            &SwapChain ,                                                    // ìƒì„±ëœ IDXGISwapChain ì¸í„°í˜ì´ìŠ¤ì— ëŒ€í•œ í¬ì¸í„°
+            &Device ,                                                       // ìƒì„±ëœ ID3D11Device ì¸í„°í˜ì´ìŠ¤ì— ëŒ€í•œ í¬ì¸í„°
+            nullptr ,                                                       // ì„ íƒëœ ê¸°ëŠ¥ ìˆ˜ì¤€ì„ ë‚˜íƒ€ë‚´ëŠ” D3D_FEATURE_LEVEL ê°’ì„ ë°˜í™˜
+            &DeviceContext                                                 // ìƒì„±ëœ ID3D11DeviceContext ì¸í„°í˜ì´ìŠ¤ì— ëŒ€í•œ í¬ì¸í„°
         );
 
-        // »ı¼ºµÈ SwapChainÀÇ Á¤º¸ °¡Á®¿À±â
+        // ìƒì„±ëœ SwapChainì˜ ì •ë³´ ê°€ì ¸ì˜¤ê¸°
         SwapChain->GetDesc(&SwapChainDesc);
 
-        // ºäÆ÷Æ® Á¤º¸ ¼³Á¤
+        // ë·°í¬íŠ¸ ì •ë³´ ì„¤ì •
         ViewportInfo = {
             0.0f, 0.0f,
-            static_cast<float>(SwapChainDesc.BufferDesc.Width), static_cast<float>(SwapChainDesc.BufferDesc.Height),
+            static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
             0.0f, 1.0f
         };
     }
 
-    /** Direct3D Device ¹× SwapChainÀ» ÇØÁ¦ÇÕ´Ï´Ù.  */
-    void ReleaseDeviceAndSwapChain()
+    /** Direct3D Device ë° SwapChainì„ í•´ì œí•©ë‹ˆë‹¤.  */
+    void URenderer::ReleaseDeviceAndSwapChain()
     {
         if (DeviceContext)
         {
-            DeviceContext->Flush(); // ³²ÀÌÀÖ´Â GPU ¸í·É ½ÇÇà
+            DeviceContext->Flush(); // ë‚¨ì´ìˆëŠ” GPU ëª…ë ¹ ì‹¤í–‰
         }
 
         if (SwapChain)
@@ -294,22 +290,22 @@ protected:
         }
     }
 
-    /** ÇÁ·¹ÀÓ ¹öÆÛ¸¦ »ı¼ºÇÕ´Ï´Ù. */
-    void CreateFrameBuffer()
+    /** í”„ë ˆì„ ë²„í¼ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. */
+    void URenderer::CreateFrameBuffer()
     {
-        // ½º¿Ò Ã¼ÀÎÀ¸·ÎºÎÅÍ ¹é ¹öÆÛ ÅØ½ºÃ³ °¡Á®¿À±â
-        SwapChain->GetBuffer(0, IID_PPV_ARGS(&FrameBuffer));
+        // ìŠ¤ì™‘ ì²´ì¸ìœ¼ë¡œë¶€í„° ë°± ë²„í¼ í…ìŠ¤ì²˜ ê°€ì ¸ì˜¤ê¸°
+        SwapChain->GetBuffer(0 , IID_PPV_ARGS(&FrameBuffer));
 
-        // ·»´õ Å¸°Ù ºä »ı¼º
+        // ë Œë” íƒ€ê²Ÿ ë·° ìƒì„±
         D3D11_RENDER_TARGET_VIEW_DESC FrameBufferRTVDesc = {};
-        FrameBufferRTVDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;      // »ö»ó Æ÷¸Ë
-        FrameBufferRTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D ÅØ½ºÃ³
+        FrameBufferRTVDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;      // ìƒ‰ìƒ í¬ë§·
+        FrameBufferRTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D í…ìŠ¤ì²˜
 
-        Device->CreateRenderTargetView(FrameBuffer, &FrameBufferRTVDesc, &FrameBufferRTV);
+        Device->CreateRenderTargetView(FrameBuffer , &FrameBufferRTVDesc , &FrameBufferRTV);
     }
 
-    /** ÇÁ·¹ÀÓ ¹öÆÛ¸¦ ÇØÁ¦ÇÕ´Ï´Ù. */
-    void ReleaseFrameBuffer()
+    /** í”„ë ˆì„ ë²„í¼ë¥¼ í•´ì œí•©ë‹ˆë‹¤. */
+    void URenderer::ReleaseFrameBuffer()
     {
         if (FrameBuffer)
         {
@@ -324,18 +320,18 @@ protected:
         }
     }
 
-    /** ·¹½ºÅÍ¶óÀÌÁî »óÅÂ¸¦ »ı¼ºÇÕ´Ï´Ù. */
-    void CreateRasterizerState()
+    /** ë ˆìŠ¤í„°ë¼ì´ì¦ˆ ìƒíƒœë¥¼ ìƒì„±í•©ë‹ˆë‹¤. */
+    void URenderer::CreateRasterizerState()
     {
         D3D11_RASTERIZER_DESC RasterizerDesc = {};
-        RasterizerDesc.FillMode = D3D11_FILL_SOLID; // Ã¤¿ì±â ¸ğµå
-        RasterizerDesc.CullMode = D3D11_CULL_BACK;  // ¹é ÆäÀÌ½º ÄÃ¸µ
+        RasterizerDesc.FillMode = D3D11_FILL_SOLID; // ì±„ìš°ê¸° ëª¨ë“œ
+        RasterizerDesc.CullMode = D3D11_CULL_BACK;  // ë°± í˜ì´ìŠ¤ ì»¬ë§
 
-        Device->CreateRasterizerState(&RasterizerDesc, &RasterizerState);
+        Device->CreateRasterizerState(&RasterizerDesc , &RasterizerState);
     }
 
-    /** ·¹½ºÅÍ¶óÀÌÀú »óÅÂ¸¦ ÇØÁ¦ÇÕ´Ï´Ù. */
-    void ReleaseRasterizerState()
+    /** ë ˆìŠ¤í„°ë¼ì´ì € ìƒíƒœë¥¼ í•´ì œí•©ë‹ˆë‹¤. */
+    void URenderer::ReleaseRasterizerState()
     {
         if (RasterizerState)
         {
@@ -343,25 +339,3 @@ protected:
             RasterizerState = nullptr;
         }
     }
-
-protected:
-    // Direct3D 11 ÀåÄ¡(Device)¿Í ÀåÄ¡ ÄÁÅØ½ºÆ®(Device Context) ¹× ½º¿Ò Ã¼ÀÎ(Swap Chain)À» °ü¸®ÇÏ±â À§ÇÑ Æ÷ÀÎÅÍµé
-    ID3D11Device* Device = nullptr;                         // GPU¿Í Åë½ÅÇÏ±â À§ÇÑ Direct3D ÀåÄ¡
-    ID3D11DeviceContext* DeviceContext = nullptr;           // GPU ¸í·É ½ÇÇàÀ» ´ã´çÇÏ´Â ÄÁÅØ½ºÆ®
-    IDXGISwapChain* SwapChain = nullptr;                    // ÇÁ·¹ÀÓ ¹öÆÛ¸¦ ±³Ã¼ÇÏ´Â µ¥ »ç¿ëµÇ´Â ½º¿Ò Ã¼ÀÎ
-
-    // ·»´õ¸µ¿¡ ÇÊ¿äÇÑ ¸®¼Ò½º ¹× »óÅÂ¸¦ °ü¸®ÇÏ±â À§ÇÑ º¯¼öµé
-    ID3D11Texture2D* FrameBuffer = nullptr;                 // È­¸é Ãâ·Â¿ë ÅØ½ºÃ³
-    ID3D11RenderTargetView* FrameBufferRTV = nullptr;       // ÅØ½ºÃ³¸¦ ·»´õ Å¸°ÙÀ¸·Î »ç¿ëÇÏ´Â ºä
-    ID3D11RasterizerState* RasterizerState = nullptr;       // ·¡½ºÅÍ¶óÀÌÀú »óÅÂ(ÄÃ¸µ, Ã¤¿ì±â ¸ğµå µî Á¤ÀÇ)
-    ID3D11Buffer* ConstantBuffer = nullptr;                 // ½¦ÀÌ´õ¿¡ µ¥ÀÌÅÍ¸¦ Àü´ŞÇÏ±â À§ÇÑ »ó¼ö ¹öÆÛ
-
-    FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f }; // È­¸éÀ» ÃÊ±âÈ­(clear)ÇÒ ¶§ »ç¿ëÇÒ »ö»ó (RGBA)
-    D3D11_VIEWPORT ViewportInfo = {};                       // ·»´õ¸µ ¿µ¿ªÀ» Á¤ÀÇÇÏ´Â ºäÆ÷Æ® Á¤º¸
-
-    // Shader¸¦ ·»´õ¸µÇÒ ¶§ »ç¿ëµÇ´Â º¯¼öµé
-    ID3D11VertexShader* SimpleVertexShader = nullptr;       // Vertex µ¥ÀÌÅÍ¸¦ Ã³¸®ÇÏ´Â Vertex ¼ÎÀÌ´õ
-    ID3D11PixelShader* SimplePixelShader = nullptr;         // PixelÀÇ »ö»óÀ» °áÁ¤ÇÏ´Â Pixel ¼ÎÀÌ´õ
-    ID3D11InputLayout* SimpleInputLayout = nullptr;         // Vertex ¼ÎÀÌ´õ ÀÔ·Â ·¹ÀÌ¾Æ¿ô Á¤ÀÇ
-    unsigned int Stride = 0;                                // Vertex ¹öÆÛÀÇ °¢ ¿ä¼Ò Å©±â
-};

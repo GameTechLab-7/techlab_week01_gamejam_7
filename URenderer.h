@@ -18,10 +18,10 @@ private:
     struct alignas(16) FConstants;
 
 public:
-    /** Renderer¸¦ ÃÊ±âÈ­ ÇÕ´Ï´Ù. */
+    /** Rendererë¥¼ ì´ˆê¸°í™” í•©ë‹ˆë‹¤. */
     void Create(HWND hWindow);
 
-    /** Renderer¿¡ »ç¿ëµÈ ¸ğµç ¸®¼Ò½º¸¦ ÇØÁ¦ÇÕ´Ï´Ù. */
+    /** Rendererì— ì‚¬ìš©ëœ ëª¨ë“  ë¦¬ì†ŒìŠ¤ë¥¼ í•´ì œí•©ë‹ˆë‹¤. */
     void Release();
 
     void CreateShader();
@@ -31,50 +31,70 @@ public:
 
     void ReleaseConstantBuffer();
 
-    /** ½º¿Ò Ã¼ÀÎÀÇ ¹é ¹öÆÛ¿Í ÇÁ·ĞÆ® ¹öÆÛ¸¦ ±³Ã¼ÇÏ¿© È­¸é¿¡ Ãâ·Â */
+    /** ìŠ¤ì™‘ ì²´ì¸ì˜ ë°± ë²„í¼ì™€ í”„ë¡ íŠ¸ ë²„í¼ë¥¼ êµì²´í•˜ì—¬ í™”ë©´ì— ì¶œë ¥ */
     void SwapBuffer() const;
 
-    /** ·»´õ¸µ ÆÄÀÌÇÁ¶óÀÎÀ» ÁØºñ ÇÕ´Ï´Ù. */
+    /** ë Œë”ë§ íŒŒì´í”„ë¼ì¸ì„ ì¤€ë¹„ í•©ë‹ˆë‹¤. */
     void Prepare() const;
 
-    /** ¼ÎÀÌ´õ¸¦ ÁØºñ ÇÕ´Ï´Ù. */
+    /** ì…°ì´ë”ë¥¼ ì¤€ë¹„ í•©ë‹ˆë‹¤. */
     void PrepareShader() const;
     
     ID3D11Buffer* CreateVertexBuffer(const FVertexSimple* Vertices, UINT ByteWidth) const;
 
     /**
-     * Buffer¿¡ ÀÖ´Â Vertex¸¦ ±×¸³´Ï´Ù.
-     * @param pBuffer ·»´õ¸µ¿¡ »ç¿ëÇÒ ¹öÅØ½º ¹öÆÛ¿¡ ´ëÇÑ Æ÷ÀÎÅÍ
-     * @param numVertices ¹öÅØ½º ¹öÆÛ¿¡ ÀúÀåµÈ ¹öÅØ½ºÀÇ ÃÑ °³¼ö
+     * Bufferì— ìˆëŠ” Vertexë¥¼ ê·¸ë¦½ë‹ˆë‹¤.
+     * @param pBuffer ë Œë”ë§ì— ì‚¬ìš©í•  ë²„í…ìŠ¤ ë²„í¼ì— ëŒ€í•œ í¬ì¸í„°
+     * @param numVertices ë²„í…ìŠ¤ ë²„í¼ì— ì €ì¥ëœ ë²„í…ìŠ¤ì˜ ì´ ê°œìˆ˜
      */
     void RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices) const;
 
-    /** Buffer¸¦ ÇØÁ¦ÇÕ´Ï´Ù. */
+    /** Bufferë¥¼ í•´ì œí•©ë‹ˆë‹¤. */
     void ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const;
 
-    /** Constant Data¸¦ ¾÷µ¥ÀÌÆ® ÇÕ´Ï´Ù. */
+    /** Constant Dataë¥¼ ì—…ë°ì´íŠ¸ í•©ë‹ˆë‹¤. */
     void UpdateConstant(const FVector3& Offset, float Scale) const;
 
     ID3D11Device* GetDevice() const;
     ID3D11DeviceContext* GetDeviceContext() const;
 
 protected:
-    /** Direct3D Device ¹× SwapChainÀ» »ı¼ºÇÕ´Ï´Ù. */
+    /** Direct3D Device ë° SwapChainì„ ìƒì„±í•©ë‹ˆë‹¤. */
     void CreateDeviceAndSwapChain(HWND hWindow);
 
-    /** Direct3D Device ¹× SwapChainÀ» ÇØÁ¦ÇÕ´Ï´Ù.  */
+    /** Direct3D Device ë° SwapChainì„ í•´ì œí•©ë‹ˆë‹¤.  */
     void ReleaseDeviceAndSwapChain();
 
-    /** ÇÁ·¹ÀÓ ¹öÆÛ¸¦ »ı¼ºÇÕ´Ï´Ù. */
+    /** í”„ë ˆì„ ë²„í¼ë¥¼ ìƒì„±í•©ë‹ˆë‹¤. */
     void CreateFrameBuffer();
 
-    /** ÇÁ·¹ÀÓ ¹öÆÛ¸¦ ÇØÁ¦ÇÕ´Ï´Ù. */
+    /** í”„ë ˆì„ ë²„í¼ë¥¼ í•´ì œí•©ë‹ˆë‹¤. */
     void ReleaseFrameBuffer();
 
-    /** ·¹½ºÅÍ¶óÀÌÁî »óÅÂ¸¦ »ı¼ºÇÕ´Ï´Ù. */
+    /** ë ˆìŠ¤í„°ë¼ì´ì¦ˆ ìƒíƒœë¥¼ ìƒì„±í•©ë‹ˆë‹¤. */
     void CreateRasterizerState();
 
-    /** ·¹½ºÅÍ¶óÀÌÀú »óÅÂ¸¦ ÇØÁ¦ÇÕ´Ï´Ù. */
+    /** ë ˆìŠ¤í„°ë¼ì´ì € ìƒíƒœë¥¼ í•´ì œí•©ë‹ˆë‹¤. */
     void ReleaseRasterizerState();
 
+
+        // Direct3D 11 ì¥ì¹˜(Device)ì™€ ì¥ì¹˜ ì»¨í…ìŠ¤íŠ¸(Device Context) ë° ìŠ¤ì™‘ ì²´ì¸(Swap Chain)ì„ ê´€ë¦¬í•˜ê¸° ìœ„í•œ í¬ì¸í„°ë“¤
+    ID3D11Device* Device = nullptr;                         // GPUì™€ í†µì‹ í•˜ê¸° ìœ„í•œ Direct3D ì¥ì¹˜
+    ID3D11DeviceContext* DeviceContext = nullptr;           // GPU ëª…ë ¹ ì‹¤í–‰ì„ ë‹´ë‹¹í•˜ëŠ” ì»¨í…ìŠ¤íŠ¸
+    IDXGISwapChain* SwapChain = nullptr;                    // í”„ë ˆì„ ë²„í¼ë¥¼ êµì²´í•˜ëŠ” ë° ì‚¬ìš©ë˜ëŠ” ìŠ¤ì™‘ ì²´ì¸
+
+    // ë Œë”ë§ì— í•„ìš”í•œ ë¦¬ì†ŒìŠ¤ ë° ìƒíƒœë¥¼ ê´€ë¦¬í•˜ê¸° ìœ„í•œ ë³€ìˆ˜ë“¤
+    ID3D11Texture2D* FrameBuffer = nullptr;                 // í™”ë©´ ì¶œë ¥ìš© í…ìŠ¤ì²˜
+    ID3D11RenderTargetView* FrameBufferRTV = nullptr;       // í…ìŠ¤ì²˜ë¥¼ ë Œë” íƒ€ê²Ÿìœ¼ë¡œ ì‚¬ìš©í•˜ëŠ” ë·°
+    ID3D11RasterizerState* RasterizerState = nullptr;       // ë˜ìŠ¤í„°ë¼ì´ì € ìƒíƒœ(ì»¬ë§, ì±„ìš°ê¸° ëª¨ë“œ ë“± ì •ì˜)
+    ID3D11Buffer* ConstantBuffer = nullptr;                 // ì‰ì´ë”ì— ë°ì´í„°ë¥¼ ì „ë‹¬í•˜ê¸° ìœ„í•œ ìƒìˆ˜ ë²„í¼
+
+    FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f }; // í™”ë©´ì„ ì´ˆê¸°í™”(clear)í•  ë•Œ ì‚¬ìš©í•  ìƒ‰ìƒ (RGBA)
+    D3D11_VIEWPORT ViewportInfo = {};                       // ë Œë”ë§ ì˜ì—­ì„ ì •ì˜í•˜ëŠ” ë·°í¬íŠ¸ ì •ë³´
+
+    // Shaderë¥¼ ë Œë”ë§í•  ë•Œ ì‚¬ìš©ë˜ëŠ” ë³€ìˆ˜ë“¤
+    ID3D11VertexShader* SimpleVertexShader = nullptr;       // Vertex ë°ì´í„°ë¥¼ ì²˜ë¦¬í•˜ëŠ” Vertex ì…°ì´ë”
+    ID3D11PixelShader* SimplePixelShader = nullptr;         // Pixelì˜ ìƒ‰ìƒì„ ê²°ì •í•˜ëŠ” Pixel ì…°ì´ë”
+    ID3D11InputLayout* SimpleInputLayout = nullptr;         // Vertex ì…°ì´ë” ì…ë ¥ ë ˆì´ì•„ì›ƒ ì •ì˜
+    unsigned int Stride = 0;                                // Vertex ë²„í¼ì˜ ê° ìš”ì†Œ í¬ê¸°
 };
