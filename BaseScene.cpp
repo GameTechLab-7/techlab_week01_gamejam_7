@@ -5,12 +5,3 @@ void BaseScene::Update(float deltaTime)
 	// !TODO : 프레임 표시, etc..
 
 }
-
-BaseScene::BaseScene()
-{
-}
-
-BaseScene::~BaseScene()
-{
-	ExitScene();
-}
