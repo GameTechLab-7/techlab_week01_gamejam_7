@@ -1,16 +1,18 @@
 #pragma once
+#include <d3d11.h>
+#include <vector>
+#include <memory>
+#include <unordered_map>
 
 #include "GameObject/CircleObject.h"
 #include "AbstractClass/Singleton.h"
-#include <vector>
-#include <map>
-#include <memory>
 
-class ObjectManager : Singleton< ObjectManager> {
+
+class ObjectManager : Singleton<ObjectManager>
+{
 public:
-	
 	// Update, FixedUpdate
-	URenderer* uRenderer;
+	URenderer* Renderer;
 
 	void Initialize(URenderer* renderer);
 
@@ -20,23 +22,23 @@ public:
 	void FixedUpdate(float FixedTime);
 
 	// 일회성
-	void RegistObject(CircleObject* CircleObject);
-	void Destory(CircleObject* CircleObject);
+	void RegistObject(CircleObject* InCircleObject);
+	void Destroy(CircleObject* InCircleObject);
 
 protected:
-	std::map<EWorld , std::vector<CircleObject*>> objectsMap;
-	std::vector <std::shared_ptr<CircleObject>> destroyList;
+	std::unordered_map<EWorld , std::vector<CircleObject*>> ObjectsMap;
+	std::vector <std::shared_ptr<CircleObject>> DestroyList;
 
 private:
 
 	// 라이프 사이클에 의해 Update 이후에 사용
 	void ProcessDestroy();
 
-	void ProcessMove(const float tick);		// velocity에 따른 움직임.
+	void ProcessMove(float DeltaTime);		// velocity에 따른 움직임.
 
 	void ProcessCheckCollision();
 
-	void ProcessRender(ID3D11Buffer* pBuffer , UINT numVertices);
+	void ProcessRender(ID3D11Buffer* pBuffer , UINT numVertices) const;
 
-	bool CheckCollision(const CircleObject& A , const CircleObject& B);
+	bool CheckCollision(const CircleObject& A , const CircleObject& B) const;
 };
