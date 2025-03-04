@@ -18,15 +18,27 @@
 			Location.x = WorldWalls[ MyWorld ][ right ] - Radius;
 		}
 
-		if (Location.y - Radius < WorldWalls[ MyWorld ][ top ])
-		{
-			Location.y = WorldWalls[ MyWorld ][ top ] + Radius;
-		}
-		else if (Location.y + Radius > WorldWalls[ MyWorld ][ bottom ])
-		{
-			Location.y = WorldWalls[ MyWorld ][ bottom ] - Radius;
-		}
-	}
+// 이동 후 겹침 보정 (Monster, Player에 대해)
+{
+    // 벽
+    if (Location.x - Radius < WorldWalls[MyWorld][Left])
+    {
+        Location.x = WorldWalls[MyWorld][Left] + Radius;
+    }
+    else if (Location.x + Radius > WorldWalls[MyWorld][Right])
+    {
+        Location.x = WorldWalls[MyWorld][Right] - Radius;
+    }
+
+    if (Location.y - Radius < WorldWalls[MyWorld][Top])
+    {
+        Location.y = WorldWalls[MyWorld][Top] + Radius;
+    }
+    else if (Location.y + Radius > WorldWalls[MyWorld][Bottom])
+    {
+        Location.y = WorldWalls[MyWorld][Bottom] - Radius;
+    }
+}
 
 	void Player::HandleWallCollision(const FVector3& WallNormal) {
 

@@ -1,32 +1,31 @@
 #include "Monster.h"
 
-class Monster : public CircleObject {
 
-	void Update(float DeltaTime) {
-		// 벽
-		if (Location.x - Radius < WorldWalls[ MyWorld ][ left ])
-		{
-			Location.x = WorldWalls[ MyWorld ][ left ] + Radius;
-		}
-		else if (Location.x + Radius > WorldWalls[ MyWorld ][ right ])
-		{
-			Location.x = WorldWalls[ MyWorld ][ right ] - Radius;
-		}
+void Monster::Update(float DeltaTime)
+{
+    // 벽
+    if (Location.x - Radius < WorldWalls[MyWorld][Left])
+    {
+        Location.x = WorldWalls[MyWorld][Left] + Radius;
+    }
+    else if (Location.x + Radius > WorldWalls[MyWorld][Right])
+    {
+        Location.x = WorldWalls[MyWorld][Right] - Radius;
+    }
 
-		if (Location.y - Radius < WorldWalls[ MyWorld ][ top ])
-		{
-			Location.y = WorldWalls[ MyWorld ][ top ] + Radius;
-		}
-		else if (Location.y + Radius > WorldWalls[ MyWorld ][ bottom ])
-		{
-			Location.y = WorldWalls[ MyWorld ][ bottom ] - Radius;
-		}
-	}
+    if (Location.y - Radius < WorldWalls[MyWorld][Top])
+    {
+        Location.y = WorldWalls[MyWorld][Top] + Radius;
+    }
+    else if (Location.y + Radius > WorldWalls[MyWorld][Bottom])
+    {
+        Location.y = WorldWalls[MyWorld][Bottom] - Radius;
+    }
+}
 
-	void HandleBallCollision(CircleObject& OtherBall)
-	{
-		// Monster - Monster
-		// if Ball is Monster
-		//	 충돌 위치 보정
-	}
-};
+void Monster::HandleBallCollision(CircleObject& OtherBall)
+{
+    // Monster - Monster
+    // if Ball is Monster
+    //	 충돌 위치 보정
+}

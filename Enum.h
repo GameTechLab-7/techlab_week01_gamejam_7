@@ -1,5 +1,9 @@
 #pragma once
-enum EWorld {
-	first ,
-	second ,
+#include <cstdint>
+
+
+enum EWorld : uint8_t
+{
+	First,
+	Second,
 };

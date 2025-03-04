@@ -261,13 +261,13 @@ ID3D11DeviceContext* URenderer::GetDeviceContext() const { return DeviceContext;
         SwapChain->GetDesc(&SwapChainDesc);
 
         // 뷰포트 정보 설정
-        viewports.insert({ EWorld::first, {
+        viewports.insert({ EWorld::First, {
             -( static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f ), 0.0f,
             static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
             0.0f, 1.0f
         } });
 
-        viewports.insert({ EWorld::second, {
+        viewports.insert({ EWorld::Second, {
             static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f, 0.0f,
             static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
             0.0f, 1.0f

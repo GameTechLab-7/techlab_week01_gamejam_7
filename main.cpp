@@ -2609,7 +2609,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	int ArrSize = 1;
 	int ArrCap = 4;
 	CircleObject** CircleObjects = new CircleObject*[ArrCap];
-	EWorld world = EWorld::first;
+	EWorld world = EWorld::First;
 	auto Ball = new Player(world);
 
 	ObjectManager objectManager;
@@ -2670,9 +2670,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		std::cout << timer << '\n';
 		if (timer > spawnCooldown) {
 			timer = 0.f;
-			auto objecta = new Player(EWorld::first);
-			auto objectb = new Player(EWorld::second);
-			// new랑 poisition, velocity, radius
+			auto objecta = new Player(EWorld::First);
+			auto objectb = new Player(EWorld::Second);
 			// new랑 position, velocity, radius
 			objectManager.RegistObject(objecta);
 			objectManager.RegistObject(objectb);
