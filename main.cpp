@@ -1,4 +1,4 @@
-﻿#pragma comment(lib, "user32")
+#pragma comment(lib, "user32")
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
 
@@ -3272,8 +3272,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
             }
         }
 
-		GameManager::GetInstance().HandleState();
-
 		// Update 로직
 		for (int i = 0; i < ArrSize; ++i)
 		{
@@ -3391,10 +3389,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		        	}
         		}
         	}
-			//if (ImGui::InputInt("GameState", &GameState))
-			//{
-			//	GameManager::GetInstance().SetGameState((EGameState)GameState);
-			//}
         }
         ImGui::End();
 
