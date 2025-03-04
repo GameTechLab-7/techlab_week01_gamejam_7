@@ -1,4 +1,4 @@
-﻿#pragma comment(lib, "user32")
+#pragma comment(lib, "user32")
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
 
@@ -12,6 +12,8 @@
 #include "CircleObject.h"
 #include "URenderer.h"
 #include "FVector3.h"
+#include "GameManager.h"
+#include <iostream>
 
 
 enum class EPrimitiveType : UINT8
@@ -2521,6 +2523,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+void OpenDebugConsole()
+{
+	AllocConsole(); // 콘솔 창 생성
+
+	// 표준 출력 및 입력을 콘솔과 연결
+	freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+	freopen_s((FILE**)stdin, "CONIN$", "r", stdin);
+
+	std::cout << "Debug Console Opened!" << std::endl;
+}
+
+void CloseDebugConsole()
+{
+	FreeConsole(); // 콘솔 창 닫기
+}
+
+
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
 {
 #pragma region Init Window
@@ -2545,6 +2564,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         1024, 1024,
         nullptr, nullptr, hInstance, nullptr
     );
+
+	OpenDebugConsole();
 #pragma endregion Init Window
 
 #pragma region Init Renderer & ImGui
@@ -2595,6 +2616,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
     // Main Loop
     bool bIsExit = false;
+
+	int GameState = -1;
     while (bIsExit == false)
     {
         // DeltaTime 계산 (초 단위)
@@ -2624,6 +2647,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
             }
         }
 
+		GameManager::GetInstance().HandleState();
 
 		// Update 로직
 		for (int i = 0; i < ArrSize; ++i)
@@ -2742,6 +2766,11 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		        	}
         		}
         	}*/
+        	}
+			//if (ImGui::InputInt("GameState", &GameState))
+			//{
+			//	GameManager::GetInstance().SetGameState((EGameState)GameState);
+			//}
         }
         ImGui::End();
 
@@ -2776,5 +2805,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     Renderer.ReleaseShader();
     Renderer.Release();
 
+
+	CloseDebugConsole();
     return 0;
 }
+
+
