@@ -1,24 +1,23 @@
-#include "GameObject/Player.h"
+#include "Player.h"
+#include "URenderer.h"
 
 
-	// 문제 1. 벽 겹침 보정을 언제 어디서 해주냐
-	
+// 문제 1. 벽 겹침 보정을 언제 어디서 해주냐
 
-	// Move 이후? 뭐 어디서? 
-	
-	// 이동 후 겹침 보정 (Monster, Player에 대해)
-	void Player::Update(float DeltaTime) {
-		// 벽
-		if (Location.x - Radius < WorldWalls[ MyWorld ][ left ])
-		{
-			Location.x = WorldWalls[ MyWorld ][ left ] + Radius;
-		}
-		else if (Location.x + Radius > WorldWalls[ MyWorld ][ right ])
-		{
-			Location.x = WorldWalls[ MyWorld ][ right ] - Radius;
-		}
+
+// Move 이후? 뭐 어디서? 
+
+Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
+{
+    Radius = 0.3f;
+    const float x = rand() % 1 - MyWorld;
+    const float y = rand() % 2 - 1;
+    Location = FVector3(x , y , 0);
+    Velocity = FVector3(x , y , 0);
+}
 
 // 이동 후 겹침 보정 (Monster, Player에 대해)
+void Player::Update(float DeltaTime)
 {
     // 벽
     if (Location.x - Radius < WorldWalls[MyWorld][Left])

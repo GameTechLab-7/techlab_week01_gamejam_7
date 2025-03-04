@@ -4,13 +4,7 @@
 
 class Player : public CircleObject {
 public:
-	Player(EWorld selectedWorld) : CircleObject(selectedWorld) {
-		Radius = 0.3;
-		float x = rand() % 1 - MyWorld;
-		float y = rand() % 2 - 1;
-		Location = FVector3(x, y, 0);
-		Velocity = FVector3(x, y, 0);
-	};
+    Player(EWorld selectedWorld);
 
 	void Update(float DeltaTime);
 
