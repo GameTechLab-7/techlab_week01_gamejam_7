@@ -39,27 +39,30 @@ void Player::Update(float DeltaTime)
     }
 }
 
-	void Player::HandleWallCollision(const FVector3& WallNormal) {
+void Player::HandleWallCollision(const FVector3& WallNormal)
+{
+}
 
-	}
-
-	void Player::HandleBallCollision(CircleObject& OtherBall) {
-		// Monster -> Player
-		// Player 넉백 -> velocity
-		// Player Damage 
-		// Player 무적 
-	}
-
-
-	void Player::Render(const URenderer& Renderer) const {
-		Renderer.UpdateConstant(Location , Radius);
-	}
-
-	void Player::Move(const float tick) {
-		Location += Velocity * tick;
-	}
+void Player::HandleBallCollision(CircleObject& OtherBall)
+{
+    // Monster -> Player
+    // Player 넉백 -> velocity
+    // Player Damage 
+    // Player 무적 
+}
 
 
-	void Player::OnDestroy() {
+void Player::Render(const URenderer& Renderer) const
+{
+    Renderer.UpdateConstant(Location , Radius);
+}
 
-	}
+void Player::Move(float DeltaTime)
+{
+    Location += Velocity * DeltaTime;
+}
+
+
+void Player::OnDestroy()
+{
+}

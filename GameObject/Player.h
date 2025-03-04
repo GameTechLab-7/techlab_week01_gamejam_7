@@ -2,20 +2,21 @@
 
 #include "GameObject/CircleObject.h"
 
-class Player : public CircleObject {
+class Player : public CircleObject
+{
 public:
     Player(EWorld selectedWorld);
 
-	void Update(float DeltaTime);
+    void Update(float DeltaTime);
 
-	void HandleWallCollision(const FVector3& WallNormal);
+    virtual void HandleWallCollision(const FVector3& WallNormal) override;
 
-	void HandleBallCollision(CircleObject& OtherBall);
+    virtual void HandleBallCollision(CircleObject& OtherBall) override;
 
 
-	void Render(const URenderer& Renderer) const;
+    virtual void Render(const URenderer& Renderer) const override;
 
-	void Move(const float tick);
+    virtual void Move(float DeltaTime) override;
 
-	void OnDestroy();
+    virtual void OnDestroy() override;
 };
