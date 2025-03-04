@@ -2613,7 +2613,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	auto Ball = new Player(world);
 
 	ObjectManager objectManager;
-	objectManager.Inititalize(&Renderer);
+	objectManager.Initialize(&Renderer);
 	
 	int NumOfBalls = 1;
 	float spawnCooldown = 1.f;

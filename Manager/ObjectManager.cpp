@@ -1,8 +1,10 @@
 #include "Manager/ObjectManager.h"
 
 
-void ObjectManager::Inititalize(URenderer* renderer) {
-	uRenderer = renderer;
+
+void ObjectManager::Initialize(URenderer* renderer)
+{
+    Renderer = renderer;
 }
 
 void ObjectManager::Update(float DeltaTime, ID3D11Buffer* pBuffer, UINT numVertices) {

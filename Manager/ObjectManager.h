@@ -12,7 +12,7 @@ public:
 	// Update, FixedUpdate
 	URenderer* uRenderer;
 
-	void Inititalize(URenderer* renderer);
+	void Initialize(URenderer* renderer);
 
 	// 라이프사이클
 	//void Render(World world);
