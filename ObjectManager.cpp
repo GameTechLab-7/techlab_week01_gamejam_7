@@ -1,10 +1,14 @@
 #include "ObjectManager.h"
 
 
-void ObjectManager::Update(float DeltaTime) {
+void ObjectManager::Inititalize(URenderer* renderer) {
+	uRenderer = renderer;
+}
+
+void ObjectManager::Update(float DeltaTime, ID3D11Buffer* pBuffer, UINT numVertices) {
 		ProcessMove(DeltaTime);
 		ProcessCheckCollision();
-		ProcessRender();
+		ProcessRender(pBuffer, numVertices);
 
 		ProcessDestroy();
 	}
@@ -13,13 +17,12 @@ void ObjectManager::Update(float DeltaTime) {
 
 	}
 
-	void ObjectManager::RegistObject(CircleObject* circleObject , EWorld world) {
-		if (objectsMap.find(world) == objectsMap.end()) {
-			objectsMap.insert({ world, std::vector<CircleObject*>()});
+	void ObjectManager::RegistObject(CircleObject* circleObject) {
+		if (objectsMap.find(circleObject->MyWorld) == objectsMap.end()) {
+			objectsMap.insert({ circleObject->MyWorld, std::vector<CircleObject*>() });
 		}
-		else {
-			objectsMap.at(world).push_back(circleObject);
-		}
+
+		objectsMap.at(circleObject->MyWorld).push_back(circleObject);
 	}
 
 	void ObjectManager::Destory(CircleObject* CircleObject) {
@@ -66,11 +69,12 @@ void ObjectManager::Update(float DeltaTime) {
 		}
 	}
 
-	void ObjectManager::ProcessRender() {
+	void ObjectManager::ProcessRender(ID3D11Buffer* pBuffer, UINT numVertices) {
 		for (auto vectors : objectsMap) {
-			URenderer->PrepareViewport(vectors.first);
+			uRenderer->PrepareViewport(vectors.first);
 			for (auto vector : vectors.second) {
-				vector->Render(*URenderer);
+				vector->Render(*uRenderer);
+				uRenderer->RenderPrimitive(pBuffer, numVertices);
 			}
 		}
 	}

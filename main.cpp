@@ -16,6 +16,7 @@
 #include "FVector3.h"
 #include "GameManager.h"
 #include "Player.h"
+#include "ObjectManager.h"
 
 enum class EPrimitiveType : UINT8
 {
@@ -2614,8 +2615,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	EWorld world = EWorld::first;
 	auto Ball = new Player(world);
 
+	ObjectManager objectManager;
+	objectManager.Inititalize(&Renderer);
+	
 	int NumOfBalls = 1;
-
+	float spawnCooldown = 1.f;
+	float timer = 0.f;
     // Main Loop
     bool bIsExit = false;
 
@@ -2631,6 +2636,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
         // 누적 시간 추가
         Accumulator += DeltaTime;
+		timer += DeltaTime;
 
         // 메시지(이벤트) 처리
         MSG msg;
@@ -2668,6 +2674,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     		Accumulator -= FixedTimeStep;
     	}
 
+		std::cout << timer << '\n';
+		if (timer > spawnCooldown) {
+			timer = 0.f;
+			auto objecta = new Player(EWorld::first);
+			auto objectb = new Player(EWorld::second);
+			// new랑 poisition, velocity, radius
+			objectManager.RegistObject(objecta);
+			objectManager.RegistObject(objectb);
+		}
+
         // 렌더링 준비 작업
         Renderer.Prepare();
         Renderer.PrepareShader();
@@ -2678,9 +2694,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     		//Renderer.RenderPrimitive(VertexBufferSphere, NumOfVertices);
     	//}
 
-		Renderer.PrepareViewport(EWorld::second);
-		Ball->Render(Renderer);
-		Renderer.RenderPrimitive(VertexBufferSphere , NumOfVertices);
+		
+		objectManager.Update(DeltaTime, VertexBufferSphere , NumOfVertices);
+
+		//Renderer.PrepareViewport(EWorld::second);
+		//Ball->Render(Renderer);
+		//Renderer.RenderPrimitive(VertexBufferSphere , NumOfVertices);
 
 
 

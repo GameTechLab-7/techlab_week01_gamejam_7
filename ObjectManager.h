@@ -10,19 +10,22 @@ class ObjectManager : Singleton< ObjectManager> {
 public:
 	
 	// Update, FixedUpdate
-	std::map<EWorld, std::vector<CircleObject*>> objectsMap;
-	std::vector <std::shared_ptr<CircleObject>> destroyList;
-	URenderer* URenderer;
+	URenderer* uRenderer;
 
+	void Inititalize(URenderer* renderer);
 
 	// 라이프사이클
 	//void Render(World world);
-	void Update(float DeltaTime);
+	void Update(float DeltaTime, ID3D11Buffer* pBuffer , UINT numVertices);
 	void FixedUpdate(float FixedTime);
 
 	// 일회성
-	void RegistObject(CircleObject* CircleObject, EWorld world);
+	void RegistObject(CircleObject* CircleObject);
 	void Destory(CircleObject* CircleObject);
+
+protected:
+	std::map<EWorld , std::vector<CircleObject*>> objectsMap;
+	std::vector <std::shared_ptr<CircleObject>> destroyList;
 
 private:
 
@@ -33,7 +36,7 @@ private:
 
 	void ProcessCheckCollision();
 
-	void ProcessRender();
+	void ProcessRender(ID3D11Buffer* pBuffer , UINT numVertices);
 
 	bool CheckCollision(const CircleObject& A , const CircleObject& B);
 };
