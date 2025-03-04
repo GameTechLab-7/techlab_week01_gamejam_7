@@ -2655,10 +2655,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
             }
         }
 
-		GameManager::GetInstance().HandleState();
+		// TODO: Update 로직 추가
 
-		// Update 로직 -> ObjectManager에 있는 Update 호출
-		//Update(DeltaTime);
 
     	// FixedTimeStep 만큼 업데이트
     	while (Accumulator >= FixedTimeStep)
@@ -2780,10 +2778,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		        	}
         		}
         	}*/
-			//if (ImGui::InputInt("GameState", &GameState))
-			//{
-			//	GameManager::GetInstance().SetGameState((EGameState)GameState);
-			//}
         }
         ImGui::End();
 

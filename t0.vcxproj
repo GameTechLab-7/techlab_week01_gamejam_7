@@ -76,6 +76,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,6 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -118,6 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CircleObject.cpp" />
     <ClCompile Include="FVector3.cpp" />
@@ -139,9 +144,10 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="MainGameScene.cpp" />
+    <ClCompile Include="PresetScene.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="URenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -151,10 +157,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="CircleObject.h" />
-    <ClInclude Include="enum.h" />
-    <ClInclude Include="FVector3.h" />
+    <ClInclude Include="BaseScene.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -164,6 +167,15 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="MainGameScene.h" />
+    <ClInclude Include="PresetScene.h" />
+    <ClInclude Include="TitleScene.h" />
+    <ClCompile Include="Monster.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="CircleObject.h" />
+    <ClInclude Include="enum.h" />
+    <ClInclude Include="FVector3.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="ObjectManager.h" />
     <ClInclude Include="Player.h" />
