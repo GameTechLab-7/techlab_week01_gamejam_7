@@ -56,6 +56,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_KEYUP:
 		InputSystem::GetInstance().KeyUp(static_cast<EKeyCode>( wParam ));
 		break;
+    case WM_LBUTTONDOWN:
+        POINTS DownPts = MAKEPOINTS(lParam);
+        RECT dRect;
+        int dWidth , dHeight;
+        if (GetClientRect(hWnd , &dRect)) {
+            dWidth = dRect.right - dRect.left;
+            dHeight = dRect.bottom - dRect.top;
+        }
+        std::cout << "width: " << dWidth << ", height: " << dHeight << "\n";
+        std::cout << "x: " << DownPts.x << ", y: " << DownPts.y << "\n";
+        InputSystem::GetInstance().MouseKeyDown(FVector3(DownPts.x , DownPts.y , 0), FVector3(dWidth , dHeight , 0));
+        std::cout << "MouseDown " << InputSystem::GetInstance().GetMouseDownRatioPos().x << " " << InputSystem::GetInstance().GetMouseDownRatioPos().y << "\n";
+        break;
+    case WM_LBUTTONUP:
+        POINTS UpPts = MAKEPOINTS(lParam);
+        RECT uRect;
+        int uWidth , uHeight;
+        if (GetClientRect(hWnd , &uRect)) {
+            uWidth = uRect.right - uRect.left;
+            uHeight = uRect.bottom - uRect.top;
+        }
+        InputSystem::GetInstance().MouseKeyUp(FVector3(UpPts.x , UpPts.y , 0), FVector3(uWidth , uHeight , 0));
+        //std::cout << "MouseUp" << InputSystem::GetInstance().GetMouseUpRatioPos().x << " " << InputSystem::GetInstance().GetMouseUpRatioPos().y << "\n";
+        break;
     default:
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
@@ -218,14 +242,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 			playerB->SetAngle(playerB->GetAngle() + 0.5f);
 			playerB->SetVelocity(-playerB->GetVelocity());
-    		std::cout << player->GetAngle() << '\n';
+    		//std::cout << player->GetAngle() << '\n';
     		// new랑 position, velocity, radius
     		// objectManager.RegistObject<Player>(First);
     		// objectManager.RegistObject<Player>(Second);
     	}
 #pragma endregion
 
-    	
     	// FixedTimeStep 만큼 업데이트
     	while (Accumulator >= FixedTimeStep)
     	{

@@ -3,6 +3,7 @@
 #include "AbstractClass/Singleton.h"
 #include <vector>
 #include "Enum.h"
+#include "Math/FVector3.h"
 
 /**
  * 윈도우 키 코드 열거형
@@ -142,6 +143,7 @@ public:
      */
     void KeyUp(EKeyCode key);
 
+
     std::vector<EKeyCode> GetPressedKeys();
 
     /**
@@ -151,9 +153,25 @@ public:
      */
     [[nodiscard]] bool IsPressedKey(EKeyCode key) const;
 
+    void MouseKeyDown(FVector3 MouseDownPoint, FVector3 WindowSize);
+
+    void MouseKeyUp(FVector3 MouseUpPoint, FVector3 WindowSize);
+
+    bool IsPressedMouse() { return mouse; }
+
+    FVector3 GetMouseDownPos() { return MouseKeyDownPos; }
+    FVector3 GetMouseUpPos() { return MouseKeyUpPos; }
+
+    FVector3 GetMouseDownRatioPos() { return MouseKeyDownRatioPos; }
+    FVector3 GetMouseUpRatioPos() { return MouseKeyUpRatioPos; }
 
 private:
+    bool mouse;
     bool _keys[256];
+    FVector3 MouseKeyDownPos;
+    FVector3 MouseKeyUpPos;
+    FVector3 MouseKeyDownRatioPos;
+    FVector3 MouseKeyUpRatioPos;
 };
 
 class InputHandler {

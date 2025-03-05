@@ -35,6 +35,17 @@ std::vector<EKeyCode> InputSystem::GetPressedKeys() {
 
     return ret;
 }
+void InputSystem::MouseKeyDown(FVector3 MouseDownPoint, FVector3 WindowSize){
+    mouse = true; 
+    MouseKeyDownPos = MouseDownPoint;
+    MouseKeyDownRatioPos = FVector3(( MouseKeyDownPos.x / ( WindowSize.x / 2 ) ) - 1 , ( MouseKeyDownPos.y / ( WindowSize.y / 2 ) ) - 1 , 0);
+} //MouseKeyDownPos 설정
+
+void InputSystem::MouseKeyUp(FVector3 MouseUpPoint, FVector3 WindowSize){
+    mouse = false; 
+    MouseKeyUpPos = MouseUpPoint;
+    MouseKeyUpRatioPos = FVector3(( MouseKeyUpPos.x / ( WindowSize.x / 2 ))-1 , ( MouseKeyUpPos.y / ( WindowSize.y / 2 ) )-1 , 0);
+}
 
 #include <unordered_map>
 #include <utility>
@@ -100,7 +111,7 @@ void InputHandler::HandlePlayerInputByWorld(EWorld World) {
     NewPlayerVelocity = NewPlayerVelocity.Normalize();
 
     //회전이랑 마우스클릭 구현
-    if (NewPlayerVelocity != FVector3(0 , 0 , 0)) {
+    if (NewPlayerVelocity.Length() > 0.001f) {
         player->SetAngle(std::atan2(NewPlayerVelocity.y , NewPlayerVelocity.x));
     }
 
