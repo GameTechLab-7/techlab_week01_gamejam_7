@@ -2,13 +2,22 @@
 #include "URenderer.h"
 #include "Manager/ObjectManager.h"
 
-//void BulletB::Update(float DeltaTime)
-//{
-//}
-//
-//void BulletB::FixedUpdate(float Fixed)
-//{
-//}
+
+BulletB::BulletB(EWorld selectedWorld) : Bullet(selectedWorld) {
+}
+
+
+void BulletB::Update(float DeltaTime)
+{
+}
+
+void BulletB::FixedUpdate(float Fixed)
+{
+}
+
+void BulletB::HandleWallCollision(const FVector3& WallNormal)
+{
+}
 
 void BulletB::HandleBallCollision(CircleObject& OtherBall)
 {
@@ -21,16 +30,16 @@ void BulletB::HandleBallCollision(CircleObject& OtherBall)
     //		Player.AddPoint
 }
 
-//void BulletB::Render(const URenderer& Renderer) const
-//{
-//    Renderer.UpdateConstant(Location, Radius, Radian);
-//}
-//
-//void BulletB::Move(float DeltaTime)
-//{
-//    Location += Velocity * DeltaTime;
-//}
-//
-//void BulletB::OnDestroy()
-//{
-//}
+void BulletB::Render(const URenderer& Renderer) const
+{
+    //Renderer.UpdateConstant(Location, Radius, Radian);
+}
+
+void BulletB::Move(float DeltaTime)
+{
+    //Location += Velocity * DeltaTime;
+}
+
+void BulletB::OnDestroy()
+{
+}

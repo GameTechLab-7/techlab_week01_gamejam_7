@@ -23,15 +23,6 @@ void Monster::Update(float DeltaTime)
 
 void Monster::FixedUpdate(float Fixed)
 {
-
-}
-
-void Monster::FixedUpdate(float Fixed)
-{
-}
-
-void Monster::FixedUpdate(float Fixed)
-{
 }
 
 void Monster::HandleBallCollision(CircleObject& OtherBall)

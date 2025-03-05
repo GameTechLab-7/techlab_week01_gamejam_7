@@ -4,6 +4,11 @@
 #include "GameObject/Monster.h"
 #include "Manager/ObjectManager.h"
 
+
+BulletA::BulletA(EWorld selectedWorld) : Bullet(selectedWorld) {
+
+}
+
 void BulletA::Update(float DeltaTime)
 {
 }

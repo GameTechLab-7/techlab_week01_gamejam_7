@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include "Manager/ObjectManager.h"
 
 #include "Weapon/WeaponA.h"
@@ -27,7 +27,6 @@ void WeaponA::SpawnBullet()
 {
 	std::cout << "Spawn!\n";
 	auto& objectManager = ObjectManager::GetInstance();
-	auto& objectManager = Singleton<ObjectManager>::GetInstance();
 
 	BulletA* bullet = objectManager.RegistObject<BulletA>(currentPlayer->GetWorld());
 

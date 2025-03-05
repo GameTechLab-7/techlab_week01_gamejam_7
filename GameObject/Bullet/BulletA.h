@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "GameObject/Bullet/Bullet.h"
 
@@ -8,6 +8,10 @@
 
 class BulletA : public Bullet {
 public:
+
+    BulletA(EWorld selectedWorld);
+    ~BulletA() = default;
+
     virtual void Update(float DeltaTime) override;
     virtual void FixedUpdate(float Fixed) override;
 
