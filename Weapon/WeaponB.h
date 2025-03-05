@@ -30,8 +30,10 @@ public:
 	virtual void SetLevel(const int level) override;
 	void Clear();
 	void UpdateRadius();
+	void UpdateForce();
 
 	void SpawnBullet(int num);
+
 private:
 	void UpdateBulletLocation();
 };

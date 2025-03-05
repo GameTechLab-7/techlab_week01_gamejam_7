@@ -23,6 +23,9 @@ void MainGameScene::LoadScene()
 	RightPlayer->SetWeapon(rightWeapon);
 
 	SpawnerInfo Info;
+
+	Info.MonsterSpeed = 1.f;
+	Info.MonsterScale = 1.f;
 	Info.DefaultMonsterNum = 5;
 	Info.SpawnRate = 10.0f;
 	Info.MonsterIncreaseTime = 5.0f;

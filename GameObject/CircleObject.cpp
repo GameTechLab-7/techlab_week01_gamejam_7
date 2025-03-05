@@ -37,8 +37,8 @@ void CircleObject::ResolveOverlap(CircleObject& OtherBall)
 
 FVector3 CircleObject::GetCollisionImpact(CircleObject* HitByObject , CircleObject* HitObject)
 {
+
 	const FVector3 Normal = ( HitByObject->Location - HitObject->Location ).Normalize();
 
-	float Scalar = 1.f;
-	return Normal * Scalar;
+  return Normal * HitObject->Force;
 }

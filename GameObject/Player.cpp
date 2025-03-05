@@ -126,11 +126,8 @@ void Player::OnHit(FVector3 HitForce , int Damage)
     GameManager::GetInstance().GetLogic()->OnPlayerHit(this->GetWorld(), Damage);
 }
 
-#include <iostream>
-
 // Player에서는 Logic을 알지 못하도록 값을 직접 넣어줌.
-void Player::LevelUp(const int level) const
+void Player::SetLevel(const int level) const
 {
-    std::cout << "Level Up! " << GetWorld() << " " << level << '\n';
     currentWeapon->SetLevel(level);
 }

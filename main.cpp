@@ -267,11 +267,25 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
             MainGameScene* mainScene = GameManager::GetInstance().GetCurrentScene<MainGameScene>();
             if (mainScene != nullptr) {
-                ImGui::Text("Right");
-                auto player = mainScene->GetPlayer(EWorld::Second);
-                if (player != nullptr) {
-                    BaseWeapon* baseWeapon = player->GetWeapon();
-                    int level = GameManager::GetInstance().GetLogic()->GetLv(player->GetWorld());
+
+                ImGui::Text("Score  Left: %d, Right: %d" , GameManager::GetInstance().GetLogic()->GetScore(EWorld::First), GameManager::GetInstance().GetLogic()->GetScore(EWorld::Second));
+
+
+                if (ImGui::Button("Left use 10 Score")) {
+                    GameManager::GetInstance().GetLogic()->SpawnMonsterToWorld(EWorld::Second , 100);
+                    GameManager::GetInstance().GetLogic()->AddScore(EWorld::First , -10);
+                }
+
+                if (ImGui::Button("Right use 10 Score")) {
+                        GameManager::GetInstance().GetLogic()->SpawnMonsterToWorld(EWorld::First, 100);
+                    GameManager::GetInstance().GetLogic()->AddScore(EWorld::Second , -10);
+                }
+
+                ImGui::Text("Right (Second)");
+                auto* rightPlayer = mainScene->GetPlayer(EWorld::Second);
+                if (rightPlayer != nullptr) {
+                    BaseWeapon* baseWeapon = rightPlayer->GetWeapon();
+                    int level = GameManager::GetInstance().GetLogic()->GetLv(rightPlayer->GetWorld());
                     if (baseWeapon != nullptr) {
                         WeaponB* weaponB = dynamic_cast< WeaponB* >( baseWeapon );
                         if (weaponB != nullptr) {
@@ -292,10 +306,16 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
                                 weaponB->SpawnBullet(weaponB->WeaponData.NumOfBullets);
                             }
 
+                            if (ImGui::SliderFloat("Force" , &weaponB->WeaponData.Force , 1 , 100)) {
+
+                                // 개수에 맞게 소환
+                                weaponB->UpdateForce();
+                            }
+
                             if (ImGui::SliderInt("Level" , &level , 1 , 10)) {
 
                                 // 개수에 맞게 소환
-                                weaponB->SetLevel(level);
+                                GameManager::GetInstance().GetLogic()->SetLevel(rightPlayer->GetWorld(), level);
                             }
                         }
                     }
@@ -303,8 +323,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 
 
-                ImGui::Text("Left");
-                auto leftPlayer = mainScene->GetPlayer(EWorld::First);
+                ImGui::Text("Left (First)");
+                auto* leftPlayer = mainScene->GetPlayer(EWorld::First);
                 if (leftPlayer != nullptr) {
                     BaseWeapon* baseWeapon = leftPlayer->GetWeapon();
                     int level = GameManager::GetInstance().GetLogic()->GetLv(leftPlayer->GetWorld());
@@ -320,12 +340,48 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
                             if (ImGui::SliderFloat("A Cooldown" , &weaponA->WeaponData.ShootCooldown , 0.03 , 1)) {
                             }
 
+                            if (ImGui::SliderFloat("A Force" , &weaponA->WeaponData.Force , 1 , 100)) {
+
+                            }
+
                             if (ImGui::SliderInt("A Level" , &level , 1 , 10)) {
 
-                                weaponA->SetLevel(level);
+                                GameManager::GetInstance().GetLogic()->SetLevel(leftPlayer->GetWorld() , level);
                             }
                         }
                     }
+                }
+
+                auto* spawner = mainScene->GetSpawner();
+                ImGui::Text("Monster");
+                float MonsterSpeed = spawner->GetMonsterSpeed();
+                if (ImGui::SliderFloat("Monster Speed" , &MonsterSpeed , 1 , 5)) {
+                    spawner->SetMonsterSpeed(MonsterSpeed);
+                }
+
+                float MonsterScale = spawner->GetMonsterScale();
+                if (ImGui::SliderFloat("Monster Scale" , &MonsterScale , 0.5 , 2)) {
+                    spawner->SetMonsterScale(MonsterScale);
+                }
+
+                float DefaultMonsterNum = spawner->GetDefaultMonsterNum();
+                if (ImGui::SliderFloat("Default Monster Num" , &DefaultMonsterNum, 3 , 10)) {
+                    spawner->SetDefaultMonsterNum(DefaultMonsterNum);
+                }
+
+                float SpawnRate = spawner->GetSpawnRate();
+                if (ImGui::SliderFloat("Monster Spawn Rate" , &SpawnRate , 1 , 7)) {
+                    spawner->SetSpawnRate(SpawnRate);
+                }
+
+                float MonsterIncreaseTime = spawner->GetMonsterIncreaseTime();
+                if (ImGui::SliderFloat("Monster Increase Time" , &MonsterIncreaseTime , 2 , 10)) {
+                    spawner->SetMonsterIncreaseTime(MonsterIncreaseTime);
+                }
+
+                int MonsterIncreaseNum = spawner->GetMonsterIncreaseNum();
+                if (ImGui::SliderInt("Monster Increase Num" , &MonsterIncreaseNum , 1 , 10)) {
+                    spawner->SetMonsterIncreaseNum(MonsterIncreaseNum);
                 }
             }
         }

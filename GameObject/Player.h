@@ -31,9 +31,8 @@ public:
     // CircleObject을(를) 통해 상속됨
     void OnHit(FVector3 HitForce , int Damage) override;
 
-    void LevelUp(const int level) const;
+    void SetLevel(const int level) const;
 
 	void SetCanMove(bool bCanMove) { this->bCanMove = bCanMove; }
 	bool CanMove() const { return bCanMove; }
-
 };

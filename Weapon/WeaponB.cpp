@@ -45,11 +45,13 @@ void WeaponB::SpawnBullet(int num = 1)
 
 		BulletB* bullet = objectManager.RegistObject<BulletB>(currentPlayer->GetWorld());
 		bullet->SetRadius(WeaponData.BulletRadius);
+		bullet->SetForce(WeaponData.Force);
 		bullets.push_back(bullet);
 	}
 	
 	UpdateBulletLocation();
 }
+
 
 void WeaponB::UpdateRadius() {
 	for (auto& bullet : bullets) {
@@ -77,4 +79,12 @@ void WeaponB::SetLevel(const int level) {
 	Clear();
 	SpawnBullet(WeaponData.NumOfBullets);
 	UpdateRadius();
+	UpdateForce();
+}
+
+void WeaponB::UpdateForce()
+{
+	for (auto& bullet : bullets) {
+		bullet->SetForce(WeaponData.Force);
+	}
 }

@@ -43,6 +43,8 @@ public:
 
 	float GetRadius() const { return Radius; }
 	void SetRadius(float NewRadius) { Radius = NewRadius; }
+	float GetForce() const { return Force; }
+	void SetForce(float force) { Force = force; }
 
 	EWorld GetWorld() const { return MyWorld; }
 
@@ -57,6 +59,7 @@ public:
 protected:
 	FVector3 Location;
 	FVector3 Velocity;
+	float Force = 1.f;
 	FVector3 Acceleration;
 
 	float Radius = 0.0f;
