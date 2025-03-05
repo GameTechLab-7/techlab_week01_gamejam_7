@@ -40,6 +40,9 @@ float FVector3::LengthSquared() const
 FVector3 FVector3::Normalize() const
 {
 	const float VecLength = Length();
+	if (VecLength < 0.00001f) {
+		return FVector3();
+	}
 	return { x / VecLength, y / VecLength, z / VecLength };
 }
 

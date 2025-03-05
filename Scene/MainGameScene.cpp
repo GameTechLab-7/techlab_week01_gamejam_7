@@ -38,6 +38,7 @@ void MainGameScene::ExitScene()
 
 void MainGameScene::Update(float DeltaTime)
 {
+	InputHandlerInstance->InputUpdate();
 	BaseScene::Update(DeltaTime);
 	ObjectManager::GetInstance().Update(DeltaTime);
 	Spawner->Update(DeltaTime);

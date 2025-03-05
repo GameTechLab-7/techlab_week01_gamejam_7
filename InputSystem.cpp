@@ -42,7 +42,9 @@ std::vector<EKeyCode> InputSystem::GetPressedKeys() {
 #include "Math/FVector3.h"
 #include "Enum.h"
 #include "GameObject/Player.h"
-#include "manager/ObjectManager.h"
+#include "Manager/ObjectManager.h"
+#include "Manager/GameManager.h"
+#include "Scene/MainGameScene.h"
 
 struct pair_hash {
     template <class T1 , class T2>
@@ -64,8 +66,8 @@ std::unordered_map<Direction , FVector3> DicKeyAddVector //speed는 곱해서 �
 std::unordered_map<std::pair<EWorld , Direction> , EKeyCode, pair_hash> DicDirectionCodeByPlayer{
     {std::make_pair( EWorld::First, Direction::Left ), EKeyCode::A},
     {std::make_pair( EWorld::First, Direction::Right ), EKeyCode::D},
-    {std::make_pair( EWorld::First, Direction::Top ), EKeyCode::S},
-    {std::make_pair( EWorld::First, Direction::Bottom ), EKeyCode::W},
+    {std::make_pair( EWorld::First, Direction::Top ), EKeyCode::W},
+    {std::make_pair( EWorld::First, Direction::Bottom ), EKeyCode::S},
     
     {std::make_pair( EWorld::Second, Direction::Left ), EKeyCode::J},
     {std::make_pair( EWorld::Second, Direction::Right ), EKeyCode::L},
@@ -78,8 +80,8 @@ InputHandler::InputHandler() {
 }
 
 void InputHandler::HandlePlayerInputByWorld(EWorld World) {
-    Player* player = ObjectManager::GetInstance().RegistObject<Player>(World);
-
+    Player* player = static_cast< MainGameScene* >( GameManager::GetInstance().GetCurrentScene() )->GetPlayer(World);
+    
     FVector3 NewPlayerVelocity(0 , 0 , 0);
 
     if (InputSystem::GetInstance().IsPressedKey(DicDirectionCodeByPlayer[std::make_pair(World, Direction::Left)])) {
@@ -94,6 +96,9 @@ void InputHandler::HandlePlayerInputByWorld(EWorld World) {
     if (InputSystem::GetInstance().IsPressedKey(DicDirectionCodeByPlayer[ std::make_pair(World , Direction::Bottom) ])) {
         NewPlayerVelocity += DicKeyAddVector[ Direction::Bottom ];
     }
+    NewPlayerVelocity = NewPlayerVelocity.Normalize();
+
+    
 
     player->SetVelocity(NewPlayerVelocity);
 }
