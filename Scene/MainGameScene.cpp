@@ -2,37 +2,60 @@
 #include "GameObject/Player.h"
 #include "Manager/ObjectManager.h"
 #include "Manager/GameManager.h"
+#include "MonsterSpawner.h"
+#include "Weapon/WeaponA.h"
 
 
 void MainGameScene::LoadScene()
 {
-	// !TODO : 플레이어 두 개 받아와서 캐시
-	// ObjectManager->GetPlayer()
-	// ObjectManager->GetEnemy()
-	// !TODO : 
+	LeftPlayer = ObjectManager::GetInstance().RegistObject<Player>(First);
+	WeaponA * leftWeapon = new WeaponA(LeftPlayer);
 
-	leftPlayer = ObjectManager::GetInstance().RegistObject<Player>(First);
-	rightPlayer = ObjectManager::GetInstance().RegistObject<Player>(Second);
+	LeftPlayer->SetWeapon(leftWeapon);
+	RightPlayer = ObjectManager::GetInstance().RegistObject<Player>(Second);
+	WeaponA* rightWeapon = new WeaponA(RightPlayer);
+
+	RightPlayer->SetWeapon(rightWeapon);
+
+
+
+	SpawnerInfo Info;
+	Info.DefaultMonsterNum = 5;
+	Info.SpawnRate = 3.0f;
+	Info.MonsterIncreaseTime = 5.0f;
+	Info.MonsterIncreaseNum = 1;
+
+	Spawner = std::make_shared<MonsterSpawner>(Info);
 }
 
 void MainGameScene::ExitScene()
 {
-	// !TODO : object 매니저 클리어 호출
-	// ObjectManager->Destroy(left)
-
-	ObjectManager::GetInstance().Destroy(leftPlayer);
-	ObjectManager::GetInstance().Destroy(rightPlayer);
+	ObjectManager::GetInstance().Destroy(LeftPlayer);
+	ObjectManager::GetInstance().Destroy(RightPlayer);
 }
 
 void MainGameScene::Update(float DeltaTime)
 {
 	BaseScene::Update(DeltaTime);
 	ObjectManager::GetInstance().Update(DeltaTime);
+	Spawner->Update(DeltaTime);
 }
 
 void MainGameScene::Render()
 {
 	RenderWall(GameManager::GetInstance().GetRenderer());
+}
+
+Player* MainGameScene::GetPlayer(EWorld WorldType) const
+{
+	if (WorldType == EWorld::First)
+	{
+		return LeftPlayer;
+	}
+	else
+	{
+		return RightPlayer;
+	}
 }
 
 FVertexSimple LineVertices[ ] = {

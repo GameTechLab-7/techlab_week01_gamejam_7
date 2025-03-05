@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <d3d11.h>
 #include <vector>
 #include <memory>
@@ -37,6 +37,7 @@ public:
 	}
 
 	void Destroy(CircleObject* InCircleObject);
+	void DestroyAll();
 
 protected:
 	std::unordered_map<EWorld , std::vector<CircleObject*>> ObjectsMap;

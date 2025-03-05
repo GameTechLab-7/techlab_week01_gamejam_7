@@ -1,5 +1,8 @@
-#include "GameObject/Bullet.h"
+﻿#include "GameObject/Bullet.h"
 #include "URenderer.h"
+#include "Monster.h"
+#include "Manager/ObjectManager.h"
+#include <iostream>
 
 void Bullet::Update(float DeltaTime)
 {
@@ -22,6 +25,15 @@ void Bullet::HandleBallCollision(CircleObject& OtherBall)
     // If Monster Die
     //		Monster.Destroy();
     //		Player.AddPoint
+    CircleObject* object = &OtherBall;
+    Monster* monster = dynamic_cast< Monster* >( object );
+    if (monster != nullptr)
+    {
+		std::cout << "Bullet Hit Monster" << std::endl;
+        ObjectManager::GetInstance().Destroy(this);
+        monster->OnHit();
+    }
+
 }
 
 void Bullet::Render(const URenderer& Renderer) const
