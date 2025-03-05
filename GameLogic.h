@@ -1,10 +1,14 @@
 ﻿#pragma once
 #include <enum.h>
 #include <unordered_map>
-#include "Manager/GameManager.h"
 #include "Scene/MainGameScene.h"
+#include "GameObject/Player.h"
+#include "Manager/ObjectManager.h"
+#include "MonsterSpawner.h"
 
 const int LVUP_THRESHOLD = 100;
+
+class GameManager;
 
 struct PlayerState
 {
@@ -23,35 +27,28 @@ public:
 	GameLogic();
 	~GameLogic();
 
-	void AddScore(EWorld World)
-	{
-		PlayerStates[ World ].Score++;
-	}
-
-	void AddExp(EWorld World, int exp) 
-	{
-		PlayerStates[ World ].Exp += exp;
-		if (PlayerStates[ World ].Exp >= LVUP_THRESHOLD)
-		{
-			Upgrade(World);
-		}
-	}
-
-	void Upgrade(EWorld World)
-	{
-		MainGameScene* mainScene = GameManager::GetInstance().GetCurrentScene<MainGameScene>(); 
-
-		if (mainScene == nullptr)
-			return;
-		Player* player = mainScene->GetPlayer(World);
-
-		// !TODO : 플레이어 레벨업로직
-	}
-
-	/// <summary>
-	/// init은 Preset씬에서 실행
-	/// </summary>
+// Preset씬에서 실행
+public:
 	void Init();
+	void SetPreset(EWorld World , int Preset)
+	{
+		PlayerStates[ World ].Preset = Preset;
+	}
+
+// MainGameScene에서 실행
+public:
+
+	int GetPreset(EWorld World);
+
+	void AddScore(EWorld World , int Score);
+
+	void AddExp(EWorld World , int exp);
+
+
+	void Upgrade(EWorld World);
+
+
+	void SpawnMonsterToWorld(EWorld World);
 
 };
 
