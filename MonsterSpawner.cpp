@@ -23,21 +23,82 @@ void MonsterSpawner::Update(float DeltaTime)
 
 	if (SpawnTime >= Info.SpawnRate)
 	{
-		Spawn();
+		for (int i = 0; i < CurrentMonsterNum; ++i)
+		{
+			Spawn(First);
+			Spawn(Second);
+		}
 		SpawnTime = 0;
 	}
 }
 
-void MonsterSpawner::Spawn() const
+void MonsterSpawner::Spawn(EWorld world) const
 {
-	for (int i = 0; i < CurrentMonsterNum; ++i)
-	{
-		ObjectManager::GetInstance().RegistObject<Monster>(First)->Init(0.1f, 1.f, 0.1f);
-		ObjectManager::GetInstance().RegistObject<Monster>(Second)->Init(0.1f , 1.f , 0.1f);
-	}
+	ObjectManager::GetInstance().RegistObject<Monster>(world)->Init(0.1f * Info.MonsterScale , 1.f , 0.1f * Info.MonsterSpeed);
 }
 
-void MonsterSpawner::SpawnToWorld(EWorld WorldType)
+void MonsterSpawner::SpawnToWorld(EWorld WorldType, int numOfMonster)
 {
-	ObjectManager::GetInstance().RegistObject<Monster>(WorldType);
+	for (int i = 0; i < numOfMonster; i++)
+		Spawn(WorldType);
+}
+
+void MonsterSpawner::SetMonsterSpeed(float MonsterSpeed)
+{
+	Info.MonsterSpeed = MonsterSpeed;
+}
+
+void MonsterSpawner::SetMonsterScale(float MonsterScale)
+{
+	Info.MonsterScale = MonsterScale;
+}
+
+void MonsterSpawner::SetDefaultMonsterNum(float DefaultMonsterNum)
+{
+	Info.DefaultMonsterNum = DefaultMonsterNum;
+}
+
+void MonsterSpawner::SetSpawnRate(float SpawnRate)
+{
+	Info.SpawnRate = SpawnRate;
+}
+
+void MonsterSpawner::SetMonsterIncreaseTime(float MonsterIncreaseTime)
+{
+	Info.MonsterIncreaseTime = MonsterIncreaseTime;
+}
+
+void MonsterSpawner::SetMonsterIncreaseNum(int MonsterIncreaseNum)
+{
+	Info.MonsterIncreaseNum = MonsterIncreaseNum;
+}
+
+float MonsterSpawner::GetMonsterSpeed()
+{
+	return Info.MonsterSpeed;
+}
+
+float MonsterSpawner::GetMonsterScale()
+{
+	return Info.MonsterScale;
+}
+
+float MonsterSpawner::GetDefaultMonsterNum()
+{
+	return Info.DefaultMonsterNum;
+}
+
+float MonsterSpawner::GetSpawnRate()
+{
+	return Info.SpawnRate;
+}
+
+float MonsterSpawner::GetMonsterIncreaseTime()
+{
+	return Info.MonsterIncreaseTime;
+}
+
+int MonsterSpawner::GetMonsterIncreaseNum()
+{
+	return Info.MonsterIncreaseNum;
 }

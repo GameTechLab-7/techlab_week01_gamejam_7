@@ -38,6 +38,7 @@ void WeaponA::SpawnBullet()
 	bullet->SetLocation(currentPlayer->GetLocation());
 	bullet->SetAngle(currentPlayer->GetAngle());
 	bullet->SetRadius(WeaponData.BulletSize);
+	bullet->SetForce(WeaponData.Force);
 	bullet->SetVelocity(ConvertToDirection(currentPlayer->GetAngle()) * WeaponData.BulletSpeed);
 }
 

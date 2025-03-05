@@ -26,6 +26,12 @@ int GameLogic::GetLv(EWorld World)
 	return PlayerStates[ World ].Lv;
 }
 
+
+int GameLogic::GetScore(EWorld World)
+{
+	return PlayerStates[ World ].Score;
+}
+
 void GameLogic::AddScore(EWorld World , int Score)
 {
 	PlayerStates[ World ].Score += Score;
@@ -38,11 +44,11 @@ void GameLogic::AddExp(EWorld World , int exp)
 	{
 		PlayerStates[ World ].Lv += 1;
 		PlayerStates[ World ].Exp -= LVUP_THRESHOLD;
-		Upgrade(World, PlayerStates[ World ].Lv);
+		SetLevel(World, PlayerStates[ World ].Lv);
 	}
 }
 
-void GameLogic::Upgrade(EWorld World, int lv)
+void GameLogic::SetLevel(EWorld World, int lv)
 {
 	MainGameScene* mainScene = GameManager::GetInstance().GetCurrentScene<MainGameScene>();
 
@@ -52,11 +58,11 @@ void GameLogic::Upgrade(EWorld World, int lv)
 
 	if (player != nullptr)
 	{
-		player->LevelUp(lv);
+		player->SetLevel(lv);
 	}
 }
 
-void GameLogic::SpawnMonsterToWorld(EWorld World)
+void GameLogic::SpawnMonsterToWorld(EWorld World, int NumOfMonster = 1)
 {
 	MainGameScene* mainScene = GameManager::GetInstance().GetCurrentScene<MainGameScene>();
 	if (mainScene == nullptr)
@@ -64,7 +70,7 @@ void GameLogic::SpawnMonsterToWorld(EWorld World)
 	MonsterSpawner* spawner = mainScene->GetSpawner();
 	if (spawner != nullptr)
 	{
-		spawner->SpawnToWorld(World);
+		spawner->SpawnToWorld(World, NumOfMonster);
 	}
 }
 

@@ -5,6 +5,7 @@ struct WeaponBData {
 	float AngularSpeed;
 	float TotalRadius;
 	float BulletRadius;
+	float Force;
 };
 
 extern WeaponBData WeaponBDataLvTable[];
