@@ -15,6 +15,9 @@ Monster::Monster(EWorld SelectedWorld) : CircleObject(SelectedWorld)
 
 	Target = Scene->GetPlayer(SelectedWorld);
     HitInvisibleTime = 0.2f;
+
+    Drag = 0.5f;
+	Acceleration = FVector3(0 , 0 , 0);
 }
 
 void Monster::Update(float DeltaTime)
@@ -81,9 +84,16 @@ void Monster::Move(float DeltaTime)
 {
     // target pos 방향으로 이동
 	FVector3 Direction = Target->GetLocation() - Location;
-	Direction = Direction.Normalize();
+	SetVelocity(Direction.Normalize() * Speed);
 
-	Location += Direction * Speed * DeltaTime;
+    Velocity += Acceleration * DeltaTime;
+	Location += Velocity * DeltaTime;
+
+    Acceleration *= Drag;
+    if (Acceleration.Length() < 0.0001f)
+    {
+        Acceleration = FVector3(0 , 0 , 0);
+    }
 }
 
 void Monster::OnDestroy()
@@ -105,10 +115,11 @@ void Monster::OnHit(FVector3 HitForce , int Damage)
 		return;
 	}
 
-    //CircleObject::OnHit(HitForce , Damage);
-
-    SetLocation(GetLocation() + HitForce);
+    CircleObject::OnHit(HitForce , Damage);
+    bIsHitInvisible = true;
+    //SetLocation(GetLocation() + HitForce);
     
+    std::cout << "Damage to Monster" << Damage << std::endl;
 	HP -= Damage;
 
     if (IsDead()) {

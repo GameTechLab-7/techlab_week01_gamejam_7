@@ -18,7 +18,7 @@ void CircleObject::OnHit(FVector3 HitForce , int Damage)
 {
 	if (HitForce.Length() > 0.0001f)
 	{
-		Velocity = HitForce;
+		Acceleration = HitForce * 100.f;
 	}
 }
 
