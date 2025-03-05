@@ -25,14 +25,15 @@ void Bullet::HandleBallCollision(CircleObject& OtherBall)
     // If Monster Die
     //		Monster.Destroy();
     //		Player.AddPoint
-    CircleObject* object = &OtherBall;
+
+
+    /*CircleObject* object = &OtherBall;
     Monster* monster = dynamic_cast< Monster* >( object );
     if (monster != nullptr)
     {
-		std::cout << "Bullet Hit Monster" << std::endl;
-        ObjectManager::GetInstance().Destroy(this);
+		
         monster->OnHit();
-    }
+    }*/
 
 }
 
@@ -54,4 +55,10 @@ void Bullet::Move(float DeltaTime)
 
 void Bullet::OnDestroy()
 {
+}
+
+void Bullet::OnHit()
+{
+    std::cout << "Bullet Hit" << std::endl;
+    ObjectManager::GetInstance().Destroy(this);
 }

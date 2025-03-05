@@ -28,7 +28,14 @@ void Monster::FixedUpdate(float Fixed)
 
 void Monster::HandleBallCollision(CircleObject& OtherBall)
 {
-    // !TODO : 다른 몬스터와 충돌했을 때 처리. 그냥 밀어내면될듯
+    CircleObject* object = &OtherBall;
+    // !TODO : 다른 몬스터와 충돌했을 때 처리. 그냥 밀어내면될듯 ->이거해도되나
+	Monster* otherMontser = dynamic_cast< Monster* >( object );
+	if (otherMontser != nullptr)
+	{
+        // !Note : 큐브는 어색하다
+		//ResolveOverlap(*otherMontser);
+	}
 	// !TODO : 플레이어와 충돌했을 때 처리. 플레이어 OnHit 추가
     // !TODO : Bullet과 충돌했을 때
 }

@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include "URenderer.h"
 
 // 문제 1. 벽 겹침 보정을 언제 어디서 해주냐
@@ -89,4 +89,9 @@ void Player::Move(float DeltaTime)
 
 void Player::OnDestroy()
 {
+}
+
+void Player::OnHit()
+{
+
 }
