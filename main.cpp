@@ -21,6 +21,7 @@
 #include "Weapon/WeaponA.h"
 #include "Weapon/WeaponB.h"
 
+#include "InputSystem.h"
 
 enum class EPrimitiveType : UINT8
 {
@@ -49,7 +50,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0); // 프로그램 종료
         break;
-
+	case WM_KEYDOWN:
+		InputSystem::GetInstance().KeyDown(static_cast<EKeyCode>(wParam));
+		break;
+	case WM_KEYUP:
+		InputSystem::GetInstance().KeyUp(static_cast<EKeyCode>( wParam ));
+		break;
     default:
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
@@ -235,11 +241,39 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     	}
 
 
+		GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
+
+#pragma region Test Code
+		//std::cout << timer << '\n';
+		//if (timer > spawnCooldown) {
+		//	timer = 0.f;
+		//	player->SetAngle(player->GetAngle() + 0.5f);
+		//	player->SetVelocity(-player->GetVelocity());
+		//	std::cout << player->GetAngle() << '\n';
+		////	auto objecta = new Player(EWorld::First);
+		////	auto objectb = new Player(EWorld::Second);
+		////	// new랑 position, velocity, radius
+		////	objectManager.RegistObject(objecta);
+		////	objectManager.RegistObject(objectb);
+		//}
+
+#pragma endregion
+
         // 렌더링 준비 작업
         Renderer.Prepare();
         Renderer.PrepareShader();
 
     	GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
+
+		bool isPress = false;
+
+		for(EKeyCode Ek : InputSystem::GetInstance().GetPressedKeys()) {
+			std::cout << static_cast<uint8_t>(Ek) << " ";
+			isPress = true;
+		}
+		
+		if(isPress)
+			std::cout << "\n";
 
         // ImGui Frame 생성
         ImGui_ImplDX11_NewFrame();

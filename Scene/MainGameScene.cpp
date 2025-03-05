@@ -2,12 +2,13 @@
 #include "GameObject/Player.h"
 #include "Manager/ObjectManager.h"
 #include "Manager/GameManager.h"
-#include "MonsterSpawner.h"
-#include "Weapon/WeaponA.h"
 
 
 void MainGameScene::LoadScene()
 {
+
+	InputHandlerInstance = std::make_unique<InputHandler>();
+  
 	LeftPlayer = ObjectManager::GetInstance().RegistObject<Player>(First);
 	WeaponA * leftWeapon = new WeaponA(LeftPlayer);
 

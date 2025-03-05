@@ -8,17 +8,6 @@
 // forward declaration
 class URenderer;
 
-
-/** 방향 열거체 */
-enum Direction : uint8_t
-{
-	Left,
-	Right,
-	Top,
-	Bottom,
-};
-
-
 class CircleObject : public std::enable_shared_from_this<CircleObject>
 {
 
@@ -49,6 +38,8 @@ public:
 
 	FVector3 GetVelocity() const { return Velocity; }
 	void SetVelocity(const FVector3& NewVelocity) { Velocity = NewVelocity; }
+
+	void AddVelocity(const FVector3& AddVelocity) { Velocity += AddVelocity; }
 
 	float GetRadius() const { return Radius; }
 	void SetRadius(float NewRadius) { Radius = NewRadius; }

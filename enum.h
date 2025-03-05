@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <cstdint>
 
 
@@ -16,4 +16,13 @@ enum class EObjectType : uint8_t
 	Bullet,
 
 	Max,
+};
+
+/** 방향 열거체 */
+enum Direction : uint8_t
+{
+	Left ,
+	Right ,
+	Top ,
+	Bottom ,
 };

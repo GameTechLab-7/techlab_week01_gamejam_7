@@ -2,6 +2,7 @@
 #include <memory>
 #include "enum.h"
 #include "BaseScene.h"
+#include "InputSystem.h"
 
 class Player;
 class Enemy;
@@ -9,9 +10,15 @@ class MonsterSpawner;
 
 class MainGameScene : public BaseScene
 {
+
 public:
     virtual void LoadScene() override;
     virtual void ExitScene() override;
+
+public:
+    MainGameScene();
+    
+    std::unique_ptr<InputHandler> InputHandlerInstance;
 
 private:
 
@@ -19,8 +26,9 @@ private:
     virtual void Render() override;
     void RenderWall(class URenderer* Renderer);
 
-	Player* LeftPlayer;
-	Player* RightPlayer;
+
+	  Player* LeftPlayer;
+	  Player* RightPlayer;
     std::shared_ptr<MonsterSpawner> Spawner;
     
 
