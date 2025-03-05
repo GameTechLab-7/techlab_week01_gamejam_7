@@ -5,6 +5,7 @@
 #include "Manager/ObjectManager.h"
 #include "Manager/GameManager.h"
 #include "Weapon/WeaponA.h"
+#include "Weapon/WeaponB.h"
 
 
 void MainGameScene::LoadScene()
@@ -17,7 +18,7 @@ void MainGameScene::LoadScene()
 
 	LeftPlayer->SetWeapon(leftWeapon);
 	RightPlayer = ObjectManager::GetInstance().RegistObject<Player>(Second);
-	WeaponA* rightWeapon = new WeaponA(RightPlayer);
+	WeaponB* rightWeapon = new WeaponB(RightPlayer);
 
 	RightPlayer->SetWeapon(rightWeapon);
 

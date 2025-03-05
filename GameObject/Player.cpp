@@ -91,3 +91,8 @@ void Player::OnHit()
 {
 
 }
+
+void Player::LevelUp()
+{
+    // !TODO : 레벨업 로직
+}
