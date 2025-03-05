@@ -24,9 +24,15 @@ protected:
     int HP = 5;
     float InitialDistanceFromPlayer = 1.0f;
     float Speed = 0.1f;
+    float DropExp = 1;
+    float DropScore = 1;
+
+protected:
+    bool IsDead();
 
     bool IsDead();
 
 public:
     virtual void Init(float Radius, float InitialDistance , float Speed);
+
 };

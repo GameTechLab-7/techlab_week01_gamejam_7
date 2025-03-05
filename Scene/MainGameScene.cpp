@@ -1,12 +1,10 @@
 ﻿#include "MainGameScene.h"
 
-#include "MonsterSpawner.h"
-#include "GameObject/Player.h"
-#include "Manager/ObjectManager.h"
 #include "Manager/GameManager.h"
+#include "GameObject/Player.h"
+#include "MonsterSpawner.h"
 #include "Weapon/WeaponA.h"
 #include "Weapon/WeaponB.h"
-
 
 void MainGameScene::LoadScene()
 {
@@ -17,6 +15,7 @@ void MainGameScene::LoadScene()
 	WeaponA * leftWeapon = new WeaponA(LeftPlayer);
 
 	LeftPlayer->SetWeapon(leftWeapon);
+	
 	RightPlayer = ObjectManager::GetInstance().RegistObject<Player>(Second);
 	WeaponB* rightWeapon = new WeaponB(RightPlayer);
 

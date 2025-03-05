@@ -17,12 +17,15 @@
 #include "Manager/GameManager.h"
 #include "Manager/ObjectManager.h"
 #include "Scene/MainGameScene.h"
+#include "Scene/TitleScene.h"
+#include "Scene/PresetScene.h"
 #include "Math/FVector3.h"
-#include "Weapon/WeaponA.h"
-#include "Weapon/WeaponB.h"
 
 #include "InputSystem.h"
 #include <Scene/PresetScene.h>
+
+#include "Weapon/WeaponA.h"
+#include "Weapon/WeaponB.h"
 
 enum class EPrimitiveType : UINT8
 {
@@ -169,28 +172,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	ObjectManager& objectManager = ObjectManager::GetInstance();
 	objectManager.Initialize(&Renderer);
 	
-	Player* player = objectManager.RegistObject<Player>(EWorld::First);
 	
-	WeaponA* weaponA = new WeaponA(player);
-
-	player->SetWeapon(weaponA);
-	player->SetVelocity(FVector3{ 1, 0, 0 });
-	// player 자체에서 바인딩?
-
-
-	Player* playerB = objectManager.RegistObject<Player>(EWorld::Second);
-
-	WeaponB* weaponB = new WeaponB(playerB);
-
-	playerB->SetWeapon(weaponB);
-	playerB->SetVelocity(FVector3{ 1, 0, 0 });
-
-	//DirectX::
-	float spawnCooldown = 1.f;
-	float timer = 0.f;
-
-	//int NumOfBalls = 1;
-
     // Main Loop
     bool bIsExit = false;
     while (bIsExit == false)
@@ -204,10 +186,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
         // 누적 시간 추가
         Accumulator += DeltaTime;
-		timer += DeltaTime;
 
         InputSystem::GetInstance().ExpireOnceMouse();
-
         // 메시지(이벤트) 처리
         MSG msg;
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -225,34 +205,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
             }
         }
 
-    	
-#pragma region Test Code
-    	// 게 임 로직 - Update, FixedUpdate, 플레이어 경험치, point, 
-		// 웨폰 + 레벨 시스템 + 레벨 증가 등
-
-		// 플레이어, 웨폰 클래스
-
-		// 몬스터, 잡다한 충돌
-
-        if (InputSystem::GetInstance().GetMouseDown()) {
-            std::cout << "GetMouseDown" << "\n";
-        }
-
-		//std::cout << timer << '\n';
-    	if (timer > spawnCooldown) {
-    		timer = 0.f;
-    		player->SetAngle(player->GetAngle() + 0.5f);
-    		player->SetVelocity(-player->GetVelocity());
-
-			playerB->SetAngle(playerB->GetAngle() + 0.5f);
-			playerB->SetVelocity(-playerB->GetVelocity());
-    		//std::cout << player->GetAngle() << '\n';
-    		// new랑 position, velocity, radius
-    		// objectManager.RegistObject<Player>(First);
-    		// objectManager.RegistObject<Player>(Second);
-    	}
-#pragma endregion
-
     	// FixedTimeStep 만큼 업데이트
     	while (Accumulator >= FixedTimeStep)
     	{
@@ -267,21 +219,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     		Accumulator -= FixedTimeStep;
     	}
 
-#pragma region Test Code
-		//std::cout << timer << '\n';
-		//if (timer > spawnCooldown) {
-		//	timer = 0.f;
-		//	player->SetAngle(player->GetAngle() + 0.5f);
-		//	player->SetVelocity(-player->GetVelocity());
-		//	std::cout << player->GetAngle() << '\n';
-		////	auto objecta = new Player(EWorld::First);
-		////	auto objectb = new Player(EWorld::Second);
-		////	// new랑 position, velocity, radius
-		////	objectManager.RegistObject(objecta);
-		////	objectManager.RegistObject(objectb);
-		//}
-
-#pragma endregion
 
         // 렌더링 준비 작업
         Renderer.Prepare();
@@ -293,12 +230,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		bool isPress = false;
 
 		for(EKeyCode Ek : InputSystem::GetInstance().GetPressedKeys()) {
-			std::cout << static_cast<uint8_t>(Ek) << " ";
+			//std::cout << static_cast<uint8_t>(Ek) << " ";
 			isPress = true;
 		}
 		
-		if(isPress)
-			std::cout << "\n";
+		/*if(isPress)
+			std::cout << "\n";*/
 
         // ImGui Frame 생성
         ImGui_ImplDX11_NewFrame();
@@ -308,21 +245,89 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         ImGui::Begin("DX11 Property Window");
         {
             ImGui::Text("Hello, World!");
-        	ImGui::Text("FPS: %.3f", ImGui::GetIO().Framerate);
+            ImGui::Text("FPS: %.3f" , ImGui::GetIO().Framerate);
 
-			ImGui::Text("Current Scene: %s" , GameManager::GetInstance().GetCurrentScene()->GetName().c_str());
+            ImGui::Text("Current Scene: %s" , GameManager::GetInstance().GetCurrentScene()->GetName().c_str());
+            if (ImGui::Button("Title Scene")) {
 
-            if (ImGui::Button("Move to Preset Scene"))
-            {
+                GameManager::GetInstance().ChangeScene<TitleScene>();
+                GameManager::GetInstance().GetCurrentScene()->SetName("TitleScene");
+            }
+
+            if (ImGui::Button("Preset Scene")) {
                 GameManager::GetInstance().ChangeScene<PresetScene>();
                 GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene");
             }
 
-			if (ImGui::Button("Move to Main Game Scene"))
-			{
-				GameManager::GetInstance().ChangeScene<MainGameScene>();
-				GameManager::GetInstance().GetCurrentScene()->SetName("MainGameScene");
-			}
+            if (ImGui::Button("Move to Main Game Scene"))
+            {
+                GameManager::GetInstance().ChangeScene<MainGameScene>();
+                GameManager::GetInstance().GetCurrentScene()->SetName("MainGameScene");
+            }
+
+            MainGameScene* mainScene = GameManager::GetInstance().GetCurrentScene<MainGameScene>();
+            if (mainScene != nullptr) {
+                ImGui::Text("Right");
+                auto player = mainScene->GetPlayer(EWorld::Second);
+                if (player != nullptr) {
+                    BaseWeapon* baseWeapon = player->GetWeapon();
+                    int level = GameManager::GetInstance().GetLogic()->GetLv(player->GetWorld());
+                    if (baseWeapon != nullptr) {
+                        WeaponB* weaponB = dynamic_cast< WeaponB* >( baseWeapon );
+                        if (weaponB != nullptr) {
+                            if (ImGui::SliderFloat("speed" , &weaponB->WeaponData.AngularSpeed , 0.3 , 2)) {
+                            }
+
+                            if (ImGui::SliderFloat("bullet radius" , &weaponB->WeaponData.BulletRadius , 0.04 , 0.15)) {
+                                // Radius에 맞게 변환
+                                weaponB->UpdateRadius();
+                            }
+
+                            if (ImGui::SliderFloat("total radius" , &weaponB->WeaponData.TotalRadius , 0.03 , 0.5)) {
+
+                            }
+                            if (ImGui::SliderInt("NumOfBullets" , &weaponB->WeaponData.NumOfBullets , 1 , 10)) {
+                                // 개수에 맞게 소환
+                                weaponB->Clear();
+                                weaponB->SpawnBullet(weaponB->WeaponData.NumOfBullets);
+                            }
+
+                            if (ImGui::SliderInt("Level" , &level , 1 , 10)) {
+
+                                // 개수에 맞게 소환
+                                weaponB->SetLevel(level);
+                            }
+                        }
+                    }
+                }
+
+
+
+                ImGui::Text("Left");
+                auto leftPlayer = mainScene->GetPlayer(EWorld::First);
+                if (leftPlayer != nullptr) {
+                    BaseWeapon* baseWeapon = leftPlayer->GetWeapon();
+                    int level = GameManager::GetInstance().GetLogic()->GetLv(leftPlayer->GetWorld());
+                    if (baseWeapon != nullptr) {
+                        WeaponA* weaponA = dynamic_cast< WeaponA* >( baseWeapon );
+                        if (weaponA != nullptr) {
+                            if (ImGui::SliderFloat("A speed" , &weaponA->WeaponData.BulletSpeed , 0.3 , 2)) {
+                            }
+
+                            if (ImGui::SliderFloat("A bullet radius" , &weaponA->WeaponData.BulletSize , 0.04 , 0.15)) {
+                            }
+
+                            if (ImGui::SliderFloat("A Cooldown" , &weaponA->WeaponData.ShootCooldown , 0.03 , 1)) {
+                            }
+
+                            if (ImGui::SliderInt("A Level" , &level , 1 , 10)) {
+
+                                weaponA->SetLevel(level);
+                            }
+                        }
+                    }
+                }
+            }
         }
         ImGui::End();
 

@@ -91,6 +91,7 @@ void Monster::OnDestroy()
     //
 }
 
+#include <iostream>
 // TODO Bullet A, B에서 넘어옴.
 void Monster::OnHit(FVector3 HitForce , int Damage)
 {
@@ -109,6 +110,11 @@ void Monster::OnHit(FVector3 HitForce , int Damage)
 	HP -= Damage;
 
     if (IsDead()) {
+        std::cout << "destroy! \n";
+
+        auto* logic = GameManager::GetInstance().GetLogic();
+        logic->AddScore(GetWorld(), DropScore);
+        logic->AddExp(GetWorld(), DropExp);
         ObjectManager::GetInstance().Destroy(this);
     }
 }

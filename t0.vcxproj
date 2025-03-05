@@ -169,7 +169,9 @@
     <ClCompile Include="Weapon\BaseWeapon.cpp" />
     <ClCompile Include="Constant.h" />
     <ClCompile Include="Weapon\WeaponA.cpp" />
+    <ClCompile Include="Weapon\WeaponAData.cpp" />
     <ClCompile Include="Weapon\WeaponB.cpp" />
+    <ClCompile Include="Weapon\WeaponBData.cpp" />
     <ClCompile Include="Weapon\WeaponC.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -211,7 +213,9 @@
     <ClInclude Include="URenderer.h" />
     <ClInclude Include="Weapon\BaseWeapon.h" />
     <ClInclude Include="Weapon\WeaponA.h" />
+    <ClInclude Include="Weapon\WeaponAData.h" />
     <ClInclude Include="Weapon\WeaponB.h" />
+    <ClInclude Include="Weapon\WeaponBData.h" />
     <ClInclude Include="Weapon\WeaponC.h" />
   </ItemGroup>
   <ItemGroup>
