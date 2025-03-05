@@ -22,9 +22,6 @@ public:
 
     virtual void HandleBallCollision(CircleObject* OtherBall) override;
 
-
-    virtual void Render(const URenderer& Renderer) const override;
-
     virtual void Move(float DeltaTime) override;
 
     virtual void OnDestroy() override;

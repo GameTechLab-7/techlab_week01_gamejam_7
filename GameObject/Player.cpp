@@ -14,6 +14,8 @@ Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
     Location = FVector3(0 , 0 , 0);
     Velocity = FVector3(0 , 0 , 0);
     Radian = 0;
+
+    Texture->SetPrimitiveType(EObjectType::Player);
 }
 
 // 이동 후 겹침 보정 (Monster, Player에 대해)
@@ -55,6 +57,7 @@ BaseWeapon* Player::GetWeapon() const
 void Player::SetWeapon(BaseWeapon* weapon)
 {
     currentWeapon = weapon;
+    
 }
 
 void Player::HandleWallCollision(const FVector3& WallNormal)
@@ -63,18 +66,6 @@ void Player::HandleWallCollision(const FVector3& WallNormal)
 
 void Player::HandleBallCollision(CircleObject* OtherBall)
 {
-}
-
-
-void Player::Render(const URenderer& Renderer) const
-{
-    Renderer.UpdateConstant(Location , Radius, Radian);
-    ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Player);
-    int NumOfVertices = Renderer.GetBufferSize(EObjectType::Player);
-    if(buffer != nullptr)
-    {
-        Renderer.RenderPrimitive(buffer, NumOfVertices);
-    }
 }
 
 void Player::Move(float DeltaTime)

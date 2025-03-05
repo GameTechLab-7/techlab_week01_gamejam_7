@@ -4,6 +4,7 @@
 
 #include "Math/FVector3.h"
 #include "Enum.h"
+#include "Texture/UTexture2D.h"
 
 // forward declaration
 class URenderer;
@@ -20,7 +21,7 @@ public:
 	virtual void HandleWallCollision(const FVector3& WallNormal) = 0;
 	virtual void HandleBallCollision(CircleObject* OtherBall) = 0;
 
-	virtual void Render(const URenderer& Renderer) const = 0;
+	virtual void Render(const URenderer& Renderer) const;
 
 	float GetAngle() const { return Radian; }
 	void SetAngle(float rad)	{ Radian = rad; }
@@ -47,12 +48,13 @@ public:
 	EWorld GetWorld() const { return MyWorld; }
 
 protected:
+	EWorld MyWorld;
+	std::unique_ptr<UTexture2D> Texture;
+
 	FVector3 Location;
 	FVector3 Velocity;
 	float Radius = 0.0f;
 	float Radian = 0.0f; // 0 == top radian으로 다룸
-
-	EWorld MyWorld;
 
 	int WorldWalls[2][4] = {
 		{ 0 , 1 , -1 , 1},  // left right top bottom

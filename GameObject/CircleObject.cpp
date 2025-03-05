@@ -1,9 +1,18 @@
 ﻿#include "CircleObject.h"
 
+#include "URenderer.h"
+
 
 CircleObject::CircleObject(EWorld SelectedWorld)
     : MyWorld(SelectedWorld)
+	, Texture(UTexture2D::LoadTargaFromFile("Assets/Texture/default.tga"))
 {
+}
+
+void CircleObject::Render(const URenderer& Renderer) const
+{
+	Renderer.UpdateConstant(Location, Radius, Radian);
+	Texture->Render(Renderer);
 }
 
 void CircleObject::OnHit()

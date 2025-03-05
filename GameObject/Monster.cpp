@@ -14,6 +14,7 @@ Monster::Monster(EWorld SelectedWorld) : CircleObject(SelectedWorld)
 	assert(Scene != nullptr);
 
 	Target = Scene->GetPlayer(SelectedWorld);
+	Texture->SetPrimitiveType(EObjectType::Enemy);
 }
 
 void Monster::Update(float DeltaTime)
@@ -54,17 +55,6 @@ void Monster::HandleBallCollision(CircleObject* OtherBall)
 void Monster::HandleWallCollision(const FVector3& WallNormal)
 {
     // 필요없을듯
-}
-
-void Monster::Render(const URenderer& Renderer) const
-{
-    Renderer.UpdateConstant(Location , Radius , Radian);
-    ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Enemy);
-    int NumOfVertices = Renderer.GetBufferSize(EObjectType::Enemy);
-    if (buffer != nullptr)
-    {
-        Renderer.RenderPrimitive(buffer , NumOfVertices);
-    }
 }
 
 void Monster::Move(float DeltaTime)
