@@ -1,4 +1,4 @@
-#include "Weapon/WeaponC.h"
+﻿#include "Weapon/WeaponC.h"
 
 //WeaponC::WeaponC(Player* player) : BaseWeapon(player) {
 //	AngularSpeed = 0.1f;

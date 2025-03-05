@@ -27,6 +27,7 @@ void WeaponA::SpawnBullet()
 {
 	std::cout << "Spawn!\n";
 	auto& objectManager = ObjectManager::GetInstance();
+	auto& objectManager = Singleton<ObjectManager>::GetInstance();
 
 	BulletA* bullet = objectManager.RegistObject<BulletA>(currentPlayer->GetWorld());
 

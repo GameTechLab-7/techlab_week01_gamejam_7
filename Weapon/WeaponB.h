@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "math.h"
 #include <vector>
 
@@ -6,7 +6,7 @@
 #include "Weapon/BaseWeapon.h"
 #include "Math/FVector3.h"
 #include "Manager/ObjectManager.h"
-#include "GameObject/Bullet/BulleB.h"
+#include "GameObject/Bullet/BulletB.h"
 
 // 회전
 class WeaponB : public BaseWeapon {
@@ -28,7 +28,7 @@ public:
 
 
 	virtual void Update(float DeltaTime) override;
-	
+
 private:
 	void SpawnBullet();
 	void DestroyBullet();

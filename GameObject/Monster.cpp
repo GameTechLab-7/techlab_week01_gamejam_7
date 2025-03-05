@@ -30,6 +30,10 @@ void Monster::FixedUpdate(float Fixed)
 {
 }
 
+void Monster::FixedUpdate(float Fixed)
+{
+}
+
 void Monster::HandleBallCollision(CircleObject& OtherBall)
 {
     // Monster 끼리 충돌 시 보정

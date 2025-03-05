@@ -1,5 +1,7 @@
-#include "GameObject/Bullet/BulletA.h"
+﻿#include <iostream>
 #include "URenderer.h"
+#include "GameObject/Bullet/BulletA.h"
+#include "GameObject/Monster.h"
 #include "Manager/ObjectManager.h"
 
 void BulletA::Update(float DeltaTime)
@@ -24,11 +26,26 @@ void BulletA::HandleBallCollision(CircleObject& OtherBall)
     // If Monster Die
     //		Monster.Destroy();
     //		Player.AddPoint
+
+    CircleObject* object = &OtherBall;
+    Monster* monster = dynamic_cast< Monster* >( object );
+    if (monster != nullptr)
+    {
+        std::cout << "Bullet Hit Monster" << std::endl;
+        ObjectManager::GetInstance().Destroy(this);
+        monster->OnHit();
+    }
 }
 
 void BulletA::Render(const URenderer& Renderer) const
 {
-    Renderer.UpdateConstant(Location, Radius, Radian);
+    Renderer.UpdateConstant(Location , Radius , Radian);
+    ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Bullet);
+    int NumOfVertices = Renderer.GetBufferSize(EObjectType::Bullet);
+    if (buffer != nullptr)
+    {
+        Renderer.RenderPrimitive(buffer , NumOfVertices);
+    }
 }
 
 void BulletA::Move(float DeltaTime)
