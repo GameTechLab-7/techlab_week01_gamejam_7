@@ -140,7 +140,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BufferCache.cpp" />
-    <ClCompile Include="GameObject\Bullet.cpp" />
+    <ClCompile Include="GameObject\Bullet\Bullet.cpp" />
+    <ClCompile Include="GameObject\Bullet\BulletA.cpp" />
+    <ClCompile Include="GameObject\Bullet\BulletB.cpp" />
     <ClCompile Include="GameObject\CircleObject.cpp" />
     <ClCompile Include="GameObject\Monster.cpp" />
     <ClCompile Include="GameObject\Player.cpp" />
@@ -155,6 +157,7 @@
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
     <ClCompile Include="Math\FVector3.cpp" />
+    <ClCompile Include="MonsterSpawner.cpp" />
     <ClCompile Include="PrimitiveVertices.cpp" />
     <ClCompile Include="Scene\BaseScene.cpp" />
     <ClCompile Include="Scene\MainGameScene.cpp" />
@@ -163,6 +166,8 @@
     <ClCompile Include="URenderer.cpp" />
     <ClCompile Include="Weapon\BaseWeapon.cpp" />
     <ClCompile Include="Weapon\WeaponA.cpp" />
+    <ClCompile Include="Weapon\WeaponB.cpp" />
+    <ClCompile Include="Weapon\WeaponC.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderW0.hlsl">
@@ -173,7 +178,10 @@
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
     <ClInclude Include="BufferCache.h" />
-    <ClInclude Include="GameObject\Bullet.h" />
+    <ClInclude Include="GameObject\Bullet\Bullet.h" />
+    <ClInclude Include="GameObject\Bullet\BulletA.h" />
+    <ClInclude Include="GameObject\Bullet\BulletB.h" />
+    <ClInclude Include="GameObject\Bullet\BulletC.h" />
     <ClInclude Include="GameObject\CircleObject.h" />
     <ClInclude Include="GameObject\Monster.h" />
     <ClInclude Include="GameObject\Player.h" />
@@ -188,6 +196,7 @@
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\ObjectManager.h" />
     <ClInclude Include="Math\FVector3.h" />
+    <ClInclude Include="MonsterSpawner.h" />
     <ClInclude Include="PrimitiveVertices.h" />
     <ClInclude Include="Scene\BaseScene.h" />
     <ClInclude Include="Scene\MainGameScene.h" />
@@ -197,6 +206,8 @@
     <ClInclude Include="URenderer.h" />
     <ClInclude Include="Weapon\BaseWeapon.h" />
     <ClInclude Include="Weapon\WeaponA.h" />
+    <ClInclude Include="Weapon\WeaponB.h" />
+    <ClInclude Include="Weapon\WeaponC.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />

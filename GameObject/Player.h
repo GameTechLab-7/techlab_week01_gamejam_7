@@ -3,7 +3,6 @@
 #include "GameObject/CircleObject.h"
 #include "Weapon/BaseWeapon.h"
 
-
 class Player : public CircleObject
 {
 private:

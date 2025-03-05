@@ -1,4 +1,4 @@
-#pragma comment(lib, "user32")
+﻿#pragma comment(lib, "user32")
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
 
@@ -147,6 +147,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	player->SetVelocity(FVector3{ 1, 0, 0 });
 	// player 자체에서 바인딩?
 
+
+	Player* playerB = objectManager.RegistObject<Player>(EWorld::Second);
+
+	WeaponA* weaponB = new WeaponA(playerB);
+
+	playerB->SetWeapon(weaponB);
+	playerB->SetVelocity(FVector3{ 1, 0, 0 });
+
 	//DirectX::
 	float spawnCooldown = 1.f;
 	float timer = 0.f;
@@ -187,11 +195,22 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
     	
 #pragma region Test Code
-    	//std::cout << timer << '\n';
+    	// 게 임 로직 - Update, FixedUpdate, 플레이어 경험치, point, 
+		// 웨폰 + 레벨 시스템 + 레벨 증가 등
+
+		// 플레이어, 웨폰 클래스
+
+		// 몬스터, 잡다한 충돌
+
+
+		//std::cout << timer << '\n';
     	if (timer > spawnCooldown) {
     		timer = 0.f;
     		player->SetAngle(player->GetAngle() + 0.5f);
     		player->SetVelocity(-player->GetVelocity());
+
+			playerB->SetAngle(playerB->GetAngle() + 0.5f);
+			playerB->SetVelocity(-playerB->GetVelocity());
     		std::cout << player->GetAngle() << '\n';
     		// new랑 position, velocity, radius
     		// objectManager.RegistObject<Player>(First);

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 struct FVector3
@@ -33,4 +33,6 @@ struct FVector3
     FVector3& operator/=(float Scalar);
 
     FVector3 operator-() const;
+
+    static FVector3 GetRandomUnitVector2D();
 };

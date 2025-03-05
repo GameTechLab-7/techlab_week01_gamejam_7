@@ -63,10 +63,6 @@ void Player::HandleWallCollision(const FVector3& WallNormal)
 
 void Player::HandleBallCollision(CircleObject& OtherBall)
 {
-    // Monster -> Player
-    // Player 넉백 -> velocity
-    // Player Damage 
-    // Player 무적 
 }
 
 
