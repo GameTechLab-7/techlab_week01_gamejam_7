@@ -1,5 +1,6 @@
-#include "URenderer.h"
+﻿#include "URenderer.h"
 #include "BufferCache.h"
+#include <d3dcompiler.h>
 
 struct alignas( 16 ) URenderer::FConstants
 {
@@ -218,8 +219,15 @@ void URenderer::UpdateConstant(const FVector3& Offset , float Scale) const
     DeviceContext->Unmap(ConstantBuffer , 0);
 }
 
-ID3D11Device* URenderer::GetDevice() const { return Device; }
-ID3D11DeviceContext* URenderer::GetDeviceContext() const { return DeviceContext; }
+ID3D11Device* URenderer::GetDevice() const
+{
+    return Device;
+}
+
+ID3D11DeviceContext* URenderer::GetDeviceContext() const
+{
+    return DeviceContext;
+}
 
 /** Direct3D Device 및 SwapChain을 생성합니다. */
 void URenderer::CreateDeviceAndSwapChain(HWND hWindow)

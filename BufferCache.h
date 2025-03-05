@@ -1,5 +1,6 @@
 #pragma once
 #include <unordered_map>
+#include <d3d11.h>
 #include <wrl/client.h>
 #include "enum.h"
 
@@ -9,7 +10,7 @@ using Microsoft::WRL::ComPtr;
 class BufferCache
 {
 private:
-	std::unordered_map<EObjectType , ComPtr<struct ID3D11Buffer>> Cache;
+	std::unordered_map<EObjectType , ComPtr<ID3D11Buffer>> Cache;
 	std::unordered_map<EObjectType , int> BufferSize;
 public:
 	BufferCache();

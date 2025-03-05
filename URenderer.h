@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include <Windows.h>
 #include <d3d11.h>
-#include <d3dcompiler.h>
 #include <map>
 #include <memory>
 
+#include "BufferCache.h"
 #include "FVector3.h"
 #include "enum.h"
 #include "PrimitiveVertices.h"
@@ -107,5 +107,5 @@ protected:
     unsigned int Stride = 0;                                // Vertex 버퍼의 각 요소 크기
 
     // 버텍스버퍼 재사용을 위한 버퍼캐시
-    std::unique_ptr<class BufferCache> Cache;
+    std::unique_ptr<BufferCache> Cache;
 };
