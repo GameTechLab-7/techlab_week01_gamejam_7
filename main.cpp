@@ -261,6 +261,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         Renderer.PrepareShader();
 
     	GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
+		GameManager::GetInstance().GetCurrentScene()->Render();
 
 		bool isPress = false;
 

@@ -5,7 +5,6 @@
 #include "InputSystem.h"
 
 class Player;
-class Enemy;
 class MonsterSpawner;
 
 class MainGameScene : public BaseScene
@@ -27,11 +26,12 @@ private:
     void RenderWall(class URenderer* Renderer);
 
 
-	  Player* LeftPlayer;
-	  Player* RightPlayer;
+	Player* LeftPlayer;
+	Player* RightPlayer;
     std::shared_ptr<MonsterSpawner> Spawner;
     
 
 public:
     Player* GetPlayer(EWorld WorldType) const;
+	MonsterSpawner* GetSpawner() const { return Spawner.get(); }
 };

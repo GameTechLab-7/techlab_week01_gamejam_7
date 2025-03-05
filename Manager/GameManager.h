@@ -6,7 +6,7 @@
 #include "URenderer.h"
 #include "Scene/BaseScene.h"
 #include "AbstractClass/Singleton.h"
-#include "Manager/ObjectManager.h"
+#include "GameLogic.h"
 
 /**
  * 
@@ -18,6 +18,7 @@ private:
     bool bInitialized = false;
     std::unique_ptr<BaseScene> CurrentScene;
     URenderer* Renderer = nullptr;
+    std::unique_ptr<class GameLogic> Logic;
 
 public:
     template <typename Scene>
@@ -42,6 +43,9 @@ public:
 		return Renderer;
 	}
 
+    void InitGameLogic();
+    GameLogic* GetLogic() const { return Logic.get();}
+    
 };
 
 template <typename Scene>
