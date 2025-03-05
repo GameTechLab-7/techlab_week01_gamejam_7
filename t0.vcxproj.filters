@@ -31,8 +31,10 @@
     <ClCompile Include="Weapon\WeaponB.cpp" />
     <ClCompile Include="Weapon\WeaponC.cpp" />
     <ClCompile Include="GameObject\Bullet\BulletA.cpp" />
-    <ClCompile Include="GameObject\Bullet\BulletB.cpp" />
     <ClCompile Include="GameObject\Bullet\Bullet.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Constant.h" />
+    <ClCompile Include="GameObject\Bullet\BulletB.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
@@ -65,7 +67,8 @@
     <ClInclude Include="Weapon\WeaponB.h" />
     <ClInclude Include="Weapon\WeaponC.h" />
     <ClInclude Include="GameObject\Bullet\BulletA.h" />
-    <ClInclude Include="GameObject\Bullet\BulletB.h" />
     <ClInclude Include="GameObject\Bullet\BulletC.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="GameObject\Bullet\BulletB.h" />
   </ItemGroup>
 </Project>

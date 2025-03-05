@@ -167,6 +167,7 @@
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="URenderer.cpp" />
     <ClCompile Include="Weapon\BaseWeapon.cpp" />
+    <ClCompile Include="Constant.h" />
     <ClCompile Include="Weapon\WeaponA.cpp" />
     <ClCompile Include="Weapon\WeaponB.cpp" />
     <ClCompile Include="Weapon\WeaponC.cpp" />

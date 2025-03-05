@@ -6,6 +6,14 @@ CircleObject::CircleObject(EWorld SelectedWorld)
 {
 }
 
+void CircleObject::HandleWallCollision(const FVector3& WallNormal)
+{
+}
+
+void CircleObject::HandleBallCollision(CircleObject* OtherBall)
+{
+}
+
 void CircleObject::OnHit()
 {
 }

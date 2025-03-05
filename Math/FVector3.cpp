@@ -115,6 +115,14 @@ FVector3 FVector3::operator-() const
 	return { -x, -y, -z };
 }
 
+bool FVector3::operator!=(const FVector3& other) const {
+	return !( other == *this );
+}
+
+bool FVector3::operator==(const FVector3& other) const {
+	return ( fabs(x - other.x) < 0.00001f ) && ( fabs(x - other.x) < 0.00001f ) && ( fabs(z - other.z) < 0.00001f );
+}
+
 FVector3 FVector3::GetRandomUnitVector2D()
 {
 	float angle = static_cast<float>(rand()) / RAND_MAX * 2.0f * 3.14; // 0 ~ 2π 랜덤 각도
