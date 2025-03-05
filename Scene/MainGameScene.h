@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <memory>
 #include "BaseScene.h"
+#include "InputSystem.h"
 
 class Player;
 class Enemy;
@@ -8,8 +9,14 @@ class Enemy;
 
 class MainGameScene : public BaseScene
 {
+
     virtual void LoadScene() override;
     virtual void ExitScene() override;
+
+public:
+    MainGameScene();
+    
+    InputHandler* InputHandlerInstance;
 
 private:
 
@@ -19,4 +26,5 @@ private:
 
 	Player* leftPlayer;
 	Player* rightPlayer;
+
 };

@@ -2,7 +2,11 @@
 #include "GameObject/Player.h"
 #include "Manager/ObjectManager.h"
 #include "Manager/GameManager.h"
+#include "InputSystem.h"
 
+MainGameScene::MainGameScene() {
+	InputHandlerInstance = new InputHandler();
+}
 
 void MainGameScene::LoadScene()
 {
