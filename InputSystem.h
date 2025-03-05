@@ -157,7 +157,11 @@ public:
 
     void MouseKeyUp(FVector3 MouseUpPoint, FVector3 WindowSize);
 
+    void ExpireOnceMouse() { onceMouse = false; }
+
     bool IsPressedMouse() { return mouse; }
+
+    bool GetMouseDown() { return onceMouse; }
 
     FVector3 GetMouseDownPos() { return MouseKeyDownPos; }
     FVector3 GetMouseUpPos() { return MouseKeyUpPos; }
@@ -167,6 +171,7 @@ public:
 
 private:
     bool mouse;
+    bool onceMouse;
     bool _keys[256];
     FVector3 MouseKeyDownPos;
     FVector3 MouseKeyUpPos;

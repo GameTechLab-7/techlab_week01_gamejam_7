@@ -64,8 +64,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             dWidth = dRect.right - dRect.left;
             dHeight = dRect.bottom - dRect.top;
         }
-        std::cout << "width: " << dWidth << ", height: " << dHeight << "\n";
-        std::cout << "x: " << DownPts.x << ", y: " << DownPts.y << "\n";
         InputSystem::GetInstance().MouseKeyDown(FVector3(DownPts.x , DownPts.y , 0), FVector3(dWidth , dHeight , 0));
         std::cout << "MouseDown " << InputSystem::GetInstance().GetMouseDownRatioPos().x << " " << InputSystem::GetInstance().GetMouseDownRatioPos().y << "\n";
         break;
@@ -207,6 +205,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         Accumulator += DeltaTime;
 		timer += DeltaTime;
 
+        InputSystem::GetInstance().ExpireOnceMouse();
+
         // 메시지(이벤트) 처리
         MSG msg;
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -233,6 +233,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		// 몬스터, 잡다한 충돌
 
+        if (InputSystem::GetInstance().GetMouseDown()) {
+            std::cout << "GetMouseDown" << "\n";
+        }
 
 		//std::cout << timer << '\n';
     	if (timer > spawnCooldown) {
