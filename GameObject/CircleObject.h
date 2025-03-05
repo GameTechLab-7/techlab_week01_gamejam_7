@@ -39,7 +39,7 @@ public:
 	virtual void Move(float DeltaTime) = 0;
 	virtual void OnDestroy() = 0;	// CircleObject에 의해 부가적으로 발생한 메모리만 삭제, CircleObject 객체는 ObjectManager에 의해 삭제.
 
-	virtual void OnHit() = 0;
+	virtual void OnHit();
 	
 	void ResolveOverlap(CircleObject& OtherBall);
 

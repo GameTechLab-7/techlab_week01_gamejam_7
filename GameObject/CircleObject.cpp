@@ -6,6 +6,10 @@ CircleObject::CircleObject(EWorld SelectedWorld)
 {
 }
 
+void CircleObject::OnHit()
+{
+}
+
 void CircleObject::ResolveOverlap(CircleObject& OtherBall)
 {
 	const FVector3 Normal = (OtherBall.Location - Location).Normalize();

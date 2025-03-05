@@ -61,3 +61,7 @@ void BulletA::Move(float DeltaTime)
 void BulletA::OnDestroy()
 {
 }
+
+void BulletA::OnHit()
+{
+}

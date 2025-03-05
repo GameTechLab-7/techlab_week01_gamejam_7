@@ -8,7 +8,7 @@
 
 Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 {
-    Radius = 0.3f;
+    Radius = 0.1f;
     //const float x = rand() % 1 - MyWorld;
     //const float y = rand() % 2 - 1;
     Location = FVector3(0 , 0 , 0);

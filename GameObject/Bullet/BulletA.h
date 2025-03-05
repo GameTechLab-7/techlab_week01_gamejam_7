@@ -22,4 +22,7 @@ public:
 
     virtual void Move(float DeltaTime) override;
     virtual void OnDestroy() override;
+
+    // Bullet을(를) 통해 상속됨
+    void OnHit() override;
 };
