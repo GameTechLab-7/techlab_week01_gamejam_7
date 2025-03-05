@@ -1,7 +1,6 @@
 #include "Player.h"
 #include "URenderer.h"
 
-
 // 문제 1. 벽 겹침 보정을 언제 어디서 해주냐
 
 
@@ -10,15 +9,20 @@
 Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 {
     Radius = 0.3f;
-    const float x = rand() % 1 - MyWorld;
-    const float y = rand() % 2 - 1;
-    Location = FVector3(x , y , 0);
-    Velocity = FVector3(x , y , 0);
+    //const float x = rand() % 1 - MyWorld;
+    //const float y = rand() % 2 - 1;
+    Location = FVector3(0 , 0 , 0);
+    Velocity = FVector3(0 , 0 , 0);
+    Radian = 0;
 }
 
 // 이동 후 겹침 보정 (Monster, Player에 대해)
 void Player::Update(float DeltaTime)
 {
+    if (currentWeapon != nullptr) {
+        currentWeapon->Update(DeltaTime);
+    }
+
     // 벽
     if (Location.x - Radius < WorldWalls[MyWorld][Left])
     {
@@ -39,6 +43,20 @@ void Player::Update(float DeltaTime)
     }
 }
 
+void Player::FixedUpdate(float Fixed)
+{
+}
+
+BaseWeapon* Player::GetWeapon()
+{
+    return currentWeapon;
+}
+
+void Player::SetWeapon(BaseWeapon* weapon)
+{
+    currentWeapon = weapon;
+}
+
 void Player::HandleWallCollision(const FVector3& WallNormal)
 {
 }
@@ -54,7 +72,7 @@ void Player::HandleBallCollision(CircleObject& OtherBall)
 
 void Player::Render(const URenderer& Renderer) const
 {
-    Renderer.UpdateConstant(Location , Radius);
+    Renderer.UpdateConstant(Location , Radius, Radian);
 }
 
 void Player::Move(float DeltaTime)

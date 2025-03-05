@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -958,6 +958,8 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="URenderer.cpp" />
+    <ClCompile Include="Weapon\BaseWeapon.cpp" />
+    <ClCompile Include="Weapon\WeaponA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderW0.hlsl">
@@ -988,6 +990,8 @@
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="URenderer.h" />
+    <ClInclude Include="Weapon\BaseWeapon.h" />
+    <ClInclude Include="Weapon\WeaponA.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />

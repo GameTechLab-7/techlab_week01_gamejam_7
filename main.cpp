@@ -15,7 +15,7 @@
 #include "Manager/GameManager.h"
 #include "GameObject/Player.h"
 #include "Manager/ObjectManager.h"
-
+#include "WeaponA.h"
 
 enum class EPrimitiveType : UINT8
 {
@@ -2605,19 +2605,22 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     float Accumulator = 0.0; // Fixed Update에 사용되는 값
     constexpr float FixedTimeStep = 1.0f / TargetFPS;
 
-	// UBalls 배열
-	int ArrSize = 1;
-	int ArrCap = 4;
-	CircleObject** CircleObjects = new CircleObject*[ArrCap];
-	EWorld world = EWorld::First;
-	auto Ball = new Player(world);
-
-	ObjectManager objectManager;
+	ObjectManager& objectManager = Singleton<ObjectManager>::GetInstance();
 	objectManager.Initialize(&Renderer);
 	
-	int NumOfBalls = 1;
+	Player* player = objectManager.RegistObject<Player>(EWorld::First);
+	
+	WeaponA* weaponA = new WeaponA(player);
+
+	player->SetWeapon(weaponA);
+	player->SetVelocity(FVector3{ 1, 0, 0 });
+	// player 자체에서 바인딩?
+
+	//DirectX::
 	float spawnCooldown = 1.f;
 	float timer = 0.f;
+
+	//int NumOfBalls = 1;
     // Main Loop
     bool bIsExit = false;
     while (bIsExit == false)
@@ -2667,14 +2670,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     		Accumulator -= FixedTimeStep;
     	}
 
-		std::cout << timer << '\n';
+		//std::cout << timer << '\n';
 		if (timer > spawnCooldown) {
 			timer = 0.f;
-			auto objecta = new Player(EWorld::First);
-			auto objectb = new Player(EWorld::Second);
-			// new랑 position, velocity, radius
-			objectManager.RegistObject(objecta);
-			objectManager.RegistObject(objectb);
+			player->SetAngle(player->GetAngle() + 0.5f);
+			player->SetVelocity(-player->GetVelocity());
+			std::cout << player->GetAngle() << '\n';
+		//	auto objecta = new Player(EWorld::First);
+		//	auto objectb = new Player(EWorld::Second);
+		//	// new랑 position, velocity, radius
+		//	objectManager.RegistObject(objecta);
+		//	objectManager.RegistObject(objectb);
 		}
 
         // 렌더링 준비 작업
@@ -2705,7 +2711,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         {
             ImGui::Text("Hello, World!");
         	ImGui::Text("FPS: %.3f", ImGui::GetIO().Framerate);
-        	ImGui::Text("Size: %d, Capacity: %d", ArrSize, ArrCap);
+        	//ImGui::Text("Size: %d, Capacity: %d", ArrSize, ArrCap);
         	/*if (ImGui::Checkbox("Gravity", &Balls[0]->bApplyGravity))
         	{
         		for (int i = 1; i < ArrSize; ++i)
@@ -2797,7 +2803,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         } while (ElapsedTime < TargetDeltaTime);
     }
 
-	delete[] CircleObjects;
+	//delete[] CircleObjects;
 
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();

@@ -6,6 +6,7 @@ struct alignas( 16 ) URenderer::FConstants
 {
     FVector3 Offset;
     float Scale;
+    float Radian;
 };
 
 /** Renderer를 초기화 합니다. */
@@ -199,7 +200,7 @@ void URenderer::ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const
 }
 
 /** Constant Data를 업데이트 합니다. */
-void URenderer::UpdateConstant(const FVector3& Offset , float Scale) const
+void URenderer::UpdateConstant(const FVector3& Offset , float Scale, float Radian) const
 {
     if (!ConstantBuffer) return;
 
@@ -213,6 +214,7 @@ void URenderer::UpdateConstant(const FVector3& Offset , float Scale) const
         FConstants* Constants = static_cast< FConstants* >( ConstantBufferMSR.pData );
         Constants->Offset = Offset;
         Constants->Scale = Scale;
+        Constants->Radian = Radian;
     }
     DeviceContext->Unmap(ConstantBuffer , 0);
 }

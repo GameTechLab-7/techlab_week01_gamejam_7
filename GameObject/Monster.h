@@ -4,6 +4,8 @@
 
 class Monster : public CircleObject
 {
-    void Update(float DeltaTime);
+    virtual void Update(float DeltaTime) override;
+    virtual void FixedUpdate(float Fixed) override;
+
     virtual void HandleBallCollision(CircleObject& OtherBall) override;
 };

@@ -55,7 +55,7 @@ public:
     void ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const;
 
     /** Constant Data를 업데이트 합니다. */
-    void UpdateConstant(const FVector3& Offset, float Scale) const;
+    void UpdateConstant(const FVector3& Offset, float Scale, float Angle) const;
 
     ID3D11Device* GetDevice() const;
     ID3D11DeviceContext* GetDeviceContext() const;

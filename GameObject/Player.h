@@ -1,13 +1,22 @@
 #pragma once
 
 #include "GameObject/CircleObject.h"
+#include "BaseWeapon.h"
 
 class Player : public CircleObject
 {
+private:
+    BaseWeapon* currentWeapon;
+
 public:
     Player(EWorld selectedWorld);
 
-    void Update(float DeltaTime);
+
+    BaseWeapon* GetWeapon();
+    void SetWeapon(BaseWeapon* weapon);
+
+    virtual void Update(float DeltaTime) override;
+    virtual void FixedUpdate(float Fixed) override;
 
     virtual void HandleWallCollision(const FVector3& WallNormal) override;
 

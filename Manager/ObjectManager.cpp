@@ -4,6 +4,10 @@
 #include <ranges>
 
 
+ObjectManager::ObjectManager() {
+
+}
+
 void ObjectManager::Initialize(URenderer* renderer)
 {
     Renderer = renderer;
@@ -11,6 +15,8 @@ void ObjectManager::Initialize(URenderer* renderer)
 
 void ObjectManager::Update(float DeltaTime , ID3D11Buffer* pBuffer , UINT numVertices)
 {
+    ProcessUpdate(DeltaTime);
+
     ProcessMove(DeltaTime);
     ProcessCheckCollision();
     ProcessRender(pBuffer , numVertices);
@@ -20,22 +26,13 @@ void ObjectManager::Update(float DeltaTime , ID3D11Buffer* pBuffer , UINT numVer
 
 void ObjectManager::FixedUpdate(float FixedTime)
 {
-}
-
-void ObjectManager::RegistObject(CircleObject* InCircleObject)
-{
-    if (!ObjectsMap.contains(InCircleObject->GetWorld()))
-    {
-        ObjectsMap.insert({InCircleObject->GetWorld() , std::vector<CircleObject*>()});
-    }
-
-    ObjectsMap.at(InCircleObject->GetWorld()).push_back(InCircleObject);
+    ProcessFixedUpdate(FixedTime);
 }
 
 void ObjectManager::Destroy(CircleObject* InCircleObject)
 {
     DestroyList.emplace_back(InCircleObject);
-    auto vector = ObjectsMap.at(InCircleObject->GetWorld());
+    auto& vector = ObjectsMap.at(InCircleObject->GetWorld());
     const auto it = std::ranges::find(vector , InCircleObject);
     ObjectsMap.at(InCircleObject->GetWorld()).erase(it);
 }
@@ -45,10 +42,30 @@ void ObjectManager::ProcessDestroy()
 {
     for (auto destroyObject : DestroyList)
     {
-        // 이따가 destroy를 직접 시키는 게 좋을 지 어떻게 하는게 좋을지 물어보자.
         destroyObject->OnDestroy();
     }
     DestroyList.clear();
+}
+
+void ObjectManager::ProcessUpdate(float DeltaTime) {
+    for (auto Objects : ObjectsMap | std::views::values)
+    {
+        for (int i = 0; i < Objects.size(); ++i)
+        {
+            Objects[ i ]->Update(DeltaTime);
+        }
+    }
+}
+
+
+void ObjectManager::ProcessFixedUpdate(float FixedTime) {
+    for (auto Objects : ObjectsMap | std::views::values)
+    {
+        for (int i = 0; i < Objects.size(); ++i)
+        {
+            Objects[ i ]->FixedUpdate(FixedTime);
+        }
+    }
 }
 
 void ObjectManager::ProcessMove(float DeltaTime)

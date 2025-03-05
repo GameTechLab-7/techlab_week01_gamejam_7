@@ -81,6 +81,12 @@
     <ClCompile Include="URenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Weapon\WeaponA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon\BaseWeapon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderW0.hlsl">
@@ -148,10 +154,16 @@
     <ClInclude Include="Scene\TitleScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Singleton.h">
+    <ClInclude Include="URenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="URenderer.h">
+    <ClInclude Include="AbstractClass\Singleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon\BaseWeapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon\WeaponA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
