@@ -4,16 +4,13 @@
 #include "Manager/GameManager.h"
 #include "InputSystem.h"
 
-MainGameScene::MainGameScene() {
-	InputHandlerInstance = new InputHandler();
-}
-
 void MainGameScene::LoadScene()
 {
 	// !TODO : 플레이어 두 개 받아와서 캐시
 	// ObjectManager->GetPlayer()
 	// ObjectManager->GetEnemy()
 	// !TODO : 
+	InputHandlerInstance = std::make_unique<InputHandler>();
 
 	leftPlayer = ObjectManager::GetInstance().RegistObject<Player>(First);
 	rightPlayer = ObjectManager::GetInstance().RegistObject<Player>(Second);

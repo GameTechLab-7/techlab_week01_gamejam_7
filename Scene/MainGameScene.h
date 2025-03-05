@@ -16,7 +16,7 @@ class MainGameScene : public BaseScene
 public:
     MainGameScene();
     
-    InputHandler* InputHandlerInstance;
+    std::unique_ptr<InputHandler> InputHandlerInstance;
 
 private:
 
