@@ -1,7 +1,10 @@
-﻿#include <iostream>
+#include "WeaponA.h"
+
+#include <iostream>
+
+#include "GameObject/Player.h"
 #include "Manager/ObjectManager.h"
 
-#include "Weapon/WeaponA.h"
 
 WeaponA::WeaponA(Player* player) : BaseWeapon(player) {
 	BulletSize = 0.1f;
