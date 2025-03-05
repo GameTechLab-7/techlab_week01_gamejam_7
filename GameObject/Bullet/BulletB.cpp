@@ -1,9 +1,14 @@
-﻿#include "GameObject/Bullet/BulletB.h"
+﻿#include "math.h"
+
+#include "GameObject/Bullet/BulletB.h"
 #include "URenderer.h"
 #include "Manager/ObjectManager.h"
+#include "GameObject/Monster.h"
 
 
+// 외부에서 멤버변수 초기화
 BulletB::BulletB(EWorld selectedWorld) : Bullet(selectedWorld) {
+    
 }
 
 
@@ -22,22 +27,22 @@ void BulletB::HandleWallCollision(const FVector3& WallNormal)
 void BulletB::HandleBallCollision(CircleObject* OtherBall)
 {
     // Bullet -> Monster
-    
-    // if(OtherBall == Monster)
-    // Monster.넉백
-    // If Monster Die
-    //		Monster.Destroy();
-    //		Player.AddPoint
-}
+    CircleObject* object = &OtherBall;
+    Monster* monster = dynamic_cast< Monster* >( object );
 
-void BulletB::Render(const URenderer& Renderer) const
-{
-    //Renderer.UpdateConstant(Location, Radius, Radian);
+    if (monster != nullptr) {
+        monster->OnHit();
+
+        // TODO
+        // Monster.넉백
+        // If Monster Die
+        //		Monster.Destroy();
+        //		Player.AddPoint
+    }
 }
 
 void BulletB::Move(float DeltaTime)
 {
-    //Location += Velocity * DeltaTime;
 }
 
 void BulletB::OnDestroy()

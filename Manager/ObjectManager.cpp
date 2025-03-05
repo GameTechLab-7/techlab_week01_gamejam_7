@@ -1,4 +1,4 @@
-﻿#include "ObjectManager.h"
+#include "ObjectManager.h"
 #include <ranges>
 
 #include "URenderer.h"
@@ -28,67 +28,67 @@ void ObjectManager::FixedUpdate(float FixedTime)
 
 void ObjectManager::Destroy(CircleObject* InCircleObject)
 {
-	DestroyList.emplace_back(InCircleObject);
-	auto& vector = ObjectsMap.at(InCircleObject->GetWorld());
-	const auto it = std::ranges::find(vector , InCircleObject);
-	ObjectsMap.at(InCircleObject->GetWorld()).erase(it);
+    // pending queue에 추가, 삭제는 나중에 Process Destroy에서
+    DestroyQueue.push(InCircleObject->shared_from_this());
 }
 
 void ObjectManager::DestroyAll()
 {
-	for (auto& [WorldEnum , Objects] : ObjectsMap)
-	{
-		for (auto& Object : Objects)
-		{
-			// !TODO : 오브젝트 관리도 shared_ptr
-			Destroy(Object);
-		}
-		Objects.clear();
-	}
+    for (const auto& Objects : ObjectsMap | std::views::values)
+    {
+        for (const auto& Object : Objects)
+        {
+            DestroyQueue.push(Object);
+        }
+    }
 }
 
 // 라이프 사이클에 의해 Update 이후에 사용
 void ObjectManager::ProcessDestroy()
 {
-	for (const auto& destroyObject : DestroyList)
-	{
-		destroyObject->OnDestroy();
-	}
-	DestroyList.clear();
+    while (!DestroyQueue.empty())
+    {
+        if (const auto& Object = DestroyQueue.front().lock())
+        {
+            Object->OnDestroy();
+            ObjectsMap[Object->GetWorld()].erase(Object->shared_from_this());
+        }
+        DestroyQueue.pop();
+    }
 }
 
 void ObjectManager::ProcessUpdate(float DeltaTime)
 {
-	for (const auto Objects : ObjectsMap | std::views::values)
-	{
-		for (const auto Object : Objects)
-		{
-			Object->Update(DeltaTime);
-		}
-	}
+    for (const auto& Objects : ObjectsMap | std::views::values)
+    {
+        for (const auto& Object : Objects)
+        {
+            Object->Update(DeltaTime);
+        }
+    }
 }
 
 
 void ObjectManager::ProcessFixedUpdate(float FixedTime)
 {
-	for (const auto Objects : ObjectsMap | std::views::values)
-	{
-		for (const auto& Object : Objects)
-		{
-			Object->FixedUpdate(FixedTime);
-		}
-	}
+    for (const auto& Objects : ObjectsMap | std::views::values)
+    {
+        for (const auto& Object : Objects)
+        {
+            Object->FixedUpdate(FixedTime);
+        }
+    }
 }
 
 void ObjectManager::ProcessMove(float DeltaTime)
 {
-	for (const auto Objects : ObjectsMap | std::views::values) // Value만 갸져오기
-	{
-		for (CircleObject* Object : Objects)
-		{
-			Object->Move(DeltaTime);
-		}
-	}
+    for (const auto& Objects : ObjectsMap | std::views::values) // Value만 갸져오기
+    {
+        for (const auto& Object : Objects)
+        {
+            Object->Move(DeltaTime);
+        }
+    }
 }
 
 void ObjectManager::ProcessCheckCollision()
@@ -105,6 +105,7 @@ void ObjectManager::ProcessCheckCollision()
 				if (CheckCollision(objectA , objectB))
 				{
 					Objects[ i ]->HandleBallCollision(Objects[ j ]);
+          Objects[ j ]->HandleBallCollision(Objects[ i ]);
 				}
 			}
 		}
@@ -113,20 +114,20 @@ void ObjectManager::ProcessCheckCollision()
 
 void ObjectManager::ProcessRender() const
 {
-	const URenderer* pRenderer = GameManager::GetInstance().GetRenderer();
-	if (pRenderer == nullptr)
-	{
-		return;
-	}
+    const URenderer* pRenderer = GameManager::GetInstance().GetRenderer();
+    if (pRenderer == nullptr)
+    {
+        return;
+    }
 
-	for (const auto& [WorldEnum , Objects] : ObjectsMap)
-	{
-		pRenderer->PrepareViewport(WorldEnum);
-		for (const CircleObject* vector : Objects)
-		{
-			vector->Render(*pRenderer);
-		}
-	}
+    for (const auto& [WorldEnum, Objects] : ObjectsMap)
+    {
+        pRenderer->PrepareViewport(WorldEnum);
+        for (const auto& Object : Objects)
+        {
+            Object->Render(*pRenderer);
+        }
+    }
 }
 
 
