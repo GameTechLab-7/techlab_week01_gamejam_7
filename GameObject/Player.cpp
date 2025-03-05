@@ -40,6 +40,9 @@ void Player::FixedUpdate(float Fixed)
 
 BaseWeapon* Player::GetWeapon() const
 {
+    if (currentWeapon == nullptr) {
+        return nullptr;
+    }
     return currentWeapon;
 }
 
@@ -50,7 +53,6 @@ void Player::SetWeapon(BaseWeapon* weapon)
 
 void Player::HandleWallCollision(const FVector3& WallNormal)
 {
-
     if (WallNormal.x > 0.0001f) {
         // 왼쪽
         Location.x = WorldWalls[ MyWorld ][ Left ] + Radius;
@@ -105,7 +107,11 @@ void Player::OnHit(FVector3 HitForce , int Damage)
     GameManager::GetInstance().GetLogic()->OnPlayerHit(this->GetWorld(), Damage);
 }
 
-void Player::LevelUp()
+#include <iostream>
+
+// Player에서는 Logic을 알지 못하도록 값을 직접 넣어줌.
+void Player::LevelUp(const int level) const
 {
-    // !TODO : 레벨업 로직
+    std::cout << "Level Up! " << GetWorld() << " " << level << '\n';
+    currentWeapon->SetLevel(level);
 }

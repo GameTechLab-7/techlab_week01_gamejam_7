@@ -201,6 +201,6 @@ bool ObjectManager::CheckWallCollision(const CircleObject& object, FVector3& nor
     if (normal.Length() < 0.001f) {
         return false;
     }
-
+    
     return true;
 }

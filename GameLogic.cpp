@@ -21,6 +21,11 @@ int GameLogic::GetPreset(EWorld World)
 	return PlayerStates[ World ].Preset;
 }
 
+int GameLogic::GetLv(EWorld World)
+{
+	return PlayerStates[ World ].Lv;
+}
+
 void GameLogic::AddScore(EWorld World , int Score)
 {
 	PlayerStates[ World ].Score += Score;
@@ -31,12 +36,13 @@ void GameLogic::AddExp(EWorld World , int exp)
 	PlayerStates[ World ].Exp += exp;
 	if (PlayerStates[ World ].Exp >= LVUP_THRESHOLD)
 	{
-		Upgrade(World);
+		PlayerStates[ World ].Lv += 1;
 		PlayerStates[ World ].Exp -= LVUP_THRESHOLD;
+		Upgrade(World, PlayerStates[ World ].Lv);
 	}
 }
 
-void GameLogic::Upgrade(EWorld World)
+void GameLogic::Upgrade(EWorld World, int lv)
 {
 	MainGameScene* mainScene = GameManager::GetInstance().GetCurrentScene<MainGameScene>();
 
@@ -46,7 +52,7 @@ void GameLogic::Upgrade(EWorld World)
 
 	if (player != nullptr)
 	{
-		player->LevelUp();
+		player->LevelUp(lv);
 	}
 }
 

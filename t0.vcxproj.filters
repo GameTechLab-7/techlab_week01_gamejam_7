@@ -35,6 +35,9 @@
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Constant.h" />
     <ClCompile Include="GameObject\Bullet\BulletB.cpp" />
+    <ClCompile Include="GameLogic.cpp" />
+    <ClCompile Include="Weapon\WeaponBData.cpp" />
+    <ClCompile Include="Weapon\WeaponAData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
@@ -70,5 +73,8 @@
     <ClInclude Include="GameObject\Bullet\BulletC.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="GameObject\Bullet\BulletB.h" />
+    <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="Weapon\WeaponAData.h" />
+    <ClInclude Include="Weapon\WeaponBData.h" />
   </ItemGroup>
 </Project>

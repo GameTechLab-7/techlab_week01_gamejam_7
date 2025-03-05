@@ -42,12 +42,13 @@ public:
 public:
 
 	int GetPreset(EWorld World);
+	int GetLv(EWorld World);
 
 	void AddScore(EWorld World , int Score);
 
 	void AddExp(EWorld World , int exp);
 
-	void Upgrade(EWorld World);
+	void Upgrade(EWorld World, int lv);
 
 	void SpawnMonsterToWorld(EWorld World);
 
