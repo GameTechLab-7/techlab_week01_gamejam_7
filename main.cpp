@@ -136,7 +136,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	GameManager::GetInstance().Init(&Renderer);
 
-	ObjectManager& objectManager = Singleton<ObjectManager>::GetInstance();
+	ObjectManager& objectManager = ObjectManager::GetInstance();
 	objectManager.Initialize(&Renderer);
 	
 	Player* player = objectManager.RegistObject<Player>(EWorld::First);
@@ -185,9 +185,21 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
             }
         }
 
-		// TODO: Update 로직 추가
+		GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
+#pragma region Test Code
+    	//std::cout << timer << '\n';
+    	if (timer > spawnCooldown) {
+    		timer = 0.f;
+    		player->SetAngle(player->GetAngle() + 0.5f);
+    		player->SetVelocity(-player->GetVelocity());
+    		std::cout << player->GetAngle() << '\n';
+    		// new랑 position, velocity, radius
+    		// objectManager.RegistObject<Player>(First);
+    		// objectManager.RegistObject<Player>(Second);
+    	}
+#pragma endregion
 
-
+    	
     	// FixedTimeStep 만큼 업데이트
     	while (Accumulator >= FixedTimeStep)
     	{
@@ -202,22 +214,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     		Accumulator -= FixedTimeStep;
     	}
 
-		GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
-
-#pragma region Test Code
-		//std::cout << timer << '\n';
-		if (timer > spawnCooldown) {
-			timer = 0.f;
-			player->SetAngle(player->GetAngle() + 0.5f);
-			player->SetVelocity(-player->GetVelocity());
-			std::cout << player->GetAngle() << '\n';
-		//	auto objecta = new Player(EWorld::First);
-		//	auto objectb = new Player(EWorld::Second);
-		//	// new랑 position, velocity, radius
-		//	objectManager.RegistObject(objecta);
-		//	objectManager.RegistObject(objectb);
-		}
-#pragma endregion
 
         // 렌더링 준비 작업
         Renderer.Prepare();
@@ -241,83 +237,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         {
             ImGui::Text("Hello, World!");
         	ImGui::Text("FPS: %.3f", ImGui::GetIO().Framerate);
-        	//ImGui::Text("Size: %d, Capacity: %d", ArrSize, ArrCap);
-        	/*if (ImGui::Checkbox("Gravity", &Balls[0]->bApplyGravity))
-        	{
-        		for (int i = 1; i < ArrSize; ++i)
-        		{
-        			Balls[i]->bApplyGravity = Balls[0]->bApplyGravity;
-        		}
-        	}
-        	if (Balls[0]->bApplyGravity)
-        	{
-        		ImGui::SliderFloat("Gravity Factor", &Object::Gravity, -20.0f, 20.0f);
-        	}
 
-        	if (ImGui::SliderFloat("Bounce Factor", &Balls[0]->BounceFactor, 0.0f, 1.0f))
-        	{
-        		for (int i = 1; i < ArrSize; ++i)
-        		{
-        			Balls[i]->BounceFactor = Balls[0]->BounceFactor;
-        		}
-        	}
-        	if (ImGui::SliderFloat("Friction", &Balls[0]->Friction, 0.0f, 1.0f))
-        	{
-        		for (int i = 1; i < ArrSize; ++i)
-        		{
-        			Balls[i]->Friction = Balls[0]->Friction;
-        		}
-        	}
-        	if (ImGui::InputInt("Number of Ball", &NumOfBalls))
-        	{
-        		NumOfBalls = max(NumOfBalls, 1);
-        		const int Diff = NumOfBalls - ArrSize;
-        		if (Diff > 0)
-		        {
-			        if (NumOfBalls > ArrCap)
-			        {
-			        	int NewCap = NumOfBalls > ArrCap * 2
-			        		? static_cast<int>(static_cast<float>(NumOfBalls) * 1.5f)
-			        		: ArrCap * 2;
-
-			        	Object** NewBalls = new Object*[NewCap];
-			        	for (int i = 0; i < ArrSize; ++i)
-			        	{
-			        		NewBalls[i] = Balls[i];
-			        	}
-			        	delete[] Balls;
-			        	ArrCap = NewCap;
-			        	Balls = NewBalls;
-			        }
-
-			        for (int i = 0; i < Diff; ++i)
-			        {
-			        	Object* Ball = new Object;
-			        	Ball->bApplyGravity = Balls[0]->bApplyGravity;
-				        Balls[ArrSize + i] = Ball;
-			        }
-        			ArrSize = NumOfBalls;
-		        }
-		        else if (Diff < 0)
-        		{
-		        	for (int i = 0; i < -Diff; ++i)
-		        	{
-		        		int IndexToRemove = rand() % ArrSize;
-		        		delete Balls[IndexToRemove];
-		        		Balls[IndexToRemove] = Balls[ArrSize - 1];
-		        		ArrSize--;
-		        	}
-        		}
-        	}*/
+			ImGui::Text("Current Scene: %s" , GameManager::GetInstance().GetCurrentScene()->GetName().c_str());
+			if (ImGui::Button("Move to Main Game Scene"))
+			{
+				GameManager::GetInstance().ChangeScene<MainGameScene>();
+				GameManager::GetInstance().GetCurrentScene()->SetName("MainGameScene");
+			}
         }
-
-		ImGui::Text("Current Scene: %s" , GameManager::GetInstance().GetCurrentScene()->GetName().c_str());
-		if (ImGui::Button("Move to Main Game Scene"))
-		{
-			GameManager::GetInstance().ChangeScene<MainGameScene>();
-			GameManager::GetInstance().GetCurrentScene()->SetName("MainGameScene");
-		}
-		
         ImGui::End();
 
         // ImGui 렌더링
@@ -348,7 +275,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     Renderer.ReleaseConstantBuffer();
     Renderer.ReleaseShader();
     Renderer.Release();
-
 
 	CloseDebugConsole();
     return 0;
