@@ -30,8 +30,6 @@ protected:
 protected:
     bool IsDead();
 
-    bool IsDead();
-
 public:
     virtual void Init(float Radius, float InitialDistance , float Speed);
 

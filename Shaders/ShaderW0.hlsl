@@ -9,7 +9,8 @@ cbuffer constants : register(b0)
     float3 Offset;
     float Scale;
     float Radian;
-    bool bIsHit;
+    float Padding;
+    int bIsHit;
 }
 
 struct VS_INPUT

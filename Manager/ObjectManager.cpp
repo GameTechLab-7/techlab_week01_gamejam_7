@@ -161,10 +161,6 @@ void ObjectManager::ProcessRender() const
 
 bool ObjectManager::CheckCollision(const CircleObject& A , const CircleObject& B) const
 {
-	if (A.IsCollisionProcessing() || B.IsCollisionProcessing())
-	{
-		return false;
-	}
 	const float Distance = ( A.GetLocation() - B.GetLocation() ).Length();
 	return Distance <= ( A.GetRadius() + B.GetRadius() );
 }

@@ -1,4 +1,4 @@
-#include "BufferCache.h"
+﻿#include "BufferCache.h"
 #include "PrimitiveVertices.h"
 #include "Manager/GameManager.h"
 
@@ -42,15 +42,15 @@ ID3D11Buffer* BufferCache::CreateVertexBuffer(EObjectType Type)
 	case EObjectType::Enemy:
 	{
 		//적 버텍스 버퍼 생성
-		size = BufferSize[ Type ] = std::size(cube_vertices);
-		buffer = GameManager::GetInstance().GetRenderer()->CreateVertexBuffer(cube_vertices , sizeof(FVertexSimple) * size);
+		size = BufferSize[ Type ] = std::size(sphere_vertices);
+		buffer = GameManager::GetInstance().GetRenderer()->CreateVertexBuffer(sphere_vertices , sizeof(FVertexSimple) * size);
 		break;
 	}
 	case EObjectType::Bullet:
 	{
 		//총알 버텍스 버퍼 생성
-		size = BufferSize[ Type ] = std::size(triangle_vertices);
-		buffer = GameManager::GetInstance().GetRenderer()->CreateVertexBuffer(triangle_vertices , sizeof(FVertexSimple) * size);
+		size = BufferSize[ Type ] = std::size(sphere_vertices);
+		buffer = GameManager::GetInstance().GetRenderer()->CreateVertexBuffer(sphere_vertices , sizeof(FVertexSimple) * size);
 		break;
 	}
 	}
