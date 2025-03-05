@@ -37,10 +37,10 @@ void BulletA::HandleBallCollision(CircleObject* OtherBall)
     Monster* monster = dynamic_cast< Monster* >( object );
     if (monster != nullptr)
     {
-		if (bIsProcessingCollision)
-		{
-			return;
-		}
+	if (bIsProcessingCollision)
+	{
+		return;
+	}
         // bullet
         bIsProcessingCollision = true;
         ObjectManager::GetInstance().Destroy(this);
