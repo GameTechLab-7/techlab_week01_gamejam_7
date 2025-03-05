@@ -73,6 +73,11 @@ void Monster::HandleBallCollision(CircleObject* OtherBall)
     }
 }
 
+void Monster::HandleWallCollision(const FVector3& WallNormal)
+{
+	CircleObject::HandleWallCollision(WallNormal);
+}
+
 void Monster::Move(float DeltaTime)
 {
     // target pos 방향으로 이동

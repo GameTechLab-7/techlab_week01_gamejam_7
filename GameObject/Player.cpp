@@ -14,6 +14,7 @@ Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 
     Radian = 0;
 
+    Texture = UTexture2D::LoadTargaFromFile("Assets/Texture/red.tga");
     Texture->SetPrimitiveType(EObjectType::Player);
 
     bIsHitInvisible = false;
@@ -77,6 +78,11 @@ void Player::HandleWallCollision(const FVector3& WallNormal)
         // 위
         Location.y = WorldWalls[ MyWorld ][ Top ] - Radius;
     }
+}
+
+void Player::HandleBallCollision(CircleObject* OtherBall)
+{
+    CircleObject::HandleBallCollision(OtherBall);
 }
 
 void Player::Move(float DeltaTime)
