@@ -71,7 +71,7 @@ void Monster::Move(float DeltaTime)
 {
     // target pos 방향으로 이동
 	FVector3 Direction = Target->GetLocation() - Location;
-	Direction.Normalize();
+	Direction = Direction.Normalize();
 
 	Location += Direction * Speed * DeltaTime;
 }

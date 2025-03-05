@@ -23,7 +23,7 @@ void MainGameScene::LoadScene()
 
 	SpawnerInfo Info;
 	Info.DefaultMonsterNum = 5;
-	Info.SpawnRate = 3.0f;
+	Info.SpawnRate = 10.0f;
 	Info.MonsterIncreaseTime = 5.0f;
 	Info.MonsterIncreaseNum = 1;
 

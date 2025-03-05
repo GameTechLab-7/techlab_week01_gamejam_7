@@ -63,4 +63,9 @@ protected:
 		FVector3(0.5f , 0.0f , 0.0f),
 		FVector3(-0.5f , 0.0f , 0.0f)
 	};
+
+	bool bIsProcessingCollision = false;
+public:
+	void SetCollisionFlag(bool Flag) { bIsProcessingCollision = Flag; }
+	bool IsCollisionProcessing() const { return bIsProcessingCollision; }
 };

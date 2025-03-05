@@ -1,4 +1,4 @@
-#include "ObjectManager.h"
+﻿#include "ObjectManager.h"
 #include <ranges>
 
 #include "URenderer.h"
@@ -93,6 +93,14 @@ void ObjectManager::ProcessMove(float DeltaTime)
 
 void ObjectManager::ProcessCheckCollision()
 {
+    for (auto Objects : ObjectsMap | std::views::values)
+    {
+        for(auto Object : Objects)
+		{
+			Object->SetCollisionFlag(false);
+		}
+    }
+
 	for (auto Objects : ObjectsMap | std::views::values)
 	{
 	    std::vector<std::shared_ptr<CircleObject>> ObjVec = {Objects.begin(), Objects.end()};
@@ -107,8 +115,12 @@ void ObjectManager::ProcessCheckCollision()
 				{
 					ObjVec[i]->HandleBallCollision(ObjVec[j].get());
                     ObjVec[j]->HandleBallCollision(ObjVec[i].get());
+
+                    ObjVec[i]->SetCollisionFlag(true);
+					ObjVec[j]->SetCollisionFlag(true);
 				}
 			}
+
 		}
 	}
 }
@@ -134,6 +146,10 @@ void ObjectManager::ProcessRender() const
 
 bool ObjectManager::CheckCollision(const CircleObject& A , const CircleObject& B) const
 {
+	if (A.IsCollisionProcessing() || B.IsCollisionProcessing())
+	{
+		return false;
+	}
 	const float Distance = ( A.GetLocation() - B.GetLocation() ).Length();
 	return Distance <= ( A.GetRadius() + B.GetRadius() );
 }
