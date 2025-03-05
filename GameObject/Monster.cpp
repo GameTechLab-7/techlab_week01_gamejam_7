@@ -23,7 +23,6 @@ void Monster::Update(float DeltaTime)
 
 void Monster::FixedUpdate(float Fixed)
 {
-
 }
 
 void Monster::HandleBallCollision(CircleObject& OtherBall)
@@ -36,6 +35,18 @@ void Monster::HandleBallCollision(CircleObject& OtherBall)
         // !Note : 큐브는 어색하다
 		//ResolveOverlap(*otherMontser);
 	}
+    // Monster 끼리 충돌 시 보정
+    
+    // Monster -> Player
+    // 서로 Monster, Player 넉백 -> velocity
+    // Player Damage 
+    // Player 무적 
+    
+    // Monster - Monster
+    // if Ball is Monster
+    //	 충돌 위치 보정
+    
+    // !TODO : 다른 몬스터와 충돌했을 때 처리. 그냥 밀어내면될듯
 	// !TODO : 플레이어와 충돌했을 때 처리. 플레이어 OnHit 추가
     // !TODO : Bullet과 충돌했을 때
 }
