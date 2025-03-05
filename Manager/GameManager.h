@@ -47,7 +47,6 @@ void GameManager::ChangeScene()
         ObjectManager::GetInstance().DestroyAll();
         CurrentScene->ExitScene();
     }
-    ObjectManager::GetInstance().DestroyAll();
     CurrentScene = std::make_unique<Scene>();
     CurrentScene->LoadScene();
 }
