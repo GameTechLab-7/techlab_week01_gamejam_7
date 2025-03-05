@@ -1,0 +1,37 @@
+﻿#pragma once
+#include <enum.h>
+
+struct SpawnerInfo
+{
+	// 기본 생성 몬스터 수
+	float DefaultMonsterNum;
+	// 생성 주기
+	float SpawnRate;
+	// 생성되는 몬스터가 수가 증가할 타임
+	float MonsterIncreaseTime;
+	// 몬스터 생성 수 증가량
+	int MonsterIncreaseNum;
+};
+
+class MonsterSpawner
+{
+public:
+
+public:
+	MonsterSpawner(SpawnerInfo Info);
+	~MonsterSpawner();
+
+
+	// !TODO : 몬스터 풀
+	// !TODO : 몬스터 생성 로직
+	void Update(float DeltaTime);
+	void Spawn() const;
+	void SpawnToWorld(EWorld WorldType);
+
+private:
+	SpawnerInfo Info;
+
+	int CurrentMonsterNum = 0;
+	float SpawnTime = 0.f;
+	float IncreaseTime = 0.f;
+};
