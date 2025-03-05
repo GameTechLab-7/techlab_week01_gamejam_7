@@ -33,6 +33,7 @@
     <ClCompile Include="GameObject\Bullet\BulletA.cpp" />
     <ClCompile Include="GameObject\Bullet\BulletB.cpp" />
     <ClCompile Include="GameObject\Bullet\Bullet.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
@@ -67,5 +68,6 @@
     <ClInclude Include="GameObject\Bullet\BulletA.h" />
     <ClInclude Include="GameObject\Bullet\BulletB.h" />
     <ClInclude Include="GameObject\Bullet\BulletC.h" />
+    <ClInclude Include="InputSystem.h" />
   </ItemGroup>
 </Project>
