@@ -19,7 +19,7 @@ void BulletB::HandleWallCollision(const FVector3& WallNormal)
 {
 }
 
-void BulletB::HandleBallCollision(CircleObject& OtherBall)
+void BulletB::HandleBallCollision(CircleObject* OtherBall)
 {
     // Bullet -> Monster
     

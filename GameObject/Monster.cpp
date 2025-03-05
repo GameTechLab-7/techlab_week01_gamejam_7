@@ -25,9 +25,9 @@ void Monster::FixedUpdate(float Fixed)
 {
 }
 
-void Monster::HandleBallCollision(CircleObject& OtherBall)
+void Monster::HandleBallCollision(CircleObject* OtherBall)
 {
-    CircleObject* object = &OtherBall;
+    CircleObject* object = OtherBall;
     // !TODO : 다른 몬스터와 충돌했을 때 처리. 그냥 밀어내면될듯 ->이거해도되나
 	Monster* otherMontser = dynamic_cast< Monster* >( object );
 	if (otherMontser != nullptr)

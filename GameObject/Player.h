@@ -20,7 +20,7 @@ public:
 
     virtual void HandleWallCollision(const FVector3& WallNormal) override;
 
-    virtual void HandleBallCollision(CircleObject& OtherBall) override;
+    virtual void HandleBallCollision(CircleObject* OtherBall) override;
 
 
     virtual void Render(const URenderer& Renderer) const override;

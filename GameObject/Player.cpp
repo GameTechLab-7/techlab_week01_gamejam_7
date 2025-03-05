@@ -61,7 +61,7 @@ void Player::HandleWallCollision(const FVector3& WallNormal)
 {
 }
 
-void Player::HandleBallCollision(CircleObject& OtherBall)
+void Player::HandleBallCollision(CircleObject* OtherBall)
 {
 }
 
