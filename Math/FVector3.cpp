@@ -1,4 +1,5 @@
-#include "FVector3.h"
+﻿#include "FVector3.h"
+#include <cstdlib>
 #include <cmath>
 
 
@@ -109,4 +110,10 @@ FVector3& FVector3::operator/=(float Scalar)
 FVector3 FVector3::operator-() const
 {
 	return { -x, -y, -z };
+}
+
+FVector3 FVector3::GetRandomUnitVector2D()
+{
+	float angle = static_cast<float>(rand()) / RAND_MAX * 2.0f * 3.14; // 0 ~ 2π 랜덤 각도
+	return FVector3(cos(angle), sin(angle), 0);
 }
