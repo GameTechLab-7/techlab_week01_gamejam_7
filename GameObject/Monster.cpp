@@ -58,7 +58,7 @@ void Monster::HandleWallCollision(const FVector3& WallNormal)
 
 void Monster::Render(const URenderer& Renderer) const
 {
-    Renderer.UpdateConstant(Location , Radius , Radian);
+    Renderer.UpdateConstant(Location , Radius , Radian, bIsHitInvisible);
     ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Enemy);
     int NumOfVertices = Renderer.GetBufferSize(EObjectType::Enemy);
     if (buffer != nullptr)

@@ -16,6 +16,8 @@ struct PlayerState
 	int Score;
 	int Exp;
 	int Lv;
+
+	bool bIsAlive = true;
 };
 
 class GameLogic
@@ -44,11 +46,11 @@ public:
 
 	void AddExp(EWorld World , int exp);
 
-
 	void Upgrade(EWorld World);
 
-
 	void SpawnMonsterToWorld(EWorld World);
+
+	void EndGame(EWorld DeadPlayerWorld);
 
 };
 

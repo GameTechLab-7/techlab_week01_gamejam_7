@@ -68,7 +68,7 @@ void Player::HandleBallCollision(CircleObject* OtherBall)
 
 void Player::Render(const URenderer& Renderer) const
 {
-    Renderer.UpdateConstant(Location , Radius, Radian);
+    Renderer.UpdateConstant(Location , Radius, Radian, bIsHitInvisible);
     ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Player);
     int NumOfVertices = Renderer.GetBufferSize(EObjectType::Player);
     if(buffer != nullptr)

@@ -65,6 +65,11 @@ protected:
 	};
 
 	bool bIsProcessingCollision = false;
+
+	// 피격 시 무적
+	bool bIsHitInvisible = false;
+	float HitInvisibleTime = 0.0f;
+	float HitTimer = 0.0f;
 public:
 	void SetCollisionFlag(bool Flag) { bIsProcessingCollision = Flag; }
 	bool IsCollisionProcessing() const { return bIsProcessingCollision; }
