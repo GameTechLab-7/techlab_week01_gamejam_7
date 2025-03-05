@@ -51,12 +51,21 @@ public:
 	// 피격 시 충돌 임팩트를 생성함. 방향은 HitObject -> HitByObject 
 	static FVector3 GetCollisionImpact(CircleObject* HitByObject, CircleObject* HitObject);
 
+	void SetAccel(FVector3 Acceleration)
+	{ 
+		this->Acceleration = Acceleration; 
+	}
+
 protected:
 	FVector3 Location;
 	FVector3 Velocity;
 	float Force = 1.f;
+	FVector3 Acceleration;
+
 	float Radius = 0.0f;
 	float Radian = 0.0f; // 0 == top radian으로 다룸
+
+	float Drag = 0.5f;
 
 	EWorld MyWorld;
 

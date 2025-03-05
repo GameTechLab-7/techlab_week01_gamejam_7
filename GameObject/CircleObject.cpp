@@ -18,7 +18,7 @@ void CircleObject::OnHit(FVector3 HitForce , int Damage)
 {
 	if (HitForce.Length() > 0.0001f)
 	{
-		Velocity += HitForce;
+		Acceleration = HitForce * 100.f;
 	}
 }
 
@@ -37,6 +37,8 @@ void CircleObject::ResolveOverlap(CircleObject& OtherBall)
 
 FVector3 CircleObject::GetCollisionImpact(CircleObject* HitByObject , CircleObject* HitObject)
 {
-	const FVector3 Normal = ( HitObject->Location - HitByObject->Location ).Normalize();
-	return Normal * HitObject->Force;
+
+	const FVector3 Normal = ( HitByObject->Location - HitObject->Location ).Normalize();
+
+  return Normal * HitObject->Force;
 }
