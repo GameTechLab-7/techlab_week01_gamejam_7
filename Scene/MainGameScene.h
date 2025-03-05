@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <memory>
 #include "BaseScene.h"
 
@@ -15,6 +15,7 @@ private:
 
     virtual void Update(float DeltaTime) override;
     virtual void Render() override;
+    void RenderWall(class URenderer* Renderer);
 
 	Player* leftPlayer;
 	Player* rightPlayer;

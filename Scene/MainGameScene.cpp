@@ -1,4 +1,4 @@
-#include "MainGameScene.h"
+﻿#include "MainGameScene.h"
 #include "GameObject/Player.h"
 #include "Manager/ObjectManager.h"
 #include "Manager/GameManager.h"
@@ -32,4 +32,21 @@ void MainGameScene::Update(float DeltaTime)
 
 void MainGameScene::Render()
 {
+	RenderWall(GameManager::GetInstance().GetRenderer());
+}
+
+FVertexSimple LineVertices[ ] = {
+	{1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
+	{1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
+};
+
+void MainGameScene::RenderWall(URenderer* Renderer) {
+
+	ID3D11Buffer* VertexBufferLine = Renderer->CreateVertexBuffer(LineVertices , sizeof(LineVertices));
+	int NumOfLineVertices = ARRAYSIZE(LineVertices);
+
+	Renderer->PrepareViewport(EWorld::First);
+	Renderer->UpdateConstant(FVector3() , 1.0f , 0.0f);
+	Renderer->PrepareLine();
+	Renderer->RenderPrimitive(VertexBufferLine , NumOfLineVertices);
 }

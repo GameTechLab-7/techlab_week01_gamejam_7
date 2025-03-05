@@ -1,4 +1,4 @@
-#include "URenderer.h"
+﻿#include "URenderer.h"
 #include <d3dcompiler.h>
 
 struct alignas( 16 ) URenderer::FConstants
@@ -129,6 +129,10 @@ void URenderer::Prepare() const
      */
     DeviceContext->OMSetRenderTargets(1 , &FrameBufferRTV , nullptr);
     DeviceContext->OMSetBlendState(nullptr , nullptr , 0xffffffff);
+}
+
+void URenderer::PrepareLine() const {
+    // InputAssembler의 Vertex 해석 방식을 설정
 }
 
 void URenderer::PrepareViewport(EWorld World) const
