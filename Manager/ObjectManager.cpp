@@ -43,19 +43,6 @@ void ObjectManager::DestroyAll()
     }
 }
 
-void ObjectManager::DestroyAll()
-{
-	for (auto& [WorldEnum , Objects] : ObjectsMap)
-	{
-		for (auto& Object : Objects)
-		{
-            // !TODO : 오브젝트 관리도 shared_ptr
-            Destroy(Object);
-		}
-		Objects.clear();
-	}
-}
-
 // 라이프 사이클에 의해 Update 이후에 사용
 void ObjectManager::ProcessDestroy()
 {
