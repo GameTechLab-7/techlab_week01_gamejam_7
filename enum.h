@@ -11,9 +11,9 @@ enum EWorld : uint8_t
 
 enum class EObjectType : uint8_t
 {
-    Player = 0,
-    Enemy,
-    Bullet,
+	Player = 0,
+	Enemy,
+	Bullet,
 
-    Max,
+	Max,
 };
