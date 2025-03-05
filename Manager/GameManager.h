@@ -2,6 +2,7 @@
 #include <concepts>
 #include <memory>
 
+#include "ObjectManager.h"
 #include "URenderer.h"
 #include "Scene/BaseScene.h"
 #include "AbstractClass/Singleton.h"
@@ -43,6 +44,7 @@ void GameManager::ChangeScene()
 {
     if (CurrentScene)
     {
+        ObjectManager::GetInstance().DestroyAll();
         CurrentScene->ExitScene();
     }
     CurrentScene = std::make_unique<Scene>();
