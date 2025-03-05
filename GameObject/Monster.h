@@ -12,7 +12,7 @@ public:
     virtual void Update(float DeltaTime) override;
     virtual void FixedUpdate(float Fixed) override;
 
-    virtual void HandleBallCollision(CircleObject& OtherBall) override;
+    virtual void HandleBallCollision(CircleObject* OtherBall) override;
 
     // CircleObject을(를) 통해 상속됨
     void HandleWallCollision(const FVector3& WallNormal) override;

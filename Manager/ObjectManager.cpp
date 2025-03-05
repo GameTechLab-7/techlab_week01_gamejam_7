@@ -1,4 +1,4 @@
-﻿#include "ObjectManager.h"
+#include "ObjectManager.h"
 #include <ranges>
 
 #include "URenderer.h"
@@ -7,23 +7,23 @@
 
 void ObjectManager::Initialize(URenderer* renderer)
 {
-    Renderer = renderer;
+	Renderer = renderer;
 }
 
 void ObjectManager::Update(float DeltaTime)
 {
-    ProcessUpdate(DeltaTime);
+	ProcessUpdate(DeltaTime);
 
-    ProcessMove(DeltaTime);
-    ProcessCheckCollision();
-    ProcessRender();
+	ProcessMove(DeltaTime);
+	ProcessCheckCollision();
+	ProcessRender();
 
-    ProcessDestroy();
+	ProcessDestroy();
 }
 
 void ObjectManager::FixedUpdate(float FixedTime)
 {
-    ProcessFixedUpdate(FixedTime);
+	ProcessFixedUpdate(FixedTime);
 }
 
 void ObjectManager::Destroy(CircleObject* InCircleObject)
@@ -93,23 +93,23 @@ void ObjectManager::ProcessMove(float DeltaTime)
 
 void ObjectManager::ProcessCheckCollision()
 {
-    for (const auto& Objects : ObjectsMap | std::views::values)
-    {
-        const std::vector<std::shared_ptr<CircleObject>>& ObjVec = {Objects.begin(), Objects.end()};
-        for (size_t i = 0; i < ObjVec.size(); ++i)
-        {
-            for (size_t j = i + 1; j < ObjVec.size(); ++j)
-            {
-                CircleObject& objectA = *ObjVec[i];
-                CircleObject& objectB = *ObjVec[j];
+	for (auto Objects : ObjectsMap | std::views::values)
+	{
+		for (int i = 0; i < Objects.size(); ++i)
+		{
+			for (int j = i + 1; j < Objects.size(); ++j)
+			{
+				CircleObject& objectA = *Objects[ i ];
+				CircleObject& objectB = *Objects[ j ];
 
-                if (CheckCollision(objectA , objectB))
-                {
-                    objectA.HandleBallCollision(objectB);
-                }
-            }
-        }
-    }
+				if (CheckCollision(objectA , objectB))
+				{
+					Objects[ i ]->HandleBallCollision(Objects[ j ]);
+          Objects[ j ]->HandleBallCollision(Objects[ i ]);
+				}
+			}
+		}
+	}
 }
 
 void ObjectManager::ProcessRender() const
@@ -123,9 +123,9 @@ void ObjectManager::ProcessRender() const
     for (const auto& [WorldEnum, Objects] : ObjectsMap)
     {
         pRenderer->PrepareViewport(WorldEnum);
-        for (const auto& vector : Objects)
+        for (const auto& Object : Objects)
         {
-            vector->Render(*pRenderer);
+            Object->Render(*pRenderer);
         }
     }
 }
@@ -133,6 +133,6 @@ void ObjectManager::ProcessRender() const
 
 bool ObjectManager::CheckCollision(const CircleObject& A , const CircleObject& B) const
 {
-    const float Distance = (A.GetLocation() - B.GetLocation()).Length();
-    return Distance <= (A.GetRadius() + B.GetRadius());
+	const float Distance = ( A.GetLocation() - B.GetLocation() ).Length();
+	return Distance <= ( A.GetRadius() + B.GetRadius() );
 }

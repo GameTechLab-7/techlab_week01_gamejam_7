@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include "URenderer.h"
 
 // 문제 1. 벽 겹침 보정을 언제 어디서 해주냐
@@ -8,7 +8,7 @@
 
 Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 {
-    Radius = 0.3f;
+    Radius = 0.1f;
     //const float x = rand() % 1 - MyWorld;
     //const float y = rand() % 2 - 1;
     Location = FVector3(0 , 0 , 0);
@@ -61,7 +61,7 @@ void Player::HandleWallCollision(const FVector3& WallNormal)
 {
 }
 
-void Player::HandleBallCollision(CircleObject& OtherBall)
+void Player::HandleBallCollision(CircleObject* OtherBall)
 {
 }
 
@@ -85,4 +85,9 @@ void Player::Move(float DeltaTime)
 
 void Player::OnDestroy()
 {
+}
+
+void Player::OnHit()
+{
+
 }

@@ -11,7 +11,7 @@ public:
     virtual void FixedUpdate(float Fixed) = 0;
 
     virtual void HandleWallCollision(const FVector3& WallNormal) = 0;
-    virtual void HandleBallCollision(CircleObject& OtherBall) = 0;
+    virtual void HandleBallCollision(CircleObject* OtherBall) = 0;
 
     virtual void Render(const URenderer& Renderer) const;
 

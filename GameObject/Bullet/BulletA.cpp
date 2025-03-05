@@ -24,7 +24,7 @@ void BulletA::HandleWallCollision(const FVector3& WallNormal)
     ObjectManager::GetInstance().Destroy(this);
 }
 
-void BulletA::HandleBallCollision(CircleObject& OtherBall)
+void BulletA::HandleBallCollision(CircleObject* OtherBall)
 {
     // Bullet -> Monster
     ObjectManager::GetInstance().Destroy(this);
@@ -33,7 +33,7 @@ void BulletA::HandleBallCollision(CircleObject& OtherBall)
     //		Monster.Destroy();
     //		Player.AddPoint
 
-    CircleObject* object = &OtherBall;
+    CircleObject* object = OtherBall;
     Monster* monster = dynamic_cast< Monster* >( object );
     if (monster != nullptr)
     {
@@ -49,5 +49,9 @@ void BulletA::Move(float DeltaTime)
 }
 
 void BulletA::OnDestroy()
+{
+}
+
+void BulletA::OnHit()
 {
 }

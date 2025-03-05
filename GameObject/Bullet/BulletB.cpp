@@ -24,7 +24,7 @@ void BulletB::HandleWallCollision(const FVector3& WallNormal)
 {
 }
 
-void BulletB::HandleBallCollision(CircleObject& OtherBall)
+void BulletB::HandleBallCollision(CircleObject* OtherBall)
 {
     // Bullet -> Monster
     CircleObject* object = &OtherBall;
@@ -46,5 +46,9 @@ void BulletB::Move(float DeltaTime)
 }
 
 void BulletB::OnDestroy()
+{
+}
+
+void BulletB::OnHit()
 {
 }
