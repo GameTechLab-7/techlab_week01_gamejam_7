@@ -100,13 +100,15 @@ protected:
 
     FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f }; // 화면을 초기화(clear)할 때 사용할 색상 (RGBA)
 
-    std::unordered_map<EWorld , D3D11_VIEWPORT> viewports;             // 렌더링 영역을 정의하는 뷰포트 정보
+    std::unordered_map<EWorld , D3D11_VIEWPORT> viewports;  // 렌더링 영역을 정의하는 뷰포트 정보
 
-    // Shader를 렌더링할 때 사용되는 변수들
-    ID3D11VertexShader* SimpleVertexShader = nullptr;       // Vertex 데이터를 처리하는 Vertex 셰이더
-    ID3D11PixelShader* SimplePixelShader = nullptr;         // Pixel의 색상을 결정하는 Pixel 셰이더
-    ID3D11InputLayout* SimpleInputLayout = nullptr;         // Vertex 셰이더 입력 레이아웃 정의
+    // Texture를 렌더링할 때 사용되는 변수들
+    ID3D11VertexShader* TextureVertexShader = nullptr;      // Vertex 데이터를 처리하는 Vertex 셰이더
+    ID3D11PixelShader* TexturePixelShader = nullptr;        // Pixel의 색상을 결정하는 Pixel 셰이더
+    ID3D11InputLayout* TextureInputLayout = nullptr;        // Texture를 렌더링할 때 사용하는 IA
+    ID3D11SamplerState* TextureSamplerState = nullptr;      // 
     unsigned int Stride = 0;                                // Vertex 버퍼의 각 요소 크기
+
 
     // 버텍스버퍼 재사용을 위한 버퍼캐시
     std::unique_ptr<BufferCache> Cache;

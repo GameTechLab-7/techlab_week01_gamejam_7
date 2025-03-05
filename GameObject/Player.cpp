@@ -14,6 +14,9 @@ Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 
     Radian = 0;
 
+    Texture = UTexture2D::LoadTargaFromFile("Assets/Texture/red.tga");
+    Texture->SetPrimitiveType(EObjectType::Player);
+
     bIsHitInvisible = false;
     HitInvisibleTime = 0.5f;
 }
@@ -77,15 +80,9 @@ void Player::HandleWallCollision(const FVector3& WallNormal)
     }
 }
 
-void Player::Render(const URenderer& Renderer) const
+void Player::HandleBallCollision(CircleObject* OtherBall)
 {
-    Renderer.UpdateConstant(Location , Radius, Radian, bIsHitInvisible);
-    ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Player);
-    int NumOfVertices = Renderer.GetBufferSize(EObjectType::Player);
-    if(buffer != nullptr)
-    {
-        Renderer.RenderPrimitive(buffer, NumOfVertices);
-    }
+    CircleObject::HandleBallCollision(OtherBall);
 }
 
 void Player::Move(float DeltaTime)
