@@ -105,7 +105,9 @@ void Monster::OnHit(FVector3 HitForce , int Damage)
 		return;
 	}
 
-    CircleObject::OnHit(HitForce , Damage);
+    //CircleObject::OnHit(HitForce , Damage);
+
+    SetLocation(GetLocation() + HitForce);
     
 	HP -= Damage;
 

@@ -26,10 +26,12 @@ void Player::Update(float DeltaTime)
 	if (bIsHitInvisible)
 	{
 		HitTimer += DeltaTime;
+        
 		if (HitTimer >= HitInvisibleTime)
 		{
 			bIsHitInvisible = false;
 			HitTimer = 0.0f;
+            bCanMove = true;
 		}
 	}
 }
@@ -104,6 +106,7 @@ void Player::OnHit(FVector3 HitForce , int Damage)
     CircleObject::OnHit(HitForce , Damage);
 	bIsHitInvisible = true;
 
+    bCanMove = false;
     GameManager::GetInstance().GetLogic()->OnPlayerHit(this->GetWorld(), Damage);
 }
 

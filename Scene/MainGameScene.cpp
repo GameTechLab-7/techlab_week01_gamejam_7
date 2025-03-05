@@ -5,6 +5,7 @@
 #include "MonsterSpawner.h"
 #include "Weapon/WeaponA.h"
 #include "Weapon/WeaponB.h"
+#include "InputSystem.h"
 
 void MainGameScene::LoadScene()
 {
