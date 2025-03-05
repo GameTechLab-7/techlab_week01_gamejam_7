@@ -214,6 +214,7 @@
     <ClInclude Include="Scene\PresetScene.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="Texture\UTexture2D.h" />
     <ClInclude Include="URenderer.h" />
     <ClInclude Include="Weapon\BaseWeapon.h" />
     <ClInclude Include="Weapon\WeaponA.h" />

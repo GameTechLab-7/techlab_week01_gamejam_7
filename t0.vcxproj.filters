@@ -35,6 +35,7 @@
     <ClCompile Include="GameObject\Bullet\Bullet.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Shaders\TextureShader.hlsl" />
+    <ClCompile Include="Texture\UTexture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
@@ -70,5 +71,6 @@
     <ClInclude Include="GameObject\Bullet\BulletB.h" />
     <ClInclude Include="GameObject\Bullet\BulletC.h" />
     <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Texture\UTexture2D.h" />
   </ItemGroup>
 </Project>
