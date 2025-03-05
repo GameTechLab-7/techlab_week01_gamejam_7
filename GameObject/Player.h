@@ -7,7 +7,7 @@
 class Player : public CircleObject
 {
 private:
-    BaseWeapon* currentWeapon;
+    BaseWeapon* currentWeapon = nullptr;
 
 public:
     Player(EWorld selectedWorld);
