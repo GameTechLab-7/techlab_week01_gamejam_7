@@ -27,33 +27,33 @@ void Monster::FixedUpdate(float Fixed)
 
 void Monster::HandleBallCollision(CircleObject* OtherBall)
 {
+    // Bullet -> Monster (Bullet)
+
+    // Monster -> Player (Monster)
+
+    // Monster - Monster (Monster)
+
+
     CircleObject* object = OtherBall;
     // !TODO : 다른 몬스터와 충돌했을 때 처리. 그냥 밀어내면될듯 ->이거해도되나
 	Monster* otherMontser = dynamic_cast< Monster* >( object );
 	if (otherMontser != nullptr)
 	{
         // !Note : 큐브는 어색하다
-		//ResolveOverlap(*otherMontser);
+		ResolveOverlap(*otherMontser);
 	}
-    // Monster 끼리 충돌 시 보정
     
-    // Monster -> Player
-    // 서로 Monster, Player 넉백 -> velocity
-    // Player Damage 
-    // Player 무적 
     
-    // Monster - Monster
-    // if Ball is Monster
-    //	 충돌 위치 보정
-    
-    // !TODO : 다른 몬스터와 충돌했을 때 처리. 그냥 밀어내면될듯
-	// !TODO : 플레이어와 충돌했을 때 처리. 플레이어 OnHit 추가
-    // !TODO : Bullet과 충돌했을 때
-}
-
-void Monster::HandleWallCollision(const FVector3& WallNormal)
-{
-    // 필요없을듯
+    // !TODO : 다른 몬스터와 충돌했을 때 처리. 그냥 밀어내면될듯 ->이거해도되나
+    Player* otherPlayer = dynamic_cast< Player* >( object );
+    if (otherPlayer != nullptr)
+    {
+        // Player 밀기
+        // 몬스터 밀기
+        // Player 데미지
+        // Player 무적
+        otherPlayer->OnHit();
+    }
 }
 
 void Monster::Render(const URenderer& Renderer) const
@@ -81,10 +81,18 @@ void Monster::OnDestroy()
     //
 }
 
+// TODO Bullet A, B에서 넘어옴.
 void Monster::OnHit()
 {
-	// 피격 처리
-    ObjectManager::GetInstance().Destroy(this);
+    // Monster.넉백
+    // If Monster Die (Damage, 넉백 float 수치?)
+    //		Monster.Destroy();
+    //		Player.AddPoint
+    //		Player.GetLevelPoint()
+    
+    if (IsDead()) {
+        ObjectManager::GetInstance().Destroy(this);
+    }
 }
 
 void Monster::Init(float Radius, float InitialDistance , float Speed)
@@ -97,4 +105,8 @@ void Monster::Init(float Radius, float InitialDistance , float Speed)
 	// 플레이어 위치에서 일정 거리 떨어진 랜덤 위치에 생성
 	FVector3 PlayerLocation = Target->GetLocation();
 	Location = PlayerLocation + FVector3::GetRandomUnitVector2D() * InitialDistance;
+}
+
+bool Monster::IsDead() {
+    return true;
 }

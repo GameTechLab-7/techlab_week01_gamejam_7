@@ -1,10 +1,6 @@
 ﻿#include "Player.h"
 #include "URenderer.h"
-
-// 문제 1. 벽 겹침 보정을 언제 어디서 해주냐
-
-
-// Move 이후? 뭐 어디서? 
+#include "Constant.h"
 
 Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 {
@@ -21,25 +17,6 @@ void Player::Update(float DeltaTime)
 {
     if (currentWeapon != nullptr) {
         currentWeapon->Update(DeltaTime);
-    }
-
-    // 벽
-    if (Location.x - Radius < WorldWalls[MyWorld][Left])
-    {
-        Location.x = WorldWalls[MyWorld][Left] + Radius;
-    }
-    else if (Location.x + Radius > WorldWalls[MyWorld][Right])
-    {
-        Location.x = WorldWalls[MyWorld][Right] - Radius;
-    }
-
-    if (Location.y - Radius < WorldWalls[MyWorld][Top])
-    {
-        Location.y = WorldWalls[MyWorld][Top] + Radius;
-    }
-    else if (Location.y + Radius > WorldWalls[MyWorld][Bottom])
-    {
-        Location.y = WorldWalls[MyWorld][Bottom] - Radius;
     }
 }
 
@@ -59,12 +36,26 @@ void Player::SetWeapon(BaseWeapon* weapon)
 
 void Player::HandleWallCollision(const FVector3& WallNormal)
 {
-}
 
-void Player::HandleBallCollision(CircleObject* OtherBall)
-{
-}
+    if (WallNormal.x > 0.0001f) {
+        // 왼쪽
+        Location.x = WorldWalls[ MyWorld ][ Left ] + Radius;
+    }
+    else if (WallNormal.x < -0.0001f) {
+        // 오른쪽
+        Location.x = WorldWalls[ MyWorld ][ Right ] - Radius;
+    }
 
+
+    if (WallNormal.y > 0.0001f) {
+        // 아래
+        Location.y = WorldWalls[ MyWorld ][ Bottom ] + Radius;
+    }
+    else if (WallNormal.y < -0.0001f) {
+        // 위
+        Location.y = WorldWalls[ MyWorld ][ Top ] - Radius;
+    }
+}
 
 void Player::Render(const URenderer& Renderer) const
 {

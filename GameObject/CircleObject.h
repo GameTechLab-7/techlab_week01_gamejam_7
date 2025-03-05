@@ -17,8 +17,8 @@ public:
 
 	virtual void Update(float DeltaTime) = 0;
 	virtual void FixedUpdate(float FixedTime) = 0;
-	virtual void HandleWallCollision(const FVector3& WallNormal) = 0;
-	virtual void HandleBallCollision(CircleObject* OtherBall) = 0;
+	virtual void HandleWallCollision(const FVector3& WallNormal);
+	virtual void HandleBallCollision(CircleObject* OtherBall);
 
 	virtual void Render(const URenderer& Renderer) const = 0;
 
@@ -53,11 +53,6 @@ protected:
 	float Radian = 0.0f; // 0 == top radian으로 다룸
 
 	EWorld MyWorld;
-
-	int WorldWalls[2][4] = {
-		{ 0 , 1 , -1 , 1},  // left right top bottom
-		{-1 , 0 , -1 , 1},
-	};
 
 	FVector3 WorldOffsets[2] = {
 		FVector3(0.5f , 0.0f , 0.0f),

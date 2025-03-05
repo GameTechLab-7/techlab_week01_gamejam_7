@@ -18,12 +18,9 @@ public:
     virtual void HandleWallCollision(const FVector3& WallNormal) override;
     virtual void HandleBallCollision(CircleObject* OtherBall) override;
 
-    // Bullet에서 구현
-    //virtual void Render(const URenderer& Renderer) const;
-
     virtual void Move(float DeltaTime) override;
     virtual void OnDestroy() override;
 
     // Bullet을(를) 통해 상속됨
-    void OnHit() override;
+    virtual void OnHit() override;
 };
