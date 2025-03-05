@@ -1,6 +1,8 @@
 #include "WeaponA.h"
 
 #include <iostream>
+
+#include "GameObject/Player.h"
 #include "Manager/ObjectManager.h"
 
 
