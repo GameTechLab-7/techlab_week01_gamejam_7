@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <enum.h>
+#include <memory>
 
 struct SpawnerInfo
 {
@@ -13,17 +14,12 @@ struct SpawnerInfo
 	int MonsterIncreaseNum;
 };
 
-class MonsterSpawner
+class MonsterSpawner : public std::enable_shared_from_this<MonsterSpawner>
 {
 public:
-
-public:
 	MonsterSpawner(SpawnerInfo Info);
-	~MonsterSpawner();
+	~MonsterSpawner() = default;
 
-
-	// !TODO : 몬스터 풀
-	// !TODO : 몬스터 생성 로직
 	void Update(float DeltaTime);
 	void Spawn() const;
 	void SpawnToWorld(EWorld WorldType);

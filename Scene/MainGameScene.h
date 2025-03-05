@@ -28,7 +28,7 @@ private:
 
 	Player* LeftPlayer;
 	Player* RightPlayer;
-    std::shared_ptr<MonsterSpawner> Spawner;
+    std::unique_ptr<MonsterSpawner> Spawner;
     
 
 public:

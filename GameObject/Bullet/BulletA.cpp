@@ -6,7 +6,7 @@
 
 // 외부에서 멤버변수 초기화
 BulletA::BulletA(EWorld selectedWorld) : Bullet(selectedWorld) {
-
+    Damage = 3;
 }
 
 void BulletA::Update(float DeltaTime)
@@ -37,7 +37,8 @@ void BulletA::HandleBallCollision(CircleObject* OtherBall)
     if (monster != nullptr)
     {
         ObjectManager::GetInstance().Destroy(this);
-        monster->OnHit();
+		FVector3 Impact = CircleObject::GetCollisionImpact(monster , this);
+        monster->OnHit(Impact, Damage);
     }
 }
 
@@ -50,6 +51,6 @@ void BulletA::OnDestroy()
 {
 }
 
-void BulletA::OnHit()
+void BulletA::OnHit(FVector3 HitForce , int Damage)
 {
 }

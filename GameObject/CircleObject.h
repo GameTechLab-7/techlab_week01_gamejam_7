@@ -28,7 +28,7 @@ public:
 	virtual void Move(float DeltaTime) = 0;
 	virtual void OnDestroy() = 0;	// CircleObject에 의해 부가적으로 발생한 메모리만 삭제, CircleObject 객체는 ObjectManager에 의해 삭제.
 
-	virtual void OnHit();
+	virtual void OnHit(FVector3 HitForce, int Damage);
 	
 	void ResolveOverlap(CircleObject& OtherBall);
 
@@ -46,6 +46,9 @@ public:
 
 	EWorld GetWorld() const { return MyWorld; }
 
+	// 피격 시 충돌 임팩트를 생성함. 방향은 HitObject -> HitByObject 
+	static FVector3 GetCollisionImpact(CircleObject* HitByObject, CircleObject* HitObject);
+
 protected:
 	FVector3 Location;
 	FVector3 Velocity;
@@ -60,6 +63,11 @@ protected:
 	};
 
 	bool bIsProcessingCollision = false;
+
+	// 피격 시 무적
+	bool bIsHitInvisible = false;
+	float HitInvisibleTime = 0.0f;
+	float HitTimer = 0.0f;
 public:
 	void SetCollisionFlag(bool Flag) { bIsProcessingCollision = Flag; }
 	bool IsCollisionProcessing() const { return bIsProcessingCollision; }

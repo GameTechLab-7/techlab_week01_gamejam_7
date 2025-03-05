@@ -22,5 +22,5 @@ public:
     virtual void OnDestroy() override;
 
     // Bullet을(를) 통해 상속됨
-    virtual void OnHit() override;
+    virtual void OnHit(FVector3 HitForce , int Damage) override;
 };

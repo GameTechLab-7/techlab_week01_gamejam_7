@@ -28,21 +28,22 @@ void MainGameScene::LoadScene()
 	Info.MonsterIncreaseTime = 5.0f;
 	Info.MonsterIncreaseNum = 1;
 
-	Spawner = std::make_shared<MonsterSpawner>(Info);
+	Spawner = std::make_unique<MonsterSpawner>(Info);
 }
 
 void MainGameScene::ExitScene()
 {
 	ObjectManager::GetInstance().Destroy(LeftPlayer);
 	ObjectManager::GetInstance().Destroy(RightPlayer);
+
+	Spawner.reset();
 }
 
 void MainGameScene::Update(float DeltaTime)
 {
 	InputHandlerInstance->InputUpdate();
-	BaseScene::Update(DeltaTime);
-	ObjectManager::GetInstance().Update(DeltaTime);
 	Spawner->Update(DeltaTime);
+	BaseScene::Update(DeltaTime);
 }
 
 void MainGameScene::Render()
