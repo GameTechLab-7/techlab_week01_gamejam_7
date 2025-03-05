@@ -6,7 +6,8 @@ struct alignas( 16 ) URenderer::FConstants
     FVector3 Offset;
     float Scale;
     float Radian;
-    bool bIsHit;
+    float Padding;
+    int bIsHit;
 };
 
 /** Renderer를 초기화 합니다. */

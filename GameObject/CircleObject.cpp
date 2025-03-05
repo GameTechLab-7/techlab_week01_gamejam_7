@@ -39,6 +39,6 @@ FVector3 CircleObject::GetCollisionImpact(CircleObject* HitByObject , CircleObje
 {
 	const FVector3 Normal = ( HitObject->Location - HitByObject->Location ).Normalize();
 
-	float Scalar = 0.5f;
+	float Scalar = 50.f;
 	return Normal * Scalar;
 }

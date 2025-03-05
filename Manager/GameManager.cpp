@@ -19,10 +19,10 @@ void GameManager::Init(URenderer* InRenderer)
 
 void GameManager::InitGameLogic()
 {
-	if (Logic)
+	/*if (Logic)
 	{
 		return;
-	}
+	}*/
 
 	Logic = std::make_unique<GameLogic>();
 	Logic->Init();
