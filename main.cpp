@@ -240,9 +240,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     		Accumulator -= FixedTimeStep;
     	}
 
-
-		GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
-
 #pragma region Test Code
 		//std::cout << timer << '\n';
 		//if (timer > spawnCooldown) {

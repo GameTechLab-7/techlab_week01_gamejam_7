@@ -16,7 +16,7 @@ public:
     virtual void ExitScene() override;
 
 public:
-    MainGameScene();
+    MainGameScene() = default;
     
     std::unique_ptr<InputHandler> InputHandlerInstance;
 

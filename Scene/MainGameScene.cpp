@@ -1,7 +1,10 @@
 ﻿#include "MainGameScene.h"
+
+#include "MonsterSpawner.h"
 #include "GameObject/Player.h"
 #include "Manager/ObjectManager.h"
 #include "Manager/GameManager.h"
+#include "Weapon/WeaponA.h"
 
 
 void MainGameScene::LoadScene()
