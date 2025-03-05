@@ -23,8 +23,19 @@ void Monster::Update(float DeltaTime)
     }
 }
 
+void Monster::FixedUpdate(float Fixed)
+{
+}
+
 void Monster::HandleBallCollision(CircleObject& OtherBall)
 {
+    // Monster 끼리 충돌 시 보정
+    
+    // Monster -> Player
+    // 서로 Monster, Player 넉백 -> velocity
+    // Player Damage 
+    // Player 무적 
+    
     // Monster - Monster
     // if Ball is Monster
     //	 충돌 위치 보정

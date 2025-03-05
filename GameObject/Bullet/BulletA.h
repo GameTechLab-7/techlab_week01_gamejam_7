@@ -1,14 +1,13 @@
 #pragma once
-#include "GameObject/CircleObject.h"
 
+#include "GameObject/Bullet/Bullet.h"
 
-class Bullet : public CircleObject
-{
+// 기본 탄환
+// 몬스터 피격시 삭제
+// 데미지 및 반동?
+
+class BulletA : public Bullet {
 public:
-    Bullet(EWorld selectedWorld) : CircleObject(selectedWorld)
-    {
-    }
-
     virtual void Update(float DeltaTime) override;
     virtual void FixedUpdate(float Fixed) override;
 

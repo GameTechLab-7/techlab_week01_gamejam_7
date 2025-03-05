@@ -20,7 +20,6 @@
 #include "Math/FVector3.h"
 #include "Weapon/WeaponA.h"
 
-
 enum class EPrimitiveType : UINT8
 {
 	EPT_Triangle,
@@ -2597,6 +2596,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     LARGE_INTEGER Frequency;
     QueryPerformanceFrequency(&Frequency);
 
+
     LARGE_INTEGER StartTime;
     QueryPerformanceCounter(&StartTime);
 
@@ -2615,6 +2615,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	player->SetWeapon(weaponA);
 	player->SetVelocity(FVector3{ 1, 0, 0 });
 	// player 자체에서 바인딩?
+
+
+	Player* playerB = objectManager.RegistObject<Player>(EWorld::Second);
+
+	WeaponA* weaponB = new WeaponA(playerB);
+
+	playerB->SetWeapon(weaponB);
+	playerB->SetVelocity(FVector3{ 1, 0, 0 });
 
 	//DirectX::
 	float spawnCooldown = 1.f;
@@ -2674,11 +2682,22 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
 
 #pragma region Test Code
+		// 게 임 로직 - Update, FixedUpdate, 플레이어 경험치, point, 
+		// 웨폰 + 레벨 시스템 + 레벨 증가 등
+
+		// 플레이어, 웨폰 클래스
+
+		// 몬스터, 잡다한 충돌
+
+
 		//std::cout << timer << '\n';
 		if (timer > spawnCooldown) {
 			timer = 0.f;
 			player->SetAngle(player->GetAngle() + 0.5f);
 			player->SetVelocity(-player->GetVelocity());
+
+			playerB->SetAngle(playerB->GetAngle() + 0.5f);
+			playerB->SetVelocity(-playerB->GetVelocity());
 			std::cout << player->GetAngle() << '\n';
 		//	auto objecta = new Player(EWorld::First);
 		//	auto objectb = new Player(EWorld::Second);
