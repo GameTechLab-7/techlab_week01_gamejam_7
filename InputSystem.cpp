@@ -37,12 +37,14 @@ std::vector<EKeyCode> InputSystem::GetPressedKeys() {
 }
 void InputSystem::MouseKeyDown(FVector3 MouseDownPoint, FVector3 WindowSize){
     mouse = true; 
+    onceMouse = true;
     MouseKeyDownPos = MouseDownPoint;
     MouseKeyDownRatioPos = FVector3(( MouseKeyDownPos.x / ( WindowSize.x / 2 ) ) - 1 , ( MouseKeyDownPos.y / ( WindowSize.y / 2 ) ) - 1 , 0);
 } //MouseKeyDownPos 설정
 
 void InputSystem::MouseKeyUp(FVector3 MouseUpPoint, FVector3 WindowSize){
     mouse = false; 
+    onceMouse = false;
     MouseKeyUpPos = MouseUpPoint;
     MouseKeyUpRatioPos = FVector3(( MouseKeyUpPos.x / ( WindowSize.x / 2 ))-1 , ( MouseKeyUpPos.y / ( WindowSize.y / 2 ) )-1 , 0);
 }

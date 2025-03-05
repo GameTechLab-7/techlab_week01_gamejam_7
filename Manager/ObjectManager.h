@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <concepts>
 #include <memory>
 #include <queue>
@@ -24,14 +24,14 @@ public:
 
 	// 일회성
 	template<typename Obj>
-		requires std::derived_from<Obj, CircleObject>
+		requires std::derived_from<Obj , CircleObject>
 	Obj* RegistObject(EWorld eWorld);
 
 	void Destroy(CircleObject* InCircleObject);
 	void DestroyAll();
 
 protected:
-	std::unordered_map<EWorld, std::unordered_set<std::shared_ptr<CircleObject>>> ObjectsMap;
+	std::unordered_map<EWorld , std::unordered_set<std::shared_ptr<CircleObject>>> ObjectsMap;
 	std::queue<std::weak_ptr<CircleObject>> DestroyQueue;
 
 private:
@@ -40,7 +40,7 @@ private:
 
 	void ProcessUpdate(float DeltaTime);
 	void ProcessFixedUpdate(float FixedTime);
-	
+
 	void ProcessMove(float DeltaTime);		// velocity에 따른 움직임.
 
 	void ProcessCheckCollision();
@@ -48,6 +48,7 @@ private:
 	void ProcessRender() const;
 
 	bool CheckCollision(const CircleObject& A , const CircleObject& B) const;
+	bool CheckWallCollision(const CircleObject& object, FVector3& normal) const;
 };
 
 template <typename Obj>
@@ -57,9 +58,9 @@ Obj* ObjectManager::RegistObject(EWorld eWorld)
 	const auto object = std::make_shared<Obj>(eWorld);
 	if (!ObjectsMap.contains(eWorld))
 	{
-		ObjectsMap.insert({ eWorld, {}});
+		ObjectsMap.insert({ eWorld, {} });
 	}
 
-	ObjectsMap[eWorld].insert(object);
+	ObjectsMap[ eWorld ].insert(object);
 	return object.get();
 }
