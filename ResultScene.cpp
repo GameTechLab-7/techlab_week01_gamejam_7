@@ -1,26 +1,27 @@
-﻿#include "TitleScene.h"
-#include <Windows.h>
+﻿#include "ResultScene.h"
+#include <windows.h>
 #include "Scene/PresetScene.h"
 #include "Manager/GameManager.h"
 
-
-void TitleScene::LoadScene()
+void ResultScene::LoadScene()
 {
 }
 
-void TitleScene::ExitScene()
+void ResultScene::ExitScene()
 {
 }
 
-void TitleScene::Render()
+void ResultScene::Render()
 {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("Title Scene");
+	ImGui::Begin("Game Over!");
 	{
-		if (ImGui::Button("Start")) 
+		ImGui::Text("Winner is %s" , GameManager::GetInstance().DeadPlayerWorld == EWorld::First ? "Player2" : "Player1");
+
+		if (ImGui::Button("ReStart"))
 		{
 			GameManager::GetInstance().ChangeScene<PresetScene>();
 			GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene");
@@ -39,12 +40,12 @@ void TitleScene::Render()
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-void TitleScene::OnClickQuit()
+void ResultScene::OnClickQuit()
 {
 	PostQuitMessage(0);
 }
 
-void TitleScene::OnClickStart()
+void ResultScene::OnClickRestart()
 {
 	GameManager::GetInstance().ChangeScene<PresetScene>();
 }

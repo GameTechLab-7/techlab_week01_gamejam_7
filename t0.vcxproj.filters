@@ -38,6 +38,7 @@
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="Weapon\WeaponBData.cpp" />
     <ClCompile Include="Weapon\WeaponAData.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
@@ -76,5 +77,6 @@
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Weapon\WeaponAData.h" />
     <ClInclude Include="Weapon\WeaponBData.h" />
+    <ClInclude Include="ResultScene.h" />
   </ItemGroup>
 </Project>

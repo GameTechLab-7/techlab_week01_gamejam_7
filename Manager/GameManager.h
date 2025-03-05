@@ -45,6 +45,8 @@ public:
 
     void InitGameLogic();
     GameLogic* GetLogic() const { return Logic.get();}
+
+	EWorld DeadPlayerWorld = EWorld::First;
     
 };
 

@@ -1,6 +1,6 @@
 ﻿#include "GameLogic.h"
 #include "Manager/GameManager.h"
-#include "Scene/TitleScene.h"
+#include "ResultScene.h"
 
 GameLogic::GameLogic()
 {
@@ -12,8 +12,8 @@ GameLogic::~GameLogic()
 
 void GameLogic::Init()
 {
-	PlayerStates[ First ] = { 0 , 0 , 0 , 1, 99999, true };
-	PlayerStates[ Second ] = { 0 , 0 , 0 , 1, 99999, true };
+	PlayerStates[ First ] = { 0 , 0 , 0 , 1, 5, true };
+	PlayerStates[ Second ] = { 0 , 0 , 0 , 1, 5, true };
 }
 
 int GameLogic::GetPreset(EWorld World)
@@ -76,7 +76,8 @@ void GameLogic::SpawnMonsterToWorld(EWorld World, int NumOfMonster = 1)
 
 void GameLogic::EndGame(EWorld DeadPlayerWorld)
 {
-	GameManager::GetInstance().ChangeScene<TitleScene>();
+	GameManager::GetInstance().ChangeScene<ResultScene>();
+	GameManager::GetInstance().DeadPlayerWorld = DeadPlayerWorld;
 }
 
 void GameLogic::OnPlayerHit(EWorld World, int Damage)

@@ -24,6 +24,7 @@ private:
     virtual void Update(float DeltaTime) override;
     virtual void Render() override;
     void RenderWall(class URenderer* Renderer);
+	void InitPlayer(Player* player);
 
 
 	Player* LeftPlayer;

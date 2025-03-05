@@ -161,6 +161,7 @@
     <ClCompile Include="Math\FVector3.cpp" />
     <ClCompile Include="MonsterSpawner.cpp" />
     <ClCompile Include="PrimitiveVertices.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="Scene\BaseScene.cpp" />
     <ClCompile Include="Scene\MainGameScene.cpp" />
     <ClCompile Include="Scene\PresetScene.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Math\FVector3.h" />
     <ClInclude Include="MonsterSpawner.h" />
     <ClInclude Include="PrimitiveVertices.h" />
+    <ClInclude Include="ResultScene.h" />
     <ClInclude Include="Scene\BaseScene.h" />
     <ClInclude Include="Scene\MainGameScene.h" />
     <ClInclude Include="Scene\PresetScene.h" />

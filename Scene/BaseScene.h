@@ -1,5 +1,9 @@
-#pragma once
+﻿#pragma once
 #include <string>
+#include "ImGui/imgui.h"
+#include "Imgui/imgui_internal.h"
+#include "ImGui/imgui_impl_win32.h"
+#include "ImGui/imgui_impl_dx11.h"
 
 
 class BaseScene
