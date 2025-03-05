@@ -4,12 +4,10 @@
 
 WeaponB::WeaponB(Player* player) : BaseWeapon(player) {
 	currentPlayer = player;
-	AngularSpeed = 0.1f;
+	SetLevel(1);
 	Radian = 0.f;
-	TotalRadius = 0.5f;
-	BulletRadius = 0.1f;
 
-	SpawnBullet(5);
+	SpawnBullet(WeaponData.NumOfBullets);
 };
 
 // 보유중인 Bullet은 Object
@@ -22,16 +20,22 @@ WeaponB::~WeaponB() {
 	bullets.clear();
 }
 
-// 레벨업시, 시작시, NumOfBullet이 변할때 -> SpawnBullet
-
 void WeaponB::Update(float DeltaTime)
 {
 	// Bullet 플레이어 중심 회전
 
 	// 0 ~ 2pi
 
-	Radian += AngularSpeed;
+	Radian += WeaponData.AngularSpeed / WeaponData.TotalRadius * DeltaTime;
 	UpdateBulletLocation();
+}
+
+void WeaponB::Clear() {
+	auto& objectManager = Singleton<ObjectManager>::GetInstance();
+	for (auto& bullet : bullets) {
+		objectManager.Destroy(bullet);
+	}
+	bullets.clear();
 }
 
 void WeaponB::SpawnBullet(int num = 1)
@@ -40,11 +44,19 @@ void WeaponB::SpawnBullet(int num = 1)
 		auto& objectManager = Singleton<ObjectManager>::GetInstance();
 
 		BulletB* bullet = objectManager.RegistObject<BulletB>(currentPlayer->GetWorld());
-		bullet->SetRadius(BulletRadius);
+		bullet->SetRadius(WeaponData.BulletRadius);
+		bullet->SetForce(WeaponData.Force);
 		bullets.push_back(bullet);
 	}
 	
 	UpdateBulletLocation();
+}
+
+
+void WeaponB::UpdateRadius() {
+	for (auto& bullet : bullets) {
+		bullet->SetRadius(WeaponData.BulletRadius);
+	}
 }
 
 void WeaponB::UpdateBulletLocation()
@@ -53,9 +65,26 @@ void WeaponB::UpdateBulletLocation()
 		auto& bullet = bullets.at(i);
 		float value = ( 2.f * 3.141592f * i ) / bullets.size();
 
-		float x = cos(Radian + value) * TotalRadius + currentPlayer->GetLocation().x;
-		float y = sin(Radian + value) * TotalRadius + currentPlayer->GetLocation().y;
+		float x = cos(Radian + value) * WeaponData.TotalRadius + currentPlayer->GetLocation().x;
+		float y = sin(Radian + value) * WeaponData.TotalRadius + currentPlayer->GetLocation().y;
 
 		bullet->SetLocation(FVector3(x , y , 0));
+	}
+}
+
+void WeaponB::SetLevel(const int level) {
+	WeaponData = WeaponBDataLvTable[ level ];
+
+	// Level에 맞게 업데이트
+	Clear();
+	SpawnBullet(WeaponData.NumOfBullets);
+	UpdateRadius();
+	UpdateForce();
+}
+
+void WeaponB::UpdateForce()
+{
+	for (auto& bullet : bullets) {
+		bullet->SetForce(WeaponData.Force);
 	}
 }

@@ -40,6 +40,9 @@ float FVector3::LengthSquared() const
 FVector3 FVector3::Normalize() const
 {
 	const float VecLength = Length();
+	if (VecLength < 0.00001f) {
+		return FVector3();
+	}
 	return { x / VecLength, y / VecLength, z / VecLength };
 }
 
@@ -110,6 +113,14 @@ FVector3& FVector3::operator/=(float Scalar)
 FVector3 FVector3::operator-() const
 {
 	return { -x, -y, -z };
+}
+
+bool FVector3::operator!=(const FVector3& other) const {
+	return !( other == *this );
+}
+
+bool FVector3::operator==(const FVector3& other) const {
+	return ( fabs(x - other.x) < 0.00001f ) && ( fabs(x - other.x) < 0.00001f ) && ( fabs(z - other.z) < 0.00001f );
 }
 
 FVector3 FVector3::GetRandomUnitVector2D()

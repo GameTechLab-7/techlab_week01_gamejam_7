@@ -2,26 +2,23 @@
 
 #include "GameObject/Bullet/Bullet.h"
 
-// 무한 탄환
-// 몬스터 통과
-// 벽 무시
-// 피격, 벽과 무관하게 존재한다. (ex - 회전 방어)
+// 기본 탄환
+// 몬스터 피격시 삭제
+// 데미지 및 반동?
 
 class BulletB : public Bullet {
 public:
-	// Collision X
-	BulletB(EWorld selectedWorld);
-	~BulletB() = default;
 
-	virtual void Update(float DeltaTime) override;
-	virtual void FixedUpdate(float Fixed) override;
+    BulletB(EWorld selectedWorld);
+    ~BulletB() = default;
 
-	virtual void HandleWallCollision(const FVector3& WallNormal) override;
-	virtual void HandleBallCollision(CircleObject* OtherBall) override;
+    virtual void Update(float DeltaTime) override;
+    virtual void FixedUpdate(float Fixed) override;
 
-	virtual void Move(float DeltaTime) override;
-	virtual void OnDestroy() override;
+    virtual void HandleWallCollision(const FVector3& WallNormal) override;
+    virtual void HandleBallCollision(CircleObject* OtherBall) override;
 
-	// Bullet을(를) 통해 상속됨
-	void OnHit() override;
+    // Bullet을(를) 통해 상속됨
+    void Move(float DeltaTime) override;
+    void OnDestroy() override;
 };

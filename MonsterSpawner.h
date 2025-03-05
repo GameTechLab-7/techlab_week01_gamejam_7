@@ -1,8 +1,11 @@
 ﻿#pragma once
 #include <enum.h>
+#include <memory>
 
 struct SpawnerInfo
 {
+	float MonsterSpeed;
+	float MonsterScale;
 	// 기본 생성 몬스터 수
 	float DefaultMonsterNum;
 	// 생성 주기
@@ -13,24 +16,31 @@ struct SpawnerInfo
 	int MonsterIncreaseNum;
 };
 
-class MonsterSpawner
+class MonsterSpawner : public std::enable_shared_from_this<MonsterSpawner>
 {
 public:
-
-public:
 	MonsterSpawner(SpawnerInfo Info);
-	~MonsterSpawner();
+	~MonsterSpawner() = default;
 
-
-	// !TODO : 몬스터 풀
-	// !TODO : 몬스터 생성 로직
 	void Update(float DeltaTime);
-	void Spawn() const;
-	void SpawnToWorld(EWorld WorldType);
-
+	void Spawn(EWorld world) const;
+	void SpawnToWorld(EWorld WorldType , int numOfMonster);
+	void SetMonsterSpeed(float MonsterSpeed);
+	void SetMonsterScale(float MonsterScale);
+	void SetDefaultMonsterNum(float DefaultMonsterNum);
+	void SetSpawnRate(float SpawnRate);
+	void SetMonsterIncreaseTime(float MonsterIncreaseTime);
+	void SetMonsterIncreaseNum(int MonsterIncreaseNum);
+	
+	float GetMonsterSpeed();
+	float GetMonsterScale();
+	float GetDefaultMonsterNum();
+	float GetSpawnRate();
+	float GetMonsterIncreaseTime();
+	int GetMonsterIncreaseNum();
 private:
 	SpawnerInfo Info;
-
+	
 	int CurrentMonsterNum = 0;
 	float SpawnTime = 0.f;
 	float IncreaseTime = 0.f;

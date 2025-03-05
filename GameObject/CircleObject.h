@@ -18,8 +18,8 @@ public:
 
 	virtual void Update(float DeltaTime) = 0;
 	virtual void FixedUpdate(float FixedTime) = 0;
-	virtual void HandleWallCollision(const FVector3& WallNormal) = 0;
-	virtual void HandleBallCollision(CircleObject* OtherBall) = 0;
+	virtual void HandleWallCollision(const FVector3& WallNormal);
+	virtual void HandleBallCollision(CircleObject* OtherBall);
 
 	virtual void Render(const URenderer& Renderer) const;
 
@@ -29,7 +29,7 @@ public:
 	virtual void Move(float DeltaTime) = 0;
 	virtual void OnDestroy() = 0;	// CircleObject에 의해 부가적으로 발생한 메모리만 삭제, CircleObject 객체는 ObjectManager에 의해 삭제.
 
-	virtual void OnHit();
+	virtual void OnHit(FVector3 HitForce, int Damage);
 	
 	void ResolveOverlap(CircleObject& OtherBall);
 
@@ -44,8 +44,18 @@ public:
 
 	float GetRadius() const { return Radius; }
 	void SetRadius(float NewRadius) { Radius = NewRadius; }
+	float GetForce() const { return Force; }
+	void SetForce(float force) { Force = force; }
 
 	EWorld GetWorld() const { return MyWorld; }
+
+	// 피격 시 충돌 임팩트를 생성함. 방향은 HitObject -> HitByObject 
+	static FVector3 GetCollisionImpact(CircleObject* HitByObject, CircleObject* HitObject);
+
+	void SetAccel(FVector3 Acceleration)
+	{ 
+		this->Acceleration = Acceleration; 
+	}
 
 protected:
 	EWorld MyWorld;
@@ -53,16 +63,26 @@ protected:
 
 	FVector3 Location;
 	FVector3 Velocity;
+	float Force = 1.f;
+	FVector3 Acceleration;
+
 	float Radius = 0.0f;
 	float Radian = 0.0f; // 0 == top radian으로 다룸
 
-	int WorldWalls[2][4] = {
-		{ 0 , 1 , -1 , 1},  // left right top bottom
-		{-1 , 0 , -1 , 1},
-	};
+	float Drag = 0.5f;
 
 	FVector3 WorldOffsets[2] = {
 		FVector3(0.5f , 0.0f , 0.0f),
 		FVector3(-0.5f , 0.0f , 0.0f)
 	};
+
+	bool bIsProcessingCollision = false;
+
+	// 피격 시 무적
+	bool bIsHitInvisible = false;
+	float HitInvisibleTime = 0.0f;
+	float HitTimer = 0.0f;
+public:
+	void SetCollisionFlag(bool Flag) { bIsProcessingCollision = Flag; }
+	bool IsCollisionProcessing() const { return bIsProcessingCollision; }
 };

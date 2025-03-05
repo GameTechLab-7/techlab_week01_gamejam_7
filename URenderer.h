@@ -55,7 +55,7 @@ public:
     void ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const;
 
     /** Constant Data를 업데이트 합니다. */
-    void UpdateConstant(const FVector3& Offset, float Scale, float Radian) const;
+    void UpdateConstant(const FVector3& Offset, float Scale, float Radian, bool bIsHit = false) const;
 
 public:
     /*버텍스버퍼 가져오기*/

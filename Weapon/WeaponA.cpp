@@ -1,4 +1,4 @@
-#include "WeaponA.h"
+﻿#include "WeaponA.h"
 
 #include <iostream>
 
@@ -6,18 +6,20 @@
 #include "Manager/ObjectManager.h"
 
 
+
+
+// 레벨별 웨폰 데이터
+
 WeaponA::WeaponA(Player* player) : BaseWeapon(player) {
-	BulletSize = 0.1f;
+	SetLevel(1);
 	Timer = 0.f;
-	ShootCooldown = 1.f;
-	BulletSpeed = 1.f;
 };
 
 void WeaponA::Update(float tick)
 {
 	// n초마다 탄환 생성
 
-	if (Timer > ShootCooldown) {
+	if (Timer > WeaponData.ShootCooldown) {
 		Timer = 0.f;
 		SpawnBullet();
 	}
@@ -28,15 +30,16 @@ void WeaponA::Update(float tick)
 
 void WeaponA::SpawnBullet()
 {
-	std::cout << "Spawn!\n";
+	std::cout << WeaponData.BulletSpeed << '\n';
 	auto& objectManager = ObjectManager::GetInstance();
 
 	BulletA* bullet = objectManager.RegistObject<BulletA>(currentPlayer->GetWorld());
 
 	bullet->SetLocation(currentPlayer->GetLocation());
 	bullet->SetAngle(currentPlayer->GetAngle());
-	bullet->SetRadius(BulletSize);
-	bullet->SetVelocity(ConvertToDirection(currentPlayer->GetAngle()) * BulletSpeed);
+	bullet->SetRadius(WeaponData.BulletSize);
+	bullet->SetForce(WeaponData.Force);
+	bullet->SetVelocity(ConvertToDirection(currentPlayer->GetAngle()) * WeaponData.BulletSpeed);
 }
 
 FVector3 WeaponA::ConvertToDirection(const float angle)
@@ -48,4 +51,8 @@ FVector3 WeaponA::ConvertToDirection(const float angle)
 	vector3.z = 0;
 
 	return vector3;
+}
+
+void WeaponA::SetLevel(const int level) {
+	WeaponData = WeaponADataLvTable[ level ];
 }

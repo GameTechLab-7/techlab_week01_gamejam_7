@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 class Player;
 
@@ -11,4 +11,6 @@ public:
 	virtual ~BaseWeapon() = default;
 
 	virtual void Update(float DeltaTime) = 0;
+
+	virtual void SetLevel(const int level) = 0;
 };

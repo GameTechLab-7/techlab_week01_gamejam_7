@@ -1,11 +1,11 @@
 ﻿#include "MainGameScene.h"
 
-#include "MonsterSpawner.h"
-#include "GameObject/Player.h"
-#include "Manager/ObjectManager.h"
 #include "Manager/GameManager.h"
+#include "GameObject/Player.h"
+#include "MonsterSpawner.h"
 #include "Weapon/WeaponA.h"
-
+#include "Weapon/WeaponB.h"
+#include "InputSystem.h"
 
 void MainGameScene::LoadScene()
 {
@@ -16,31 +16,37 @@ void MainGameScene::LoadScene()
 	WeaponA * leftWeapon = new WeaponA(LeftPlayer);
 
 	LeftPlayer->SetWeapon(leftWeapon);
+	
 	RightPlayer = ObjectManager::GetInstance().RegistObject<Player>(Second);
-	WeaponA* rightWeapon = new WeaponA(RightPlayer);
+	WeaponB* rightWeapon = new WeaponB(RightPlayer);
 
 	RightPlayer->SetWeapon(rightWeapon);
 
 	SpawnerInfo Info;
+
+	Info.MonsterSpeed = 1.f;
+	Info.MonsterScale = 1.f;
 	Info.DefaultMonsterNum = 5;
-	Info.SpawnRate = 3.0f;
+	Info.SpawnRate = 10.0f;
 	Info.MonsterIncreaseTime = 5.0f;
 	Info.MonsterIncreaseNum = 1;
 
-	Spawner = std::make_shared<MonsterSpawner>(Info);
+	Spawner = std::make_unique<MonsterSpawner>(Info);
 }
 
 void MainGameScene::ExitScene()
 {
 	ObjectManager::GetInstance().Destroy(LeftPlayer);
 	ObjectManager::GetInstance().Destroy(RightPlayer);
+
+	Spawner.reset();
 }
 
 void MainGameScene::Update(float DeltaTime)
 {
-	BaseScene::Update(DeltaTime);
-	ObjectManager::GetInstance().Update(DeltaTime);
+	InputHandlerInstance->InputUpdate();
 	Spawner->Update(DeltaTime);
+	BaseScene::Update(DeltaTime);
 }
 
 void MainGameScene::Render()
@@ -59,6 +65,7 @@ Player* MainGameScene::GetPlayer(EWorld WorldType) const
 		return RightPlayer;
 	}
 }
+
 
 FVertexSimple LineVertices[ ] = {
 	{1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},

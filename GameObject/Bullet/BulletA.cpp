@@ -1,5 +1,4 @@
-﻿#include <iostream>
-#include "URenderer.h"
+﻿#include "URenderer.h"
 #include "GameObject/Bullet/BulletA.h"
 #include "GameObject/Monster.h"
 #include "Manager/ObjectManager.h"
@@ -7,7 +6,8 @@
 
 // 외부에서 멤버변수 초기화
 BulletA::BulletA(EWorld selectedWorld) : Bullet(selectedWorld) {
-
+    Damage = 3;
+    bIsProcessingCollision = false;
 }
 
 void BulletA::Update(float DeltaTime)
@@ -26,19 +26,26 @@ void BulletA::HandleWallCollision(const FVector3& WallNormal)
 
 void BulletA::HandleBallCollision(CircleObject* OtherBall)
 {
+    // TODO
     // Bullet -> Monster
     // Monster.넉백
     // If Monster Die
     //		Monster.Destroy();
     //		Player.AddPoint
-
+    
     CircleObject* object = OtherBall;
     Monster* monster = dynamic_cast< Monster* >( object );
     if (monster != nullptr)
     {
-        std::cout << "Bullet Hit Monster" << std::endl;
+	if (bIsProcessingCollision)
+	{
+		return;
+	}
+        // bullet
+        bIsProcessingCollision = true;
         ObjectManager::GetInstance().Destroy(this);
-        monster->OnHit();
+		FVector3 Impact = CircleObject::GetCollisionImpact(monster , this);
+        monster->OnHit(Impact, Damage);
     }
 }
 
@@ -51,6 +58,6 @@ void BulletA::OnDestroy()
 {
 }
 
-void BulletA::OnHit()
+void BulletA::OnHit(FVector3 HitForce , int Damage)
 {
 }

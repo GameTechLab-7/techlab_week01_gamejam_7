@@ -1,9 +1,9 @@
+﻿#include <ranges>
 #include "ObjectManager.h"
-#include <ranges>
 
 #include "URenderer.h"
 #include "GameManager.h"
-
+#include "Constant.h"
 
 void ObjectManager::Initialize(URenderer* renderer)
 {
@@ -93,6 +93,29 @@ void ObjectManager::ProcessMove(float DeltaTime)
 
 void ObjectManager::ProcessCheckCollision()
 {
+    for (auto Objects : ObjectsMap | std::views::values)
+    {
+        for (auto Object : Objects)
+        {
+            Object->SetCollisionFlag(false);
+        }
+    }
+
+    for (auto Objects : ObjectsMap | std::views::values)
+    {
+        std::vector<std::shared_ptr<CircleObject>> ObjVec = { Objects.begin(), Objects.end() };
+        for (size_t i = 0; i < Objects.size(); ++i)
+        {
+            CircleObject& objectA = *ObjVec[ i ];
+            FVector3 normal;
+            if (CheckWallCollision(objectA , normal))
+            {
+                objectA.HandleWallCollision(normal);
+            }
+        }
+    }
+
+
 	for (auto Objects : ObjectsMap | std::views::values)
 	{
 	    std::vector<std::shared_ptr<CircleObject>> ObjVec = {Objects.begin(), Objects.end()};
@@ -107,8 +130,12 @@ void ObjectManager::ProcessCheckCollision()
 				{
 					ObjVec[i]->HandleBallCollision(ObjVec[j].get());
                     ObjVec[j]->HandleBallCollision(ObjVec[i].get());
+
+                    ObjVec[i]->SetCollisionFlag(true);
+					ObjVec[j]->SetCollisionFlag(true);
 				}
 			}
+
 		}
 	}
 }
@@ -136,4 +163,40 @@ bool ObjectManager::CheckCollision(const CircleObject& A , const CircleObject& B
 {
 	const float Distance = ( A.GetLocation() - B.GetLocation() ).Length();
 	return Distance <= ( A.GetRadius() + B.GetRadius() );
+}
+
+bool ObjectManager::CheckWallCollision(const CircleObject& object, FVector3& normal) const {
+    FVector3 Location = object.GetLocation();
+    EWorld MyWorld = object.GetWorld();
+    float Radius = object.GetRadius();
+    normal = FVector3();
+
+    if (Location.x - Radius < WorldWalls[ MyWorld ][ Left ])
+    {
+        // left
+        normal += FVector3(1 , 0 , 0);
+    }
+    else if (Location.x + Radius > WorldWalls[ MyWorld ][ Right ])
+    {
+        // right
+        normal += FVector3(-1 , 0 , 0);
+    }
+
+    if (Location.y + Radius > WorldWalls[ MyWorld ][ Top ])
+    {
+        // top
+        normal += FVector3(0 , -1 , 0);
+    }
+    else if (Location.y - Radius < WorldWalls[ MyWorld ][ Bottom ])
+    {
+        // botom
+        normal += FVector3(0, 1 , 0);
+    }
+    normal = normal.Normalize();
+
+    if (normal.Length() < 0.001f) {
+        return false;
+    }
+    
+    return true;
 }

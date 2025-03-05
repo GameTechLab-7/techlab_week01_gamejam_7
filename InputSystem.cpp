@@ -35,14 +35,30 @@ std::vector<EKeyCode> InputSystem::GetPressedKeys() {
 
     return ret;
 }
+void InputSystem::MouseKeyDown(FVector3 MouseDownPoint, FVector3 WindowSize){
+    mouse = true; 
+    onceMouse = true;
+    MouseKeyDownPos = MouseDownPoint;
+    MouseKeyDownRatioPos = FVector3(( MouseKeyDownPos.x / ( WindowSize.x / 2 ) ) - 1 , ( MouseKeyDownPos.y / ( WindowSize.y / 2 ) ) - 1 , 0);
+} //MouseKeyDownPos 설정
+
+void InputSystem::MouseKeyUp(FVector3 MouseUpPoint, FVector3 WindowSize){
+    mouse = false; 
+    onceMouse = false;
+    MouseKeyUpPos = MouseUpPoint;
+    MouseKeyUpRatioPos = FVector3(( MouseKeyUpPos.x / ( WindowSize.x / 2 ))-1 , ( MouseKeyUpPos.y / ( WindowSize.y / 2 ) )-1 , 0);
+}
 
 #include <unordered_map>
 #include <utility>
+#include <cmath>
 
 #include "Math/FVector3.h"
 #include "Enum.h"
 #include "GameObject/Player.h"
-#include "manager/ObjectManager.h"
+#include "Manager/ObjectManager.h"
+#include "Manager/GameManager.h"
+#include "Scene/MainGameScene.h"
 
 struct pair_hash {
     template <class T1 , class T2>
@@ -64,8 +80,8 @@ std::unordered_map<Direction , FVector3> DicKeyAddVector //speed는 곱해서 �
 std::unordered_map<std::pair<EWorld , Direction> , EKeyCode, pair_hash> DicDirectionCodeByPlayer{
     {std::make_pair( EWorld::First, Direction::Left ), EKeyCode::A},
     {std::make_pair( EWorld::First, Direction::Right ), EKeyCode::D},
-    {std::make_pair( EWorld::First, Direction::Top ), EKeyCode::S},
-    {std::make_pair( EWorld::First, Direction::Bottom ), EKeyCode::W},
+    {std::make_pair( EWorld::First, Direction::Top ), EKeyCode::W},
+    {std::make_pair( EWorld::First, Direction::Bottom ), EKeyCode::S},
     
     {std::make_pair( EWorld::Second, Direction::Left ), EKeyCode::J},
     {std::make_pair( EWorld::Second, Direction::Right ), EKeyCode::L},
@@ -78,8 +94,10 @@ InputHandler::InputHandler() {
 }
 
 void InputHandler::HandlePlayerInputByWorld(EWorld World) {
-    Player* player = ObjectManager::GetInstance().RegistObject<Player>(World);
 
+    Player* player = static_cast< MainGameScene* >( GameManager::GetInstance().GetCurrentScene() )->GetPlayer(World);
+	if (player->CanMove() == false) return;
+    
     FVector3 NewPlayerVelocity(0 , 0 , 0);
 
     if (InputSystem::GetInstance().IsPressedKey(DicDirectionCodeByPlayer[std::make_pair(World, Direction::Left)])) {
@@ -93,6 +111,12 @@ void InputHandler::HandlePlayerInputByWorld(EWorld World) {
     }
     if (InputSystem::GetInstance().IsPressedKey(DicDirectionCodeByPlayer[ std::make_pair(World , Direction::Bottom) ])) {
         NewPlayerVelocity += DicKeyAddVector[ Direction::Bottom ];
+    }
+    NewPlayerVelocity = NewPlayerVelocity.Normalize();
+
+    //회전이랑 마우스클릭 구현
+    if (NewPlayerVelocity.Length() > 0.001f) {
+        player->SetAngle(std::atan2(NewPlayerVelocity.y , NewPlayerVelocity.x));
     }
 
     player->SetVelocity(NewPlayerVelocity);

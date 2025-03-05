@@ -7,4 +7,7 @@ class Bullet : public CircleObject
 {
 public:
     Bullet(EWorld selectedWorld);
+
+protected:
+    int Damage = 1;
 };
