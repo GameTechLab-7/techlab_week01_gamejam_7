@@ -2,19 +2,11 @@
 #include "GameObject/CircleObject.h"
 #include "URenderer.h"
 
+
 class Bullet : public CircleObject
 {
 public:
     Bullet(EWorld selectedWorld);
 
-    virtual void Update(float DeltaTime) = 0;
-    virtual void FixedUpdate(float Fixed) = 0;
-
-    virtual void HandleWallCollision(const FVector3& WallNormal) = 0;
-    virtual void HandleBallCollision(CircleObject* OtherBall) = 0;
-
-    virtual void Render(const URenderer& Renderer) const;
-
-    virtual void Move(float DeltaTime) = 0;
-    virtual void OnDestroy() = 0;
+    virtual void Render(const URenderer& Renderer) const override;
 };

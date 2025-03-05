@@ -27,7 +27,6 @@ void BulletA::HandleWallCollision(const FVector3& WallNormal)
 void BulletA::HandleBallCollision(CircleObject* OtherBall)
 {
     // Bullet -> Monster
-    ObjectManager::GetInstance().Destroy(this);
     // Monster.넉백
     // If Monster Die
     //		Monster.Destroy();

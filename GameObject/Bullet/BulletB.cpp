@@ -27,7 +27,7 @@ void BulletB::HandleWallCollision(const FVector3& WallNormal)
 void BulletB::HandleBallCollision(CircleObject* OtherBall)
 {
     // Bullet -> Monster
-    CircleObject* object = &OtherBall;
+    CircleObject* object = OtherBall;
     Monster* monster = dynamic_cast< Monster* >( object );
 
     if (monster != nullptr) {

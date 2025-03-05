@@ -95,17 +95,18 @@ void ObjectManager::ProcessCheckCollision()
 {
 	for (auto Objects : ObjectsMap | std::views::values)
 	{
-		for (int i = 0; i < Objects.size(); ++i)
+	    std::vector<std::shared_ptr<CircleObject>> ObjVec = {Objects.begin(), Objects.end()};
+		for (size_t i = 0; i < Objects.size(); ++i)
 		{
-			for (int j = i + 1; j < Objects.size(); ++j)
+			for (size_t j = i + 1; j < Objects.size(); ++j)
 			{
-				CircleObject& objectA = *Objects[ i ];
-				CircleObject& objectB = *Objects[ j ];
+				CircleObject& objectA = *ObjVec[ i ];
+				CircleObject& objectB = *ObjVec[ j ];
 
 				if (CheckCollision(objectA , objectB))
 				{
-					Objects[ i ]->HandleBallCollision(Objects[ j ]);
-          Objects[ j ]->HandleBallCollision(Objects[ i ]);
+					ObjVec[i]->HandleBallCollision(ObjVec[j].get());
+                    ObjVec[j]->HandleBallCollision(ObjVec[i].get());
 				}
 			}
 		}
