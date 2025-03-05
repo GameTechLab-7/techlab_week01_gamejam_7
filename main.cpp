@@ -185,7 +185,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
             }
         }
 
-		GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
+    	
 #pragma region Test Code
     	//std::cout << timer << '\n';
     	if (timer > spawnCooldown) {
@@ -219,14 +219,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         Renderer.Prepare();
         Renderer.PrepareShader();
 
-    	//for (int i = 0; i < ArrSize; ++i)
-    	//{
-    		//CircleObjects[i]->Render(Renderer);
-    		//Renderer.RenderPrimitive(VertexBufferSphere, NumOfVertices);
-    	//}
-
-		objectManager.Update(DeltaTime);
-
+    	GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
 
         // ImGui Frame 생성
         ImGui_ImplDX11_NewFrame();
