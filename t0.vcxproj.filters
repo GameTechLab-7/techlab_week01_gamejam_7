@@ -87,6 +87,12 @@
     <ClCompile Include="Weapon\BaseWeapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="BufferCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveVertices.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderW0.hlsl">
@@ -164,6 +170,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Weapon\WeaponA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BufferCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveVertices.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
