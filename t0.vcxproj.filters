@@ -33,6 +33,9 @@
     <ClCompile Include="GameObject\Bullet\BulletA.cpp" />
     <ClCompile Include="GameObject\Bullet\Bullet.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Shaders\TextureShader.hlsl" />
+    <ClCompile Include="Texture\UTexture2D.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Constant.h" />
     <ClCompile Include="GameObject\Bullet\BulletB.cpp" />
     <ClCompile Include="GameLogic.cpp" />
@@ -71,6 +74,8 @@
     <ClInclude Include="Weapon\WeaponC.h" />
     <ClInclude Include="GameObject\Bullet\BulletA.h" />
     <ClInclude Include="GameObject\Bullet\BulletC.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Texture\UTexture2D.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="GameObject\Bullet\BulletB.h" />
     <ClInclude Include="GameLogic.h" />

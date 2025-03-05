@@ -1,6 +1,9 @@
 ﻿#include "URenderer.h"
 #include <d3dcompiler.h>
 
+using Microsoft::WRL::ComPtr;
+
+
 struct alignas( 16 ) URenderer::FConstants
 {
     FVector3 Offset;
@@ -45,49 +48,69 @@ void URenderer::CreateShader()
      *   - SIZE_T GetBufferSize
      *     - 버퍼의 크기(바이트 갯수)를 돌려준다
      */
-    ID3DBlob* VertexShaderCSO;
-    ID3DBlob* PixelShaderCSO;
 
-    // 셰이더 컴파일 및 생성
-    D3DCompileFromFile(L"Shaders/ShaderW0.hlsl" , nullptr , nullptr , "mainVS" , "vs_5_0" , 0 , 0 , &VertexShaderCSO , nullptr);
-    Device->CreateVertexShader(VertexShaderCSO->GetBufferPointer() , VertexShaderCSO->GetBufferSize() , nullptr , &SimpleVertexShader);
-
-    D3DCompileFromFile(L"Shaders/ShaderW0.hlsl" , nullptr , nullptr , "mainPS" , "ps_5_0" , 0 , 0 , &PixelShaderCSO , nullptr);
-    Device->CreatePixelShader(PixelShaderCSO->GetBufferPointer() , PixelShaderCSO->GetBufferSize() , nullptr , &SimplePixelShader);
-
-    // 입력 레이아웃 정의 및 생성
-    D3D11_INPUT_ELEMENT_DESC Layout[ ] =
+    // Texture Shader 생성
     {
-        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-        { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-    };
+        ComPtr<ID3DBlob> VertexShaderCSO;
+        ComPtr<ID3DBlob> PixelShaderCSO;
 
-    Device->CreateInputLayout(Layout , ARRAYSIZE(Layout) , VertexShaderCSO->GetBufferPointer() , VertexShaderCSO->GetBufferSize() , &SimpleInputLayout);
+        D3DCompileFromFile(L"Shaders/TextureShader.hlsl", nullptr, nullptr, "TextureShaderVS", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &VertexShaderCSO, nullptr);
+        Device->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, &TextureVertexShader);
+    
+        D3DCompileFromFile(L"Shaders/TextureShader.hlsl", nullptr, nullptr, "TextureShaderPS", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &PixelShaderCSO, nullptr);
+        Device->CreatePixelShader(PixelShaderCSO->GetBufferPointer(), PixelShaderCSO->GetBufferSize(), nullptr, &TexturePixelShader);
 
-    VertexShaderCSO->Release();
-    PixelShaderCSO->Release();
+        D3D11_INPUT_ELEMENT_DESC Layout[] =
+        {
+            {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+            {"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+        };
+
+        Device->CreateInputLayout(Layout , ARRAYSIZE(Layout) , VertexShaderCSO->GetBufferPointer() , VertexShaderCSO->GetBufferSize() , &TextureInputLayout);
+
+        D3D11_SAMPLER_DESC SamplerDesc{
+            .Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR,
+            .AddressU = D3D11_TEXTURE_ADDRESS_WRAP,
+            .AddressV = D3D11_TEXTURE_ADDRESS_WRAP,
+            .AddressW = D3D11_TEXTURE_ADDRESS_WRAP,
+            .MipLODBias = 0.0f,
+            .MaxAnisotropy = 1,
+            .ComparisonFunc = D3D11_COMPARISON_ALWAYS,
+            .BorderColor = {0, 0, 0, 0},
+            .MinLOD = 0,
+            .MaxLOD = D3D11_FLOAT32_MAX
+        };
+
+        Device->CreateSamplerState(&SamplerDesc, &TextureSamplerState);
+    }
 
     // 정점 하나의 크기를 설정 (바이트 단위)
     Stride = sizeof(FVertexSimple);
 }
 void URenderer::ReleaseShader()
 {
-    if (SimpleInputLayout)
+    if (TextureInputLayout)
     {
-        SimpleInputLayout->Release();
-        SimpleInputLayout = nullptr;
+        TextureInputLayout->Release();
+        TextureInputLayout = nullptr;
     }
 
-    if (SimplePixelShader)
+    if (TexturePixelShader)
     {
-        SimplePixelShader->Release();
-        SimplePixelShader = nullptr;
+        TexturePixelShader->Release();
+        TexturePixelShader = nullptr;
     }
 
-    if (SimpleVertexShader)
+    if (TextureVertexShader)
     {
-        SimpleVertexShader->Release();
-        SimpleVertexShader = nullptr;
+        TextureVertexShader->Release();
+        TextureVertexShader = nullptr;
+    }
+
+    if (TextureSamplerState)
+    {
+        TextureSamplerState->Release();
+        TextureSamplerState = nullptr;
     }
 }
 
@@ -150,9 +173,10 @@ void URenderer::PrepareViewport(EWorld World) const
 void URenderer::PrepareShader() const
 {
     // 기본 셰이더랑 InputLayout을 설정
-    DeviceContext->VSSetShader(SimpleVertexShader , nullptr , 0);
-    DeviceContext->PSSetShader(SimplePixelShader , nullptr , 0);
-    DeviceContext->IASetInputLayout(SimpleInputLayout);
+    DeviceContext->VSSetShader(TextureVertexShader , nullptr , 0);
+    DeviceContext->PSSetShader(TexturePixelShader , nullptr , 0);
+    DeviceContext->PSSetSamplers(0, 1, &TextureSamplerState);
+    DeviceContext->IASetInputLayout(TextureInputLayout);
 
     // 버텍스 쉐이더에 상수 버퍼를 설정
     if (ConstantBuffer)
@@ -170,7 +194,6 @@ void URenderer::RenderPrimitive(ID3D11Buffer* pBuffer , UINT numVertices) const
 {
     UINT Offset = 0;
     DeviceContext->IASetVertexBuffers(0 , 1 , &pBuffer , &Stride , &Offset);
-
     DeviceContext->Draw(numVertices , 0);
 }
 

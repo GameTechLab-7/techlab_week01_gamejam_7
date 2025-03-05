@@ -14,6 +14,8 @@ Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 
     Radian = 0;
 
+    Texture->SetPrimitiveType(EObjectType::Player);
+
     bIsHitInvisible = false;
     HitInvisibleTime = 0.5f;
 }
@@ -74,17 +76,6 @@ void Player::HandleWallCollision(const FVector3& WallNormal)
     else if (WallNormal.y < -0.0001f) {
         // 위
         Location.y = WorldWalls[ MyWorld ][ Top ] - Radius;
-    }
-}
-
-void Player::Render(const URenderer& Renderer) const
-{
-    Renderer.UpdateConstant(Location , Radius, Radian, bIsHitInvisible);
-    ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Player);
-    int NumOfVertices = Renderer.GetBufferSize(EObjectType::Player);
-    if(buffer != nullptr)
-    {
-        Renderer.RenderPrimitive(buffer, NumOfVertices);
     }
 }
 

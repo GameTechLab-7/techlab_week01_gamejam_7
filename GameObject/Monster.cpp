@@ -1,19 +1,23 @@
 ﻿#include "Monster.h"
 #include "URenderer.h"
-#include <Scene/MainGameScene.h>
+#include "Scene/MainGameScene.h"
 #include "Manager/GameManager.h"
-#include <cassert>
 #include "Player.h"
+
+#include <iostream>
+#include <cassert>
+
 
 Monster::Monster(EWorld SelectedWorld) : CircleObject(SelectedWorld)
 {
     // 플레이어를 찾는다
     // 현재 씬이 메인게임씬인지 먼저 검사
-    MainGameScene* Scene = (MainGameScene*)GameManager::GetInstance().GetCurrentScene();
+    MainGameScene* Scene = static_cast<MainGameScene*>(GameManager::GetInstance().GetCurrentScene());
 
 	assert(Scene != nullptr);
 
 	Target = Scene->GetPlayer(SelectedWorld);
+	Texture->SetPrimitiveType(EObjectType::Enemy);
     HitInvisibleTime = 0.2f;
 
     Drag = 0.5f;
@@ -69,17 +73,6 @@ void Monster::HandleBallCollision(CircleObject* OtherBall)
     }
 }
 
-void Monster::Render(const URenderer& Renderer) const
-{
-    Renderer.UpdateConstant(Location , Radius , Radian, bIsHitInvisible);
-    ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Enemy);
-    int NumOfVertices = Renderer.GetBufferSize(EObjectType::Enemy);
-    if (buffer != nullptr)
-    {
-        Renderer.RenderPrimitive(buffer , NumOfVertices);
-    }
-}
-
 void Monster::Move(float DeltaTime)
 {
     // target pos 방향으로 이동
@@ -101,7 +94,6 @@ void Monster::OnDestroy()
     //
 }
 
-#include <iostream>
 // TODO Bullet A, B에서 넘어옴.
 void Monster::OnHit(FVector3 HitForce , int Damage)
 {
