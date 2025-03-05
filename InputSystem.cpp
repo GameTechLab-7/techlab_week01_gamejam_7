@@ -38,6 +38,7 @@ std::vector<EKeyCode> InputSystem::GetPressedKeys() {
 
 #include <unordered_map>
 #include <utility>
+#include <cmath>
 
 #include "Math/FVector3.h"
 #include "Enum.h"
@@ -98,7 +99,10 @@ void InputHandler::HandlePlayerInputByWorld(EWorld World) {
     }
     NewPlayerVelocity = NewPlayerVelocity.Normalize();
 
-    
+    //회전이랑 마우스클릭 구현
+    if (NewPlayerVelocity != FVector3(0 , 0 , 0)) {
+        player->SetAngle(std::atan2(NewPlayerVelocity.y , NewPlayerVelocity.x));
+    }
 
     player->SetVelocity(NewPlayerVelocity);
 }
