@@ -43,6 +43,7 @@ void MainGameScene::Update(float DeltaTime)
 
 void MainGameScene::Render()
 {
+	RenderWall(GameManager::GetInstance().GetRenderer());
 }
 
 Player* MainGameScene::GetPlayer(EWorld WorldType) const
@@ -55,4 +56,20 @@ Player* MainGameScene::GetPlayer(EWorld WorldType) const
 	{
 		return RightPlayer;
 	}
+}
+
+FVertexSimple LineVertices[ ] = {
+	{1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
+	{1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
+};
+
+void MainGameScene::RenderWall(URenderer* Renderer) {
+
+	ID3D11Buffer* VertexBufferLine = Renderer->CreateVertexBuffer(LineVertices , sizeof(LineVertices));
+	int NumOfLineVertices = ARRAYSIZE(LineVertices);
+
+	Renderer->PrepareViewport(EWorld::First);
+	Renderer->UpdateConstant(FVector3() , 1.0f , 0.0f);
+	Renderer->PrepareLine();
+	Renderer->RenderPrimitive(VertexBufferLine , NumOfLineVertices);
 }

@@ -1,4 +1,4 @@
-#pragma comment(lib, "user32")
+﻿#pragma comment(lib, "user32")
 #pragma comment(lib, "d3d11")
 #pragma comment(lib, "d3dcompiler")
 
@@ -2496,6 +2496,7 @@ FVertexSimple SphereVertices[] = {
 	{ 0.156434f, -0.987688f, 0.000000f, 0.578217f, 0.006156f, 0.500000f, 1.000000f },
 };
 
+
 #pragma endregion Shapes
 
 
@@ -2540,7 +2541,6 @@ void CloseDebugConsole()
 {
 	FreeConsole(); // 콘솔 창 닫기
 }
-
 
 int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
 {
@@ -2699,7 +2699,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     	//}
 
 		objectManager.Update(DeltaTime);
-
 
         // ImGui Frame 생성
         ImGui_ImplDX11_NewFrame();

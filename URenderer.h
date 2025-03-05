@@ -36,6 +36,8 @@ public:
     /** 렌더링 파이프라인을 준비 합니다. */
     void Prepare() const;
 
+    void PrepareLine() const;
+
     /** 셰이더를 준비 합니다. */
     void PrepareShader() const;
     void PrepareViewport(EWorld World) const;
