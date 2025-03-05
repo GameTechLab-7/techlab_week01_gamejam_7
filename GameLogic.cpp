@@ -12,8 +12,8 @@ GameLogic::~GameLogic()
 
 void GameLogic::Init()
 {
-	PlayerStates[ First ] = { 0 , 0 , 0 , 1, 5, true };
-	PlayerStates[ Second ] = { 0 , 0 , 0 , 1, 5, true };
+	PlayerStates[ First ] = { 0 , 0 , 0 , 1, 99999, true };
+	PlayerStates[ Second ] = { 0 , 0 , 0 , 1, 99999, true };
 }
 
 int GameLogic::GetPreset(EWorld World)

@@ -94,7 +94,9 @@ InputHandler::InputHandler() {
 }
 
 void InputHandler::HandlePlayerInputByWorld(EWorld World) {
+
     Player* player = static_cast< MainGameScene* >( GameManager::GetInstance().GetCurrentScene() )->GetPlayer(World);
+	if (player->CanMove() == false) return;
     
     FVector3 NewPlayerVelocity(0 , 0 , 0);
 

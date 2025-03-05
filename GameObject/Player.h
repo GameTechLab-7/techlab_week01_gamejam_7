@@ -7,6 +7,7 @@ class Player : public CircleObject
 {
 private:
     BaseWeapon* currentWeapon = nullptr;
+    bool bCanMove = true;
 
 public:
     Player(EWorld selectedWorld);
@@ -31,4 +32,8 @@ public:
     void OnHit(FVector3 HitForce , int Damage) override;
 
     void LevelUp(const int level) const;
+
+	void SetCanMove(bool bCanMove) { this->bCanMove = bCanMove; }
+	bool CanMove() const { return bCanMove; }
+
 };

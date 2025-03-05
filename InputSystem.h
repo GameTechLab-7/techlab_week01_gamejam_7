@@ -169,10 +169,12 @@ public:
     FVector3 GetMouseDownRatioPos() { return MouseKeyDownRatioPos; }
     FVector3 GetMouseUpRatioPos() { return MouseKeyUpRatioPos; }
 
+
 private:
     bool mouse;
     bool onceMouse;
     bool _keys[256];
+    bool bIsBlockInput = false;
     FVector3 MouseKeyDownPos;
     FVector3 MouseKeyUpPos;
     FVector3 MouseKeyDownRatioPos;

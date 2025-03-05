@@ -10,6 +10,8 @@ Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
     //const float y = rand() % 2 - 1;
     Location = FVector3(0 , 0 , 0);
     Velocity = FVector3(0 , 0 , 0);
+	Acceleration = FVector3(0 , 0 , 0);
+
     Radian = 0;
 
     bIsHitInvisible = false;
@@ -26,10 +28,12 @@ void Player::Update(float DeltaTime)
 	if (bIsHitInvisible)
 	{
 		HitTimer += DeltaTime;
+        
 		if (HitTimer >= HitInvisibleTime)
 		{
 			bIsHitInvisible = false;
 			HitTimer = 0.0f;
+            bCanMove = true;
 		}
 	}
 }
@@ -86,7 +90,21 @@ void Player::Render(const URenderer& Renderer) const
 
 void Player::Move(float DeltaTime)
 {
+    Velocity += Acceleration * DeltaTime;
+
     Location += Velocity * DeltaTime;
+    Velocity *= Drag;
+    Acceleration *= Drag;
+
+	if (Velocity.Length() < 0.0001f)
+	{
+		Velocity = FVector3(0 , 0 , 0);
+	}
+
+    if (Acceleration.Length() < 0.0001f)
+    {
+        Velocity = FVector3(0 , 0 , 0);
+    }
 }
 
 
@@ -104,6 +122,7 @@ void Player::OnHit(FVector3 HitForce , int Damage)
     CircleObject::OnHit(HitForce , Damage);
 	bIsHitInvisible = true;
 
+    bCanMove = false;
     GameManager::GetInstance().GetLogic()->OnPlayerHit(this->GetWorld(), Damage);
 }
 
