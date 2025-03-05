@@ -34,6 +34,7 @@
     <ClCompile Include="GameObject\Bullet\BulletB.cpp" />
     <ClCompile Include="GameObject\Bullet\Bullet.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Shaders\TextureShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
