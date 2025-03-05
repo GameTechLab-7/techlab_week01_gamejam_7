@@ -16,10 +16,11 @@ class WeaponB : public BaseWeapon {
 	// 반지름 (전체)
 	// 반지름 (물체)
 public:
+	Player* currentPlayer;
+
 	std::vector<BulletB*> bullets;
 	float AngularSpeed;
 	float Radian;
-	unsigned int NumOfBullet;
 	float TotalRadius;
 	float BulletRadius;
 
@@ -30,6 +31,6 @@ public:
 	virtual void Update(float DeltaTime) override;
 
 private:
-	void SpawnBullet();
-	void DestroyBullet();
+	void SpawnBullet(int num);
+	void UpdateBulletLocation();
 };

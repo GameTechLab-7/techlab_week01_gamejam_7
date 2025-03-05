@@ -5,6 +5,7 @@
 #include "Manager/ObjectManager.h"
 
 
+// 외부에서 멤버변수 초기화
 BulletA::BulletA(EWorld selectedWorld) : Bullet(selectedWorld) {
 
 }
@@ -39,17 +40,6 @@ void BulletA::HandleBallCollision(CircleObject& OtherBall)
         std::cout << "Bullet Hit Monster" << std::endl;
         ObjectManager::GetInstance().Destroy(this);
         monster->OnHit();
-    }
-}
-
-void BulletA::Render(const URenderer& Renderer) const
-{
-    Renderer.UpdateConstant(Location , Radius , Radian);
-    ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Bullet);
-    int NumOfVertices = Renderer.GetBufferSize(EObjectType::Bullet);
-    if (buffer != nullptr)
-    {
-        Renderer.RenderPrimitive(buffer , NumOfVertices);
     }
 }
 

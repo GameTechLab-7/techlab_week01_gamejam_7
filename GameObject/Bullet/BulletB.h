@@ -8,7 +8,6 @@
 // 피격, 벽과 무관하게 존재한다. (ex - 회전 방어)
 
 class BulletB : public Bullet {
-	
 public:
 	// Collision X
 	BulletB(EWorld selectedWorld);
@@ -19,8 +18,6 @@ public:
 
 	virtual void HandleWallCollision(const FVector3& WallNormal) override;
 	virtual void HandleBallCollision(CircleObject& OtherBall) override;
-
-	virtual void Render(const URenderer& Renderer) const override;
 
 	virtual void Move(float DeltaTime) override;
 	virtual void OnDestroy() override;

@@ -19,6 +19,7 @@
 #include "Scene/MainGameScene.h"
 #include "Math/FVector3.h"
 #include "Weapon/WeaponA.h"
+#include "Weapon/WeaponB.h"
 
 
 enum class EPrimitiveType : UINT8
@@ -150,7 +151,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	Player* playerB = objectManager.RegistObject<Player>(EWorld::Second);
 
-	WeaponA* weaponB = new WeaponA(playerB);
+	WeaponB* weaponB = new WeaponB(playerB);
 
 	playerB->SetWeapon(weaponB);
 	playerB->SetVelocity(FVector3{ 1, 0, 0 });
