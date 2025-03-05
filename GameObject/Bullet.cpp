@@ -1,4 +1,4 @@
-#include "Bullet.h"
+#include "GameObject/Bullet.h"
 #include "URenderer.h"
 
 void Bullet::Update(float DeltaTime)
@@ -26,7 +26,13 @@ void Bullet::HandleBallCollision(CircleObject& OtherBall)
 
 void Bullet::Render(const URenderer& Renderer) const
 {
-    Renderer.UpdateConstant(Location, Radius, Radian);
+    Renderer.UpdateConstant(Location , Radius, Radian);
+    ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Bullet);
+    int NumOfVertices = Renderer.GetBufferSize(EObjectType::Bullet);
+    if(buffer != nullptr)
+    {
+        Renderer.RenderPrimitive(buffer, NumOfVertices);
+    }
 }
 
 void Bullet::Move(float DeltaTime)

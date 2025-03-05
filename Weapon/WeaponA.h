@@ -1,12 +1,11 @@
 #pragma once
 
 #include "BaseWeapon.h"
-#include "Manager/ObjectManager.h"
 #include "GameObject/Bullet.h"
-#include "Enum.h"
 
 
-class WeaponA : public BaseWeapon {
+class WeaponA : public BaseWeapon
+{
 public:
 	float timer;
 	float shootCooldown;

@@ -1,7 +1,8 @@
 #pragma once
 
 #include "GameObject/CircleObject.h"
-#include "BaseWeapon.h"
+#include "Weapon/BaseWeapon.h"
+
 
 class Player : public CircleObject
 {
@@ -12,7 +13,7 @@ public:
     Player(EWorld selectedWorld);
 
 
-    BaseWeapon* GetWeapon();
+    BaseWeapon* GetWeapon() const;
     void SetWeapon(BaseWeapon* weapon);
 
     virtual void Update(float DeltaTime) override;

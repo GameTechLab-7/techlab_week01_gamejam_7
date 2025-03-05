@@ -19,6 +19,8 @@ public:
 	virtual void Update(float DeltaTime);
 	virtual void Render() = 0;
 
+	std::string GetName() const { return Name; }
+	void SetName(const char* name) { Name = name; }
 
 protected:
 	std::string Name;

@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BufferCache.cpp" />
     <ClCompile Include="GameObject\Bullet.cpp" />
     <ClCompile Include="GameObject\CircleObject.cpp" />
     <ClCompile Include="GameObject\Monster.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
     <ClCompile Include="Math\FVector3.cpp" />
+    <ClCompile Include="PrimitiveVertices.cpp" />
     <ClCompile Include="Scene\BaseScene.cpp" />
     <ClCompile Include="Scene\MainGameScene.cpp" />
     <ClCompile Include="Scene\PresetScene.cpp" />
@@ -166,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
+    <ClInclude Include="BufferCache.h" />
     <ClInclude Include="GameObject\Bullet.h" />
     <ClInclude Include="GameObject\CircleObject.h" />
     <ClInclude Include="GameObject\Monster.h" />
@@ -181,6 +184,7 @@
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\ObjectManager.h" />
     <ClInclude Include="Math\FVector3.h" />
+    <ClInclude Include="PrimitiveVertices.h" />
     <ClInclude Include="Scene\BaseScene.h" />
     <ClInclude Include="Scene\MainGameScene.h" />
     <ClInclude Include="Scene\PresetScene.h" />

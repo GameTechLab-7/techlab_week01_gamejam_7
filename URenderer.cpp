@@ -1,7 +1,6 @@
 #include "URenderer.h"
 #include <d3dcompiler.h>
 
-
 struct alignas( 16 ) URenderer::FConstants
 {
     FVector3 Offset;
@@ -15,6 +14,8 @@ void URenderer::Create(HWND hWindow)
     CreateDeviceAndSwapChain(hWindow);
     CreateFrameBuffer();
     CreateRasterizerState();
+
+    Cache = std::make_unique<BufferCache>();
 }
 
 /** Renderer에 사용된 모든 리소스를 해제합니다. */
@@ -130,10 +131,11 @@ void URenderer::Prepare() const
     DeviceContext->OMSetBlendState(nullptr , nullptr , 0xffffffff);
 }
 
-void URenderer::PrepareViewport(EWorld World) {
-    auto viewPort = viewports.at(World);
+void URenderer::PrepareViewport(EWorld World) const
+{
+    const D3D11_VIEWPORT ViewPort = viewports.at(World);
     // Rasterization할 Viewport를 설정 
-    DeviceContext->RSSetViewports(1 , &viewPort);
+    DeviceContext->RSSetViewports(1 , &ViewPort);
     DeviceContext->RSSetState(RasterizerState);
 
 }
@@ -219,48 +221,55 @@ void URenderer::UpdateConstant(const FVector3& Offset , float Scale, float Radia
     DeviceContext->Unmap(ConstantBuffer , 0);
 }
 
-ID3D11Device* URenderer::GetDevice() const { return Device; }
-ID3D11DeviceContext* URenderer::GetDeviceContext() const { return DeviceContext; }
+ID3D11Device* URenderer::GetDevice() const
+{
+    return Device;
+}
 
-    /** Direct3D Device 및 SwapChain을 생성합니다. */
-    void URenderer::CreateDeviceAndSwapChain(HWND hWindow)
-    {
-        // 지원하는 Direct3D 기능 레벨을 정의
-        D3D_FEATURE_LEVEL FeatureLevels[ ] = { D3D_FEATURE_LEVEL_11_0 };
+ID3D11DeviceContext* URenderer::GetDeviceContext() const
+{
+    return DeviceContext;
+}
 
-        // SwapChain 구조체 초기화
-        DXGI_SWAP_CHAIN_DESC SwapChainDesc = {};
-        SwapChainDesc.BufferDesc.Width = 0;                            // 창 크기에 맞게 자동으로 설정
-        SwapChainDesc.BufferDesc.Height = 0;                           // 창 크기에 맞게 자동으로 설정
-        SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;  // 색상 포멧
-        SwapChainDesc.SampleDesc.Count = 1;                            // 멀티 샘플링 비활성화
-        SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;   // 렌더 타겟으로 설정
-        SwapChainDesc.BufferCount = 2;                                 // 더블 버퍼링
-        SwapChainDesc.OutputWindow = hWindow;                          // 렌더링할 창 핸들
-        SwapChainDesc.Windowed = TRUE;                                 // 창 모드
-        SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;      // 스왑 방식
+/** Direct3D Device 및 SwapChain을 생성합니다. */
+void URenderer::CreateDeviceAndSwapChain(HWND hWindow)
+{
+    // 지원하는 Direct3D 기능 레벨을 정의
+    D3D_FEATURE_LEVEL FeatureLevels[ ] = { D3D_FEATURE_LEVEL_11_0 };
 
-        // Direct3D Device와 SwapChain을 생성
-        D3D11CreateDeviceAndSwapChain(
-            // 입력 매개변수
-            nullptr ,                                                       // 디바이스를 만들 때 사용할 비디오 어댑터에 대한 포인터
-            D3D_DRIVER_TYPE_HARDWARE ,                                      // 만들 드라이버 유형을 나타내는 D3D_DRIVER_TYPE 열거형 값
-            nullptr ,                                                       // 소프트웨어 래스터라이저를 구현하는 DLL에 대한 핸들
-            D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG ,  // 사용할 런타임 계층을 지정하는 D3D11_CREATE_DEVICE_FLAG 열거형 값들의 조합
-            FeatureLevels ,                                                 // 만들려는 기능 수준의 순서를 결정하는 D3D_FEATURE_LEVEL 배열에 대한 포인터
-            ARRAYSIZE(FeatureLevels) ,                                      // pFeatureLevels 배열의 요소 수
-            D3D11_SDK_VERSION ,                                             // SDK 버전. 주로 D3D11_SDK_VERSION을 사용
-            &SwapChainDesc ,                                                // SwapChain 설정과 관련된 DXGI_SWAP_CHAIN_DESC 구조체에 대한 포인터
+    // SwapChain 구조체 초기화
+    DXGI_SWAP_CHAIN_DESC SwapChainDesc = {};
+    SwapChainDesc.BufferDesc.Width = 0;                            // 창 크기에 맞게 자동으로 설정
+    SwapChainDesc.BufferDesc.Height = 0;                           // 창 크기에 맞게 자동으로 설정
+    SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;  // 색상 포멧
+    SwapChainDesc.SampleDesc.Count = 1;                            // 멀티 샘플링 비활성화
+    SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;   // 렌더 타겟으로 설정
+    SwapChainDesc.BufferCount = 2;                                 // 더블 버퍼링
+    SwapChainDesc.OutputWindow = hWindow;                          // 렌더링할 창 핸들
+    SwapChainDesc.Windowed = TRUE;                                 // 창 모드
+    SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD;      // 스왑 방식
 
-            // 출력 매개변수
-            &SwapChain ,                                                    // 생성된 IDXGISwapChain 인터페이스에 대한 포인터
-            &Device ,                                                       // 생성된 ID3D11Device 인터페이스에 대한 포인터
-            nullptr ,                                                       // 선택된 기능 수준을 나타내는 D3D_FEATURE_LEVEL 값을 반환
-            &DeviceContext                                                 // 생성된 ID3D11DeviceContext 인터페이스에 대한 포인터
-        );
+    // Direct3D Device와 SwapChain을 생성
+    D3D11CreateDeviceAndSwapChain(
+        // 입력 매개변수
+        nullptr ,                                                       // 디바이스를 만들 때 사용할 비디오 어댑터에 대한 포인터
+        D3D_DRIVER_TYPE_HARDWARE ,                                      // 만들 드라이버 유형을 나타내는 D3D_DRIVER_TYPE 열거형 값
+        nullptr ,                                                       // 소프트웨어 래스터라이저를 구현하는 DLL에 대한 핸들
+        D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG ,  // 사용할 런타임 계층을 지정하는 D3D11_CREATE_DEVICE_FLAG 열거형 값들의 조합
+        FeatureLevels ,                                                 // 만들려는 기능 수준의 순서를 결정하는 D3D_FEATURE_LEVEL 배열에 대한 포인터
+        ARRAYSIZE(FeatureLevels) ,                                      // pFeatureLevels 배열의 요소 수
+        D3D11_SDK_VERSION ,                                             // SDK 버전. 주로 D3D11_SDK_VERSION을 사용
+        &SwapChainDesc ,                                                // SwapChain 설정과 관련된 DXGI_SWAP_CHAIN_DESC 구조체에 대한 포인터
 
-        // 생성된 SwapChain의 정보 가져오기
-        SwapChain->GetDesc(&SwapChainDesc);
+        // 출력 매개변수
+        &SwapChain ,                                                    // 생성된 IDXGISwapChain 인터페이스에 대한 포인터
+        &Device ,                                                       // 생성된 ID3D11Device 인터페이스에 대한 포인터
+        nullptr ,                                                       // 선택된 기능 수준을 나타내는 D3D_FEATURE_LEVEL 값을 반환
+        &DeviceContext                                                 // 생성된 ID3D11DeviceContext 인터페이스에 대한 포인터
+    );
+
+    // 생성된 SwapChain의 정보 가져오기
+    SwapChain->GetDesc(&SwapChainDesc);
 
         // 뷰포트 정보 설정
         viewports.insert({ EWorld::First, {
@@ -276,79 +285,96 @@ ID3D11DeviceContext* URenderer::GetDeviceContext() const { return DeviceContext;
         } });
     }
 
-    /** Direct3D Device 및 SwapChain을 해제합니다.  */
-    void URenderer::ReleaseDeviceAndSwapChain()
+/** Direct3D Device 및 SwapChain을 해제합니다.  */
+void URenderer::ReleaseDeviceAndSwapChain()
+{
+    if (DeviceContext)
     {
-        if (DeviceContext)
-        {
-            DeviceContext->Flush(); // 남이있는 GPU 명령 실행
-        }
-
-        if (SwapChain)
-        {
-            SwapChain->Release();
-            SwapChain = nullptr;
-        }
-
-        if (Device)
-        {
-            Device->Release();
-            Device = nullptr;
-        }
-
-        if (DeviceContext)
-        {
-            DeviceContext->Release();
-            DeviceContext = nullptr;
-        }
+        DeviceContext->Flush(); // 남이있는 GPU 명령 실행
     }
 
-    /** 프레임 버퍼를 생성합니다. */
-    void URenderer::CreateFrameBuffer()
+    if (SwapChain)
     {
-        // 스왑 체인으로부터 백 버퍼 텍스처 가져오기
-        SwapChain->GetBuffer(0 , IID_PPV_ARGS(&FrameBuffer));
-
-        // 렌더 타겟 뷰 생성
-        D3D11_RENDER_TARGET_VIEW_DESC FrameBufferRTVDesc = {};
-        FrameBufferRTVDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;      // 색상 포맷
-        FrameBufferRTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D 텍스처
-
-        Device->CreateRenderTargetView(FrameBuffer , &FrameBufferRTVDesc , &FrameBufferRTV);
+        SwapChain->Release();
+        SwapChain = nullptr;
     }
 
-    /** 프레임 버퍼를 해제합니다. */
-    void URenderer::ReleaseFrameBuffer()
+    if (Device)
     {
-        if (FrameBuffer)
-        {
-            FrameBuffer->Release();
-            FrameBuffer = nullptr;
-        }
-
-        if (FrameBufferRTV)
-        {
-            FrameBufferRTV->Release();
-            FrameBufferRTV = nullptr;
-        }
+        Device->Release();
+        Device = nullptr;
     }
 
-    /** 레스터라이즈 상태를 생성합니다. */
-    void URenderer::CreateRasterizerState()
+    if (DeviceContext)
     {
-        D3D11_RASTERIZER_DESC RasterizerDesc = {};
-        RasterizerDesc.FillMode = D3D11_FILL_SOLID; // 채우기 모드
-        RasterizerDesc.CullMode = D3D11_CULL_BACK;  // 백 페이스 컬링
+        DeviceContext->Release();
+        DeviceContext = nullptr;
+    }
+}
 
-        Device->CreateRasterizerState(&RasterizerDesc , &RasterizerState);
+/** 프레임 버퍼를 생성합니다. */
+void URenderer::CreateFrameBuffer()
+{
+    // 스왑 체인으로부터 백 버퍼 텍스처 가져오기
+    SwapChain->GetBuffer(0 , IID_PPV_ARGS(&FrameBuffer));
+
+    // 렌더 타겟 뷰 생성
+    D3D11_RENDER_TARGET_VIEW_DESC FrameBufferRTVDesc = {};
+    FrameBufferRTVDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;      // 색상 포맷
+    FrameBufferRTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D 텍스처
+
+    Device->CreateRenderTargetView(FrameBuffer , &FrameBufferRTVDesc , &FrameBufferRTV);
+}
+
+/** 프레임 버퍼를 해제합니다. */
+void URenderer::ReleaseFrameBuffer()
+{
+    if (FrameBuffer)
+    {
+        FrameBuffer->Release();
+        FrameBuffer = nullptr;
     }
 
-    /** 레스터라이저 상태를 해제합니다. */
-    void URenderer::ReleaseRasterizerState()
+    if (FrameBufferRTV)
     {
-        if (RasterizerState)
-        {
-            RasterizerState->Release();
-            RasterizerState = nullptr;
-        }
+        FrameBufferRTV->Release();
+        FrameBufferRTV = nullptr;
     }
+}
+
+/** 레스터라이즈 상태를 생성합니다. */
+void URenderer::CreateRasterizerState()
+{
+    D3D11_RASTERIZER_DESC RasterizerDesc = {};
+    RasterizerDesc.FillMode = D3D11_FILL_SOLID; // 채우기 모드
+    RasterizerDesc.CullMode = D3D11_CULL_BACK;  // 백 페이스 컬링
+
+    Device->CreateRasterizerState(&RasterizerDesc , &RasterizerState);
+}
+
+/** 레스터라이저 상태를 해제합니다. */
+void URenderer::ReleaseRasterizerState()
+{
+    if (RasterizerState)
+    {
+        RasterizerState->Release();
+        RasterizerState = nullptr;
+    }
+}
+
+ID3D11Buffer* URenderer::GetVertexBuffer(EObjectType Type) const
+{
+    if (Cache.get() == nullptr)
+    {
+        return nullptr;
+    }
+    return Cache->GetBuffer(Type);
+}
+
+int URenderer::GetBufferSize(EObjectType Type) const
+{
+    if (Cache.get() == nullptr)
+        return 0;
+
+    return Cache->GetBufferSize(Type);
+}

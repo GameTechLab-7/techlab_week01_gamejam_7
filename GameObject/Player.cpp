@@ -47,7 +47,7 @@ void Player::FixedUpdate(float Fixed)
 {
 }
 
-BaseWeapon* Player::GetWeapon()
+BaseWeapon* Player::GetWeapon() const
 {
     return currentWeapon;
 }
@@ -73,6 +73,12 @@ void Player::HandleBallCollision(CircleObject& OtherBall)
 void Player::Render(const URenderer& Renderer) const
 {
     Renderer.UpdateConstant(Location , Radius, Radian);
+    ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Player);
+    int NumOfVertices = Renderer.GetBufferSize(EObjectType::Player);
+    if(buffer != nullptr)
+    {
+        Renderer.RenderPrimitive(buffer, NumOfVertices);
+    }
 }
 
 void Player::Move(float DeltaTime)

@@ -1,25 +1,22 @@
 #include "ObjectManager.h"
-#include "URenderer.h"
-
 #include <ranges>
 
+#include "URenderer.h"
+#include "GameManager.h"
 
-ObjectManager::ObjectManager() {
-
-}
 
 void ObjectManager::Initialize(URenderer* renderer)
 {
     Renderer = renderer;
 }
 
-void ObjectManager::Update(float DeltaTime , ID3D11Buffer* pBuffer , UINT numVertices)
+void ObjectManager::Update(float DeltaTime)
 {
     ProcessUpdate(DeltaTime);
 
     ProcessMove(DeltaTime);
     ProcessCheckCollision();
-    ProcessRender(pBuffer , numVertices);
+    ProcessRender();
 
     ProcessDestroy();
 }
@@ -40,37 +37,39 @@ void ObjectManager::Destroy(CircleObject* InCircleObject)
 // 라이프 사이클에 의해 Update 이후에 사용
 void ObjectManager::ProcessDestroy()
 {
-    for (auto destroyObject : DestroyList)
+    for (const auto& destroyObject : DestroyList)
     {
         destroyObject->OnDestroy();
     }
     DestroyList.clear();
 }
 
-void ObjectManager::ProcessUpdate(float DeltaTime) {
-    for (auto Objects : ObjectsMap | std::views::values)
+void ObjectManager::ProcessUpdate(float DeltaTime)
+{
+    for (const auto Objects : ObjectsMap | std::views::values)
     {
-        for (int i = 0; i < Objects.size(); ++i)
+        for (const auto Object : Objects)
         {
-            Objects[ i ]->Update(DeltaTime);
+            Object->Update(DeltaTime);
         }
     }
 }
 
 
-void ObjectManager::ProcessFixedUpdate(float FixedTime) {
-    for (auto Objects : ObjectsMap | std::views::values)
+void ObjectManager::ProcessFixedUpdate(float FixedTime)
+{
+    for (const auto Objects : ObjectsMap | std::views::values)
     {
-        for (int i = 0; i < Objects.size(); ++i)
+        for (const auto& Object : Objects)
         {
-            Objects[ i ]->FixedUpdate(FixedTime);
+            Object->FixedUpdate(FixedTime);
         }
     }
 }
 
 void ObjectManager::ProcessMove(float DeltaTime)
 {
-    for (const auto& Objects : ObjectsMap | std::views::values) // Value만 갸져오기
+    for (const auto Objects : ObjectsMap | std::views::values) // Value만 갸져오기
     {
         for (CircleObject* Object : Objects)
         {
@@ -99,15 +98,20 @@ void ObjectManager::ProcessCheckCollision()
     }
 }
 
-void ObjectManager::ProcessRender(ID3D11Buffer* pBuffer , UINT numVertices) const
+void ObjectManager::ProcessRender() const
 {
+    const URenderer* pRenderer = GameManager::GetInstance().GetRenderer();
+    if (pRenderer == nullptr)
+    {
+        return;
+    }
+
     for (const auto& [WorldEnum, Objects] : ObjectsMap)
     {
-        Renderer->PrepareViewport(WorldEnum);
+        pRenderer->PrepareViewport(WorldEnum);
         for (const CircleObject* vector : Objects)
         {
-            vector->Render(*Renderer);
-            Renderer->RenderPrimitive(pBuffer , numVertices);
+            vector->Render(*pRenderer);
         }
     }
 }

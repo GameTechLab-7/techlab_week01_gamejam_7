@@ -11,14 +11,14 @@
 class ObjectManager : public Singleton<ObjectManager>
 {
 public:
-	ObjectManager();
+	ObjectManager() = default;
 	// Update, FixedUpdate
 	URenderer* Renderer;
 
 	void Initialize(URenderer* renderer);
 
 	//void Render(World world);
-	void Update(float DeltaTime, ID3D11Buffer* pBuffer , UINT numVertices);
+	void Update(float DeltaTime);
 	void FixedUpdate(float FixedTime);
 	// 일회성
 	template<typename T> 
@@ -54,7 +54,7 @@ private:
 
 	void ProcessCheckCollision();
 
-	void ProcessRender(ID3D11Buffer* pBuffer , UINT numVertices) const;
+	void ProcessRender() const;
 
 	bool CheckCollision(const CircleObject& A , const CircleObject& B) const;
 };

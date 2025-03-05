@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "BaseScene.h"
 
 class Player;
@@ -11,9 +12,10 @@ class MainGameScene : public BaseScene
     virtual void ExitScene() override;
 
 private:
+
     virtual void Update(float DeltaTime) override;
     virtual void Render() override;
 
-
+	Player* leftPlayer;
+	Player* rightPlayer;
 };
-

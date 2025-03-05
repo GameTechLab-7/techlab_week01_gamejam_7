@@ -1,6 +1,8 @@
 #include "WeaponA.h"
 
 #include <iostream>
+#include "Manager/ObjectManager.h"
+
 
 WeaponA::WeaponA(Player* player) : BaseWeapon(player) {
 	bulletSize = 0.1f;
@@ -24,7 +26,7 @@ void WeaponA::Update(float tick)
 void WeaponA::SpawnBullet()
 {
 	std::cout << "Spawn!\n";
-	auto& objectManager = Singleton<ObjectManager>::GetInstance();
+	auto& objectManager = ObjectManager::GetInstance();
 
 	Bullet* bullet = objectManager.RegistObject<Bullet>(currentPlayer->GetWorld());
 

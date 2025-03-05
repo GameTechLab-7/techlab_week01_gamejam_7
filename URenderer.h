@@ -1,17 +1,15 @@
-#pragma once
+﻿#pragma once
 
 #include <Windows.h>
 #include <d3d11.h>
 #include <unordered_map>
+#include <memory>
 
 #include "Math/FVector3.h"
 #include "Enum.h"
+#include "BufferCache.h"
+#include "PrimitiveVertices.h"
 
-struct FVertexSimple
-{
-	float x, y, z;    // Position
-	float r, g, b, a; // Color
-};
 
 class URenderer
 {
@@ -40,7 +38,7 @@ public:
 
     /** 셰이더를 준비 합니다. */
     void PrepareShader() const;
-    void PrepareViewport(EWorld World);
+    void PrepareViewport(EWorld World) const;
     
     ID3D11Buffer* CreateVertexBuffer(const FVertexSimple* Vertices, UINT ByteWidth) const;
 
@@ -55,7 +53,14 @@ public:
     void ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const;
 
     /** Constant Data를 업데이트 합니다. */
-    void UpdateConstant(const FVector3& Offset, float Scale, float Angle) const;
+    void UpdateConstant(const FVector3& Offset, float Scale, float Radian) const;
+
+public:
+    /*버텍스버퍼 가져오기*/
+    ID3D11Buffer* GetVertexBuffer(EObjectType Type) const;
+
+    /*버텍스 개수 가져오기*/
+    int GetBufferSize(EObjectType Type) const;
 
     ID3D11Device* GetDevice() const;
     ID3D11DeviceContext* GetDeviceContext() const;
@@ -80,7 +85,7 @@ protected:
     void ReleaseRasterizerState();
 
 
-        // Direct3D 11 장치(Device)와 장치 컨텍스트(Device Context) 및 스왑 체인(Swap Chain)을 관리하기 위한 포인터들
+    // Direct3D 11 장치(Device)와 장치 컨텍스트(Device Context) 및 스왑 체인(Swap Chain)을 관리하기 위한 포인터들
     ID3D11Device* Device = nullptr;                         // GPU와 통신하기 위한 Direct3D 장치
     ID3D11DeviceContext* DeviceContext = nullptr;           // GPU 명령 실행을 담당하는 컨텍스트
     IDXGISwapChain* SwapChain = nullptr;                    // 프레임 버퍼를 교체하는 데 사용되는 스왑 체인
@@ -100,4 +105,7 @@ protected:
     ID3D11PixelShader* SimplePixelShader = nullptr;         // Pixel의 색상을 결정하는 Pixel 셰이더
     ID3D11InputLayout* SimpleInputLayout = nullptr;         // Vertex 셰이더 입력 레이아웃 정의
     unsigned int Stride = 0;                                // Vertex 버퍼의 각 요소 크기
+
+    // 버텍스버퍼 재사용을 위한 버퍼캐시
+    std::unique_ptr<BufferCache> Cache;
 };
