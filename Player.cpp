@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include "PrimitiveVertices.h"
 
 	// 문제 1. 벽 겹침 보정을 언제 어디서 해주냐
 	
@@ -42,6 +42,10 @@
 
 	void Player::Render(const URenderer& Renderer) const {
 		Renderer.UpdateConstant(Location , Radius);
+		ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Player);
+		int NumOfVertices = Renderer.GetBufferSize(EObjectType::Player);
+		if(buffer != nullptr)
+			Renderer.RenderPrimitive(buffer, NumOfVertices);
 	}
 
 	void Player::Move(const float tick) {
@@ -52,3 +56,4 @@
 	void Player::OnDestroy() {
 
 	}
+

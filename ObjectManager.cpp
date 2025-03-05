@@ -1,4 +1,7 @@
 #include "ObjectManager.h"
+#include "PrimitiveVertices.h"
+#include "GameManager.h"
+
 
 
 void ObjectManager::Update(float DeltaTime) {
@@ -67,10 +70,17 @@ void ObjectManager::Update(float DeltaTime) {
 	}
 
 	void ObjectManager::ProcessRender() {
+		URenderer* renderer = GameManager::GetInstance().GetRenderer();
+
+		if (renderer == nullptr)
+		{
+			return;
+		}
+
 		for (auto vectors : objectsMap) {
-			URenderer->PrepareViewport(vectors.first);
+			GameManager::GetInstance().GetRenderer()->PrepareViewport(vectors.first);
 			for (auto vector : vectors.second) {
-				vector->Render(*URenderer);
+				vector->Render(*renderer);
 			}
 		}
 	}

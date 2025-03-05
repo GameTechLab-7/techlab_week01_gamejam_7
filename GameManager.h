@@ -6,6 +6,7 @@
 
 #include "BaseScene.h"
 #include "Singleton.h"
+#include "URenderer.h"
 
 
 /**
@@ -15,7 +16,9 @@ class GameManager : public Singleton<GameManager>
 {
 private:
 
+    bool bInitialized = false;
     std::unique_ptr<BaseScene> CurrentScene;
+    URenderer* Renderer;
     
 public:
 
@@ -28,7 +31,13 @@ public:
         return CurrentScene.get();
     }
 
-    void Init();
+    void Init(URenderer* Renderer);
+
+	URenderer* GetRenderer() const
+	{
+		return Renderer;
+	}
+
 };
 
 template <typename Scene>

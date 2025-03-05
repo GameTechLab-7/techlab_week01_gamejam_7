@@ -4,6 +4,9 @@
 #include "FVector3.h"
 #include "URenderer.h"
 #include "enum.h"
+#include <wrl/client.h>
+
+using Microsoft::WRL::ComPtr;
 
 enum Dir {
 	left,

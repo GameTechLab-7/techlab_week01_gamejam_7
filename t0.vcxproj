@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="BufferCache.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="CircleObject.cpp" />
     <ClCompile Include="FVector3.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="ObjectManager.cpp" />
     <ClCompile Include="MainGameScene.cpp" />
     <ClCompile Include="PresetScene.cpp" />
+    <ClCompile Include="PrimitiveVertices.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="URenderer.cpp" />
   </ItemGroup>
@@ -158,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="BufferCache.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -169,6 +172,7 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="MainGameScene.h" />
     <ClInclude Include="PresetScene.h" />
+    <ClInclude Include="PrimitiveVertices.h" />
     <ClInclude Include="TitleScene.h" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Player.cpp" />

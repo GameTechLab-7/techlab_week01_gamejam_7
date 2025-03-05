@@ -6,13 +6,15 @@
 #include <map>
 #include <memory>
 
-class ObjectManager : Singleton< ObjectManager> {
+class ObjectManager : public Singleton<ObjectManager> {
 public:
 	
 	// Update, FixedUpdate
 	std::map<EWorld, std::vector<CircleObject*>> objectsMap;
 	std::vector <std::shared_ptr<CircleObject>> destroyList;
-	URenderer* URenderer;
+
+	// !NOTE : 렌더러는 게임매니저를 통해서만 접근
+	//URenderer* URenderer;
 
 
 	// 라이프사이클
