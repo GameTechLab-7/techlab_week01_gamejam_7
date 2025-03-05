@@ -1,15 +1,17 @@
 ﻿#pragma once
 #include <memory>
+#include "enum.h"
 #include "BaseScene.h"
 #include "InputSystem.h"
 
 class Player;
 class Enemy;
-
+class MonsterSpawner;
 
 class MainGameScene : public BaseScene
 {
 
+public:
     virtual void LoadScene() override;
     virtual void ExitScene() override;
 
@@ -24,7 +26,12 @@ private:
     virtual void Render() override;
     void RenderWall(class URenderer* Renderer);
 
-	Player* leftPlayer;
-	Player* rightPlayer;
 
+	  Player* LeftPlayer;
+	  Player* RightPlayer;
+    std::shared_ptr<MonsterSpawner> Spawner;
+    
+
+public:
+    Player* GetPlayer(EWorld WorldType) const;
 };

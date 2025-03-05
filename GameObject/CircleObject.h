@@ -18,7 +18,7 @@ public:
 	virtual void Update(float DeltaTime) = 0;
 	virtual void FixedUpdate(float FixedTime) = 0;
 	virtual void HandleWallCollision(const FVector3& WallNormal) = 0;
-	virtual void HandleBallCollision(CircleObject& OtherBall) = 0;
+	virtual void HandleBallCollision(CircleObject* OtherBall) = 0;
 
 	virtual void Render(const URenderer& Renderer) const = 0;
 
@@ -27,6 +27,10 @@ public:
 
 	virtual void Move(float DeltaTime) = 0;
 	virtual void OnDestroy() = 0;	// CircleObject에 의해 부가적으로 발생한 메모리만 삭제, CircleObject 객체는 ObjectManager에 의해 삭제.
+
+	virtual void OnHit();
+	
+	void ResolveOverlap(CircleObject& OtherBall);
 
 public:
 	FVector3 GetLocation() const { return Location; }

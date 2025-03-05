@@ -1,12 +1,13 @@
 #pragma once
-#include <d3d11.h>
-#include <vector>
+#include <concepts>
 #include <memory>
+#include <queue>
+#include <unordered_set>
 #include <unordered_map>
 
 #include "GameObject/CircleObject.h"
 #include "AbstractClass/Singleton.h"
-#include "GameObject/Player.h"
+
 
 class ObjectManager : public Singleton<ObjectManager>
 {
@@ -20,30 +21,20 @@ public:
 	//void Render(World world);
 	void Update(float DeltaTime);
 	void FixedUpdate(float FixedTime);
+
 	// 일회성
-	template<typename T> 
-		requires std::is_base_of<CircleObject , T>::value
-	T* RegistObject(EWorld eWorld) {
-		T* object = new T(eWorld);
-
-		if (!ObjectsMap.contains(eWorld))
-		{
-			ObjectsMap.insert({ eWorld , std::vector<CircleObject*>() });
-		}
-
-		ObjectsMap.at(eWorld).push_back(object);
-
-		return object;
-	}
+	template<typename Obj>
+		requires std::derived_from<Obj, CircleObject>
+	Obj* RegistObject(EWorld eWorld);
 
 	void Destroy(CircleObject* InCircleObject);
+	void DestroyAll();
 
 protected:
-	std::unordered_map<EWorld , std::vector<CircleObject*>> ObjectsMap;
-	std::vector <std::shared_ptr<CircleObject>> DestroyList;
+	std::unordered_map<EWorld, std::unordered_set<std::shared_ptr<CircleObject>>> ObjectsMap;
+	std::queue<std::weak_ptr<CircleObject>> DestroyQueue;
 
 private:
-
 	// 라이프 사이클에 의해 Update 이후에 사용
 	void ProcessDestroy();
 
@@ -59,17 +50,16 @@ private:
 	bool CheckCollision(const CircleObject& A , const CircleObject& B) const;
 };
 
-//template<typename T> //requires std::is_base_of<CircleObject , T>::value
-//T* ObjectManager::RegistObject(EWorld eWorld)
-//{
-//	/*T* object = new T(eWorld);
-//
-//	if (!ObjectsMap.contains(eWorld))
-//	{
-//		ObjectsMap.insert({ eWorld , std::vector<CircleObject*>() });
-//	}
-//
-//	ObjectsMap.at(eWorld).push_back(object);*/
-//
-//	return nullptr;
-//}
+template <typename Obj>
+	requires std::derived_from<Obj, CircleObject>
+Obj* ObjectManager::RegistObject(EWorld eWorld)
+{
+	const auto object = std::make_shared<Obj>(eWorld);
+	if (!ObjectsMap.contains(eWorld))
+	{
+		ObjectsMap.insert({ eWorld, {}});
+	}
+
+	ObjectsMap[eWorld].insert(object);
+	return object.get();
+}

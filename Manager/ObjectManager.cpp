@@ -7,48 +7,61 @@
 
 void ObjectManager::Initialize(URenderer* renderer)
 {
-    Renderer = renderer;
+	Renderer = renderer;
 }
 
 void ObjectManager::Update(float DeltaTime)
 {
-    ProcessUpdate(DeltaTime);
+	ProcessUpdate(DeltaTime);
 
-    ProcessMove(DeltaTime);
-    ProcessCheckCollision();
-    ProcessRender();
+	ProcessMove(DeltaTime);
+	ProcessCheckCollision();
+	ProcessRender();
 
-    ProcessDestroy();
+	ProcessDestroy();
 }
 
 void ObjectManager::FixedUpdate(float FixedTime)
 {
-    ProcessFixedUpdate(FixedTime);
+	ProcessFixedUpdate(FixedTime);
 }
 
 void ObjectManager::Destroy(CircleObject* InCircleObject)
 {
-    DestroyList.emplace_back(InCircleObject);
-    auto& vector = ObjectsMap.at(InCircleObject->GetWorld());
-    const auto it = std::ranges::find(vector , InCircleObject);
-    ObjectsMap.at(InCircleObject->GetWorld()).erase(it);
+    // pending queue에 추가, 삭제는 나중에 Process Destroy에서
+    DestroyQueue.push(InCircleObject->shared_from_this());
+}
+
+void ObjectManager::DestroyAll()
+{
+    for (const auto& Objects : ObjectsMap | std::views::values)
+    {
+        for (const auto& Object : Objects)
+        {
+            DestroyQueue.push(Object);
+        }
+    }
 }
 
 // 라이프 사이클에 의해 Update 이후에 사용
 void ObjectManager::ProcessDestroy()
 {
-    for (const auto& destroyObject : DestroyList)
+    while (!DestroyQueue.empty())
     {
-        destroyObject->OnDestroy();
+        if (const auto& Object = DestroyQueue.front().lock())
+        {
+            Object->OnDestroy();
+            ObjectsMap[Object->GetWorld()].erase(Object->shared_from_this());
+        }
+        DestroyQueue.pop();
     }
-    DestroyList.clear();
 }
 
 void ObjectManager::ProcessUpdate(float DeltaTime)
 {
-    for (const auto Objects : ObjectsMap | std::views::values)
+    for (const auto& Objects : ObjectsMap | std::views::values)
     {
-        for (const auto Object : Objects)
+        for (const auto& Object : Objects)
         {
             Object->Update(DeltaTime);
         }
@@ -58,7 +71,7 @@ void ObjectManager::ProcessUpdate(float DeltaTime)
 
 void ObjectManager::ProcessFixedUpdate(float FixedTime)
 {
-    for (const auto Objects : ObjectsMap | std::views::values)
+    for (const auto& Objects : ObjectsMap | std::views::values)
     {
         for (const auto& Object : Objects)
         {
@@ -69,9 +82,9 @@ void ObjectManager::ProcessFixedUpdate(float FixedTime)
 
 void ObjectManager::ProcessMove(float DeltaTime)
 {
-    for (const auto Objects : ObjectsMap | std::views::values) // Value만 갸져오기
+    for (const auto& Objects : ObjectsMap | std::views::values) // Value만 갸져오기
     {
-        for (CircleObject* Object : Objects)
+        for (const auto& Object : Objects)
         {
             Object->Move(DeltaTime);
         }
@@ -80,22 +93,24 @@ void ObjectManager::ProcessMove(float DeltaTime)
 
 void ObjectManager::ProcessCheckCollision()
 {
-    for (auto Objects : ObjectsMap | std::views::values)
-    {
-        for (int i = 0; i < Objects.size(); ++i)
-        {
-            for (int j = i + 1; j < Objects.size(); ++j)
-            {
-                CircleObject& objectA = *Objects[i];
-                CircleObject& objectB = *Objects[j];
+	for (auto Objects : ObjectsMap | std::views::values)
+	{
+	    std::vector<std::shared_ptr<CircleObject>> ObjVec = {Objects.begin(), Objects.end()};
+		for (size_t i = 0; i < Objects.size(); ++i)
+		{
+			for (size_t j = i + 1; j < Objects.size(); ++j)
+			{
+				CircleObject& objectA = *ObjVec[ i ];
+				CircleObject& objectB = *ObjVec[ j ];
 
-                if (CheckCollision(objectA , objectB))
-                {
-                    objectA.HandleBallCollision(objectB);
-                }
-            }
-        }
-    }
+				if (CheckCollision(objectA , objectB))
+				{
+					ObjVec[i]->HandleBallCollision(ObjVec[j].get());
+                    ObjVec[j]->HandleBallCollision(ObjVec[i].get());
+				}
+			}
+		}
+	}
 }
 
 void ObjectManager::ProcessRender() const
@@ -109,9 +124,9 @@ void ObjectManager::ProcessRender() const
     for (const auto& [WorldEnum, Objects] : ObjectsMap)
     {
         pRenderer->PrepareViewport(WorldEnum);
-        for (const CircleObject* vector : Objects)
+        for (const auto& Object : Objects)
         {
-            vector->Render(*pRenderer);
+            Object->Render(*pRenderer);
         }
     }
 }
@@ -119,6 +134,6 @@ void ObjectManager::ProcessRender() const
 
 bool ObjectManager::CheckCollision(const CircleObject& A , const CircleObject& B) const
 {
-    const float Distance = (A.GetLocation() - B.GetLocation()).Length();
-    return Distance <= (A.GetRadius() + B.GetRadius());
+	const float Distance = ( A.GetLocation() - B.GetLocation() ).Length();
+	return Distance <= ( A.GetRadius() + B.GetRadius() );
 }
