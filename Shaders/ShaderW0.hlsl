@@ -8,6 +8,7 @@ cbuffer constants : register(b0)
 {
     float3 Offset;
     float Scale;
+    float Radian;
 }
 
 struct VS_INPUT
@@ -29,8 +30,14 @@ PS_INPUT mainVS(VS_INPUT input)
     // Pass the position directly to the pixel shader (no transformation)
     // output.position = input.position;
 
+    float c = cos(Radian);
+    float s = sin(Radian);
+    
+    float x = (input.position.x * c - input.position.y * s) * Scale + Offset.x;
+    float y = (input.position.x * s + input.position.y * c) * Scale + Offset.y;
+        
     // 상수버퍼를 통해 넘겨 받은 Scale을 곱하고 Offset을 더해서 픽셀쉐이더로 넘김
-    output.position = float4(input.position.xyz * Scale + Offset, input.position.w);
+    output.position = float4(x, y, input.position.z, input.position.w);
 
     // Pass the color to the pixel shader
     output.color = input.color;

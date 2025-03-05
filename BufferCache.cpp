@@ -1,6 +1,6 @@
 #include "BufferCache.h"
 #include "PrimitiveVertices.h"
-#include "GameManager.h"
+#include "Manager/GameManager.h"
 
 BufferCache::BufferCache()
 {

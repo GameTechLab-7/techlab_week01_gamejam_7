@@ -3,22 +3,23 @@
 #pragma comment(lib, "d3dcompiler")
 
 #include <Windows.h>
+#include <iostream>
+#include <string>
 
 #include "ImGui/imgui.h"
 #include "Imgui/imgui_internal.h"
 #include "ImGui/imgui_impl_win32.h"
 #include "ImGui/imgui_impl_dx11.h"
 
-#include <iostream>
-
-#include "CircleObject.h"
 #include "URenderer.h"
-#include "FVector3.h"
-#include "GameManager.h"
-#include "ObjectManager.h"
-#include "Player.h"
-#include <string>
-#include "MainGameScene.h"
+#include "GameObject/CircleObject.h"
+#include "GameObject/Player.h"
+#include "Manager/GameManager.h"
+#include "Manager/ObjectManager.h"
+#include "Scene/MainGameScene.h"
+#include "Math/FVector3.h"
+#include "Weapon/WeaponA.h"
+
 
 enum class EPrimitiveType : UINT8
 {
@@ -2498,9 +2499,6 @@ FVertexSimple SphereVertices[] = {
 #pragma endregion Shapes
 
 
-
-
-
 // ImGui WndProc 정의
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -2571,7 +2569,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	OpenDebugConsole();
 #pragma endregion Init Window
-
+	
 #pragma region Init Renderer & ImGui
     // 렌더러 초기화
     URenderer Renderer;
@@ -2591,11 +2589,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     ImGui_ImplDX11_Init(Renderer.GetDevice(), Renderer.GetDeviceContext());
 #pragma endregion Init Renderer & ImGui
 
-#pragma region Create Vertex Buffer
-	//int NumOfVertices = sizeof(SphereVertices) / sizeof(FVertexSimple);
-	//ID3D11Buffer* VertexBufferSphere = Renderer.CreateVertexBuffer(SphereVertices, sizeof(SphereVertices));
-#pragma endregion Create Vertex Buffer
-
     // FPS 제한
     constexpr int TargetFPS = 60;
     constexpr double TargetDeltaTime = 1000.0f / TargetFPS; // 1 FPS의 목표 시간 (ms)
@@ -2610,21 +2603,27 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     float Accumulator = 0.0; // Fixed Update에 사용되는 값
     constexpr float FixedTimeStep = 1.0f / TargetFPS;
 
-	// UBalls 배열
-	int ArrSize = 1;
-	int ArrCap = 4;
-	CircleObject** CircleObjects = new CircleObject*[ArrCap];
-	EWorld world = EWorld::first;
-	auto Ball = new Player(world);
+	GameManager::GetInstance().Init(&Renderer);
 
-	int NumOfBalls = 1;
+	ObjectManager& objectManager = Singleton<ObjectManager>::GetInstance();
+	objectManager.Initialize(&Renderer);
+	
+	Player* player = objectManager.RegistObject<Player>(EWorld::First);
+	
+	WeaponA* weaponA = new WeaponA(player);
+
+	player->SetWeapon(weaponA);
+	player->SetVelocity(FVector3{ 1, 0, 0 });
+	// player 자체에서 바인딩?
+
+	//DirectX::
+	float spawnCooldown = 1.f;
+	float timer = 0.f;
+
+	//int NumOfBalls = 1;
 
     // Main Loop
     bool bIsExit = false;
-
-	int GameState = -1;
-
-	GameManager::GetInstance().Init(&Renderer);
     while (bIsExit == false)
     {
         // DeltaTime 계산 (초 단위)
@@ -2636,6 +2635,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
         // 누적 시간 추가
         Accumulator += DeltaTime;
+		timer += DeltaTime;
 
         // 메시지(이벤트) 처리
         MSG msg;
@@ -2673,6 +2673,21 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
 
+#pragma region Test Code
+		//std::cout << timer << '\n';
+		if (timer > spawnCooldown) {
+			timer = 0.f;
+			player->SetAngle(player->GetAngle() + 0.5f);
+			player->SetVelocity(-player->GetVelocity());
+			std::cout << player->GetAngle() << '\n';
+		//	auto objecta = new Player(EWorld::First);
+		//	auto objectb = new Player(EWorld::Second);
+		//	// new랑 position, velocity, radius
+		//	objectManager.RegistObject(objecta);
+		//	objectManager.RegistObject(objectb);
+		}
+#pragma endregion
+
         // 렌더링 준비 작업
         Renderer.Prepare();
         Renderer.PrepareShader();
@@ -2683,10 +2698,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     		//Renderer.RenderPrimitive(VertexBufferSphere, NumOfVertices);
     	//}
 
-		//Renderer.PrepareViewport(EWorld::second);
-		//Ball->Render(Renderer);
-		//Renderer.RenderPrimitive(VertexBufferSphere , NumOfVertices);
-
+		objectManager.Update(DeltaTime);
 
 
         // ImGui Frame 생성
@@ -2698,7 +2710,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         {
             ImGui::Text("Hello, World!");
         	ImGui::Text("FPS: %.3f", ImGui::GetIO().Framerate);
-        	ImGui::Text("Size: %d, Capacity: %d", ArrSize, ArrCap);
+        	//ImGui::Text("Size: %d, Capacity: %d", ArrSize, ArrCap);
         	/*if (ImGui::Checkbox("Gravity", &Balls[0]->bApplyGravity))
         	{
         		for (int i = 1; i < ArrSize; ++i)
@@ -2766,7 +2778,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		        	}
         		}
         	}*/
-
         }
 
 		ImGui::Text("Current Scene: %s" , GameManager::GetInstance().GetCurrentScene()->GetName().c_str());
@@ -2798,8 +2809,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
             ElapsedTime = static_cast<double>(CurrentTime.QuadPart - StartTime.QuadPart) * 1000.0 / static_cast<double>(Frequency.QuadPart);
         } while (ElapsedTime < TargetDeltaTime);
     }
-
-	delete[] CircleObjects;
 
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();

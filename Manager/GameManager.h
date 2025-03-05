@@ -1,12 +1,10 @@
 #pragma once
-
-#include <cstdint>
 #include <concepts>
 #include <memory>
 
-#include "BaseScene.h"
-#include "Singleton.h"
 #include "URenderer.h"
+#include "Scene/BaseScene.h"
+#include "AbstractClass/Singleton.h"
 
 
 /**
@@ -19,14 +17,13 @@ private:
     bool bInitialized = false;
     std::unique_ptr<BaseScene> CurrentScene;
     URenderer* Renderer;
-    
-public:
 
+public:
     template <typename Scene>
         requires std::derived_from<Scene, BaseScene>
     void ChangeScene();
 
-    BaseScene* GetCurrentScene()
+    BaseScene* GetCurrentScene() const
     {
         return CurrentScene.get();
     }
@@ -51,4 +48,3 @@ void GameManager::ChangeScene()
     CurrentScene = std::make_unique<Scene>();
     CurrentScene->LoadScene();
 }
-

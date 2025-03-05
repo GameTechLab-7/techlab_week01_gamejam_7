@@ -2,19 +2,19 @@
 
 #include <Windows.h>
 #include <d3d11.h>
-#include <map>
+#include <unordered_map>
 #include <memory>
 
+#include "Math/FVector3.h"
+#include "Enum.h"
 #include "BufferCache.h"
-#include "FVector3.h"
-#include "enum.h"
 #include "PrimitiveVertices.h"
 
 
 class URenderer
 {
 private:
-    struct alignas( 16 ) FConstants;
+    struct alignas(16) FConstants;
 
 public:
     /** Renderer를 초기화 합니다. */
@@ -38,22 +38,22 @@ public:
 
     /** 셰이더를 준비 합니다. */
     void PrepareShader() const;
-    void PrepareViewport(EWorld World);
-
-    ID3D11Buffer* CreateVertexBuffer(const FVertexSimple* Vertices , UINT ByteWidth) const;
+    void PrepareViewport(EWorld World) const;
+    
+    ID3D11Buffer* CreateVertexBuffer(const FVertexSimple* Vertices, UINT ByteWidth) const;
 
     /**
      * Buffer에 있는 Vertex를 그립니다.
      * @param pBuffer 렌더링에 사용할 버텍스 버퍼에 대한 포인터
      * @param numVertices 버텍스 버퍼에 저장된 버텍스의 총 개수
      */
-    void RenderPrimitive(ID3D11Buffer* pBuffer , UINT numVertices) const;
+    void RenderPrimitive(ID3D11Buffer* pBuffer, UINT numVertices) const;
 
     /** Buffer를 해제합니다. */
     void ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const;
 
     /** Constant Data를 업데이트 합니다. */
-    void UpdateConstant(const FVector3& Offset , float Scale) const;
+    void UpdateConstant(const FVector3& Offset, float Scale, float Radian) const;
 
 public:
     /*버텍스버퍼 가져오기*/
@@ -96,9 +96,9 @@ protected:
     ID3D11RasterizerState* RasterizerState = nullptr;       // 래스터라이저 상태(컬링, 채우기 모드 등 정의)
     ID3D11Buffer* ConstantBuffer = nullptr;                 // 쉐이더에 데이터를 전달하기 위한 상수 버퍼
 
-    FLOAT ClearColor[ 4 ] = { 0.025f, 0.025f, 0.025f, 1.0f }; // 화면을 초기화(clear)할 때 사용할 색상 (RGBA)
+    FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f }; // 화면을 초기화(clear)할 때 사용할 색상 (RGBA)
 
-    std::map<EWorld , D3D11_VIEWPORT> viewports;             // 렌더링 영역을 정의하는 뷰포트 정보
+    std::unordered_map<EWorld , D3D11_VIEWPORT> viewports;             // 렌더링 영역을 정의하는 뷰포트 정보
 
     // Shader를 렌더링할 때 사용되는 변수들
     ID3D11VertexShader* SimpleVertexShader = nullptr;       // Vertex 데이터를 처리하는 Vertex 셰이더

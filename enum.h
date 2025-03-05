@@ -1,15 +1,19 @@
 #pragma once
-enum EWorld {
-	first ,
-	second ,
+#include <cstdint>
+
+
+enum EWorld : uint8_t
+{
+	First,
+	Second,
 };
 
 
-enum class EObjectType
+enum class EObjectType : uint8_t
 {
-    Player = 0 ,
-    Enemy ,
-    Bullet ,
+    Player = 0,
+    Enemy,
+    Bullet,
 
-    Max ,
+    Max,
 };

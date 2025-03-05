@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -77,6 +77,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -92,6 +93,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -107,6 +109,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -122,6 +125,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,12 +135,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="BufferCache.cpp" />
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="CircleObject.cpp" />
-    <ClCompile Include="FVector3.cpp" />
-    <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameObject\Bullet.cpp" />
+    <ClCompile Include="GameObject\CircleObject.cpp" />
+    <ClCompile Include="GameObject\Monster.cpp" />
+    <ClCompile Include="GameObject\Player.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -145,12 +148,17 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="ObjectManager.cpp" />
-    <ClCompile Include="MainGameScene.cpp" />
-    <ClCompile Include="PresetScene.cpp" />
+    <ClCompile Include="Manager\GameManager.cpp" />
+    <ClCompile Include="Manager\ObjectManager.cpp" />
+    <ClCompile Include="Math\FVector3.cpp" />
     <ClCompile Include="PrimitiveVertices.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="Scene\BaseScene.cpp" />
+    <ClCompile Include="Scene\MainGameScene.cpp" />
+    <ClCompile Include="Scene\PresetScene.cpp" />
+    <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="URenderer.cpp" />
+    <ClCompile Include="Weapon\BaseWeapon.cpp" />
+    <ClCompile Include="Weapon\WeaponA.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderW0.hlsl">
@@ -159,9 +167,12 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="AbstractClass\Singleton.h" />
     <ClInclude Include="BufferCache.h" />
-    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameObject\Bullet.h" />
+    <ClInclude Include="GameObject\CircleObject.h" />
+    <ClInclude Include="GameObject\Monster.h" />
+    <ClInclude Include="GameObject\Player.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -170,21 +181,18 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
-    <ClInclude Include="MainGameScene.h" />
-    <ClInclude Include="PresetScene.h" />
+    <ClInclude Include="Manager\GameManager.h" />
+    <ClInclude Include="Manager\ObjectManager.h" />
+    <ClInclude Include="Math\FVector3.h" />
     <ClInclude Include="PrimitiveVertices.h" />
-    <ClInclude Include="TitleScene.h" />
-    <ClCompile Include="Monster.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="CircleObject.h" />
-    <ClInclude Include="enum.h" />
-    <ClInclude Include="FVector3.h" />
-    <ClInclude Include="Monster.h" />
-    <ClInclude Include="ObjectManager.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Singleton.h" />
+    <ClInclude Include="Scene\BaseScene.h" />
+    <ClInclude Include="Scene\MainGameScene.h" />
+    <ClInclude Include="Scene\PresetScene.h" />
+    <ClInclude Include="Enum.h" />
+    <ClInclude Include="Scene\TitleScene.h" />
     <ClInclude Include="URenderer.h" />
+    <ClInclude Include="Weapon\BaseWeapon.h" />
+    <ClInclude Include="Weapon\WeaponA.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />

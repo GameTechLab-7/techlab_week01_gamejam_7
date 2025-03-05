@@ -1,11 +1,11 @@
-﻿#include "URenderer.h"
-#include "BufferCache.h"
+#include "URenderer.h"
 #include <d3dcompiler.h>
 
 struct alignas( 16 ) URenderer::FConstants
 {
     FVector3 Offset;
     float Scale;
+    float Radian;
 };
 
 /** Renderer를 초기화 합니다. */
@@ -131,10 +131,11 @@ void URenderer::Prepare() const
     DeviceContext->OMSetBlendState(nullptr , nullptr , 0xffffffff);
 }
 
-void URenderer::PrepareViewport(EWorld World) {
-    auto viewPort = viewports.at(World);
+void URenderer::PrepareViewport(EWorld World) const
+{
+    const D3D11_VIEWPORT ViewPort = viewports.at(World);
     // Rasterization할 Viewport를 설정 
-    DeviceContext->RSSetViewports(1 , &viewPort);
+    DeviceContext->RSSetViewports(1 , &ViewPort);
     DeviceContext->RSSetState(RasterizerState);
 
 }
@@ -201,7 +202,7 @@ void URenderer::ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const
 }
 
 /** Constant Data를 업데이트 합니다. */
-void URenderer::UpdateConstant(const FVector3& Offset , float Scale) const
+void URenderer::UpdateConstant(const FVector3& Offset , float Scale, float Radian) const
 {
     if (!ConstantBuffer) return;
 
@@ -215,6 +216,7 @@ void URenderer::UpdateConstant(const FVector3& Offset , float Scale) const
         FConstants* Constants = static_cast< FConstants* >( ConstantBufferMSR.pData );
         Constants->Offset = Offset;
         Constants->Scale = Scale;
+        Constants->Radian = Radian;
     }
     DeviceContext->Unmap(ConstantBuffer , 0);
 }
@@ -269,19 +271,19 @@ void URenderer::CreateDeviceAndSwapChain(HWND hWindow)
     // 생성된 SwapChain의 정보 가져오기
     SwapChain->GetDesc(&SwapChainDesc);
 
-    // 뷰포트 정보 설정
-    viewports.insert({ EWorld::first, {
-        -( static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f ), 0.0f,
-        static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
-        0.0f, 1.0f
-    } });
+        // 뷰포트 정보 설정
+        viewports.insert({ EWorld::First, {
+            -( static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f ), 0.0f,
+            static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
+            0.0f, 1.0f
+        } });
 
-    viewports.insert({ EWorld::second, {
-        static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f, 0.0f,
-        static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
-        0.0f, 1.0f
-    } });
-}
+        viewports.insert({ EWorld::Second, {
+            static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f, 0.0f,
+            static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
+            0.0f, 1.0f
+        } });
+    }
 
 /** Direct3D Device 및 SwapChain을 해제합니다.  */
 void URenderer::ReleaseDeviceAndSwapChain()

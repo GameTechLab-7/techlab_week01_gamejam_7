@@ -45,46 +45,46 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="BaseScene.cpp">
+    <ClCompile Include="GameObject\Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BufferCache.cpp">
+    <ClCompile Include="GameObject\CircleObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
+    <ClCompile Include="GameObject\Monster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CircleObject.cpp">
+    <ClCompile Include="GameObject\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FVector3.cpp">
+    <ClCompile Include="Manager\GameManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
+    <ClCompile Include="Manager\ObjectManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectManager.cpp">
+    <ClCompile Include="Math\FVector3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainGameScene.cpp">
+    <ClCompile Include="Scene\BaseScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PresetScene.cpp">
+    <ClCompile Include="Scene\MainGameScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PrimitiveVertices.cpp">
+    <ClCompile Include="Scene\PresetScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
+    <ClCompile Include="Scene\TitleScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="URenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon\WeaponA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon\BaseWeapon.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -118,52 +118,52 @@
     <ClInclude Include="ImGui\imstb_truetype.h">
       <Filter>ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="BaseScene.h">
+    <ClInclude Include="GameObject\Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BufferCache.h">
+    <ClInclude Include="GameObject\CircleObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h">
+    <ClInclude Include="GameObject\Monster.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MainGameScene.h">
+    <ClInclude Include="GameObject\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PresetScene.h">
+    <ClInclude Include="Manager\GameManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PrimitiveVertices.h">
+    <ClInclude Include="Manager\ObjectManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TitleScene.h">
+    <ClInclude Include="Math\FVector3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
+    <ClInclude Include="Scene\BaseScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CircleObject.h">
+    <ClInclude Include="Scene\MainGameScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="enum.h">
+    <ClInclude Include="Scene\PresetScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FVector3.h">
+    <ClInclude Include="Enum.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
+    <ClInclude Include="Scene\TitleScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="URenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbstractClass\Singleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon\BaseWeapon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon\WeaponA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
