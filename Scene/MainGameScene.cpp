@@ -3,12 +3,20 @@
 #include "Manager/ObjectManager.h"
 #include "Manager/GameManager.h"
 #include "MonsterSpawner.h"
+#include "Weapon/WeaponA.h"
 
 
 void MainGameScene::LoadScene()
 {
 	LeftPlayer = ObjectManager::GetInstance().RegistObject<Player>(First);
+	WeaponA * leftWeapon = new WeaponA(LeftPlayer);
+
+	LeftPlayer->SetWeapon(leftWeapon);
 	RightPlayer = ObjectManager::GetInstance().RegistObject<Player>(Second);
+	WeaponA* rightWeapon = new WeaponA(RightPlayer);
+
+	RightPlayer->SetWeapon(rightWeapon);
+
 
 
 	SpawnerInfo Info;

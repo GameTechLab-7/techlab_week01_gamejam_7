@@ -63,6 +63,12 @@ void Monster::OnDestroy()
     //
 }
 
+void Monster::OnHit()
+{
+	// 피격 처리
+    ObjectManager::GetInstance().Destroy(this);
+}
+
 void Monster::Init(float Radius, float InitialDistance , float Speed)
 {
     this->Radius = Radius;

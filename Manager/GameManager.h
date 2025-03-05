@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 #include <concepts>
 #include <memory>
 
 #include "URenderer.h"
 #include "Scene/BaseScene.h"
 #include "AbstractClass/Singleton.h"
-
+#include "Manager/ObjectManager.h"
 
 /**
  * 
@@ -45,6 +45,7 @@ void GameManager::ChangeScene()
     {
         CurrentScene->ExitScene();
     }
+    ObjectManager::GetInstance().DestroyAll();
     CurrentScene = std::make_unique<Scene>();
     CurrentScene->LoadScene();
 }

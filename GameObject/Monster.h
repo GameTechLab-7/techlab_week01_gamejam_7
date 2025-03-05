@@ -19,6 +19,7 @@ public:
     void Render(const URenderer& Renderer) const override;
     void Move(float DeltaTime) override;
     void OnDestroy() override;
+    void OnHit();
 
 protected:
     Player* Target;
