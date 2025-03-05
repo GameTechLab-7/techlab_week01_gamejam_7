@@ -34,5 +34,15 @@ struct FVector3
 
     FVector3 operator-() const;
 
+    // != 연산자 오버로딩
+    bool operator!=(const FVector3& other) const {
+        return ( x != other.x ) || ( y != other.y ) || ( z != other.z );
+    }
+
+    // == 연산자도 추가
+    bool operator==(const FVector3& other) const {
+        return ( x == other.x ) && ( y == other.y ) && ( z == other.z );
+    }
+
     static FVector3 GetRandomUnitVector2D();
 };
