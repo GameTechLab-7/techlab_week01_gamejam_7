@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-void GameManager::Init(URenderer* renderer)
+void GameManager::Init(URenderer* InRenderer)
 {
 	if (bInitialized)
 	{
@@ -12,7 +12,7 @@ void GameManager::Init(URenderer* renderer)
 
 	ChangeScene<TitleScene>();
 	CurrentScene->SetName("TitleScene");
-	Renderer = renderer;
+	Renderer = InRenderer;
 
 	std::cout << "GameManager Init" << std::endl;
 }

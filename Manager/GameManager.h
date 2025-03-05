@@ -16,7 +16,7 @@ private:
 
     bool bInitialized = false;
     std::unique_ptr<BaseScene> CurrentScene;
-    URenderer* Renderer;
+    URenderer* Renderer = nullptr;
 
 public:
     template <typename Scene>
@@ -28,7 +28,7 @@ public:
         return CurrentScene.get();
     }
 
-    void Init(URenderer* Renderer);
+    void Init(URenderer* InRenderer);
 
 	URenderer* GetRenderer() const
 	{
