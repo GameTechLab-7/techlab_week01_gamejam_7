@@ -28,6 +28,12 @@ public:
     {
         return CurrentScene.get();
     }
+    template <typename Scene>
+        requires std::derived_from<Scene , BaseScene>
+    Scene* GetCurrentScene() const
+    {
+		return static_cast< Scene* >( CurrentScene.get() );
+    }
 
     void Init(URenderer* InRenderer);
 
