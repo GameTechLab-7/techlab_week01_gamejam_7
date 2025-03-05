@@ -34,7 +34,6 @@ void ObjectManager::Destroy(CircleObject* InCircleObject)
 
 void ObjectManager::DestroyAll()
 {
-    // TODO: Implement DestroyAll
     for (const auto& Objects : ObjectsMap | std::views::values)
     {
         for (const auto& Object : Objects)
