@@ -28,7 +28,7 @@ public:
     virtual void OnDestroy() override;
 
     // CircleObject을(를) 통해 상속됨
-    void OnHit() override;
+    void OnHit(FVector3 HitForce , int Damage) override;
 
     void LevelUp();
 };

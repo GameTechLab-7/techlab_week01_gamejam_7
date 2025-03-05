@@ -17,12 +17,15 @@ public:
     void Render(const URenderer& Renderer) const override;
     void Move(float DeltaTime) override;
     void OnDestroy() override;
-    void OnHit() override;
+    void OnHit(FVector3 HitForce , int Damage) override;
 
 protected:
     Player* Target;
+    int HP = 5;
     float InitialDistanceFromPlayer = 1.0f;
     float Speed = 0.1f;
+
+    bool IsDead();
 
 public:
     virtual void Init(float Radius, float InitialDistance , float Speed);

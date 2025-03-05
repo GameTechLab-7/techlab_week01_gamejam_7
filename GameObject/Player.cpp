@@ -1,6 +1,7 @@
 ﻿#include "Player.h"
 #include "URenderer.h"
 #include "Constant.h"
+#include "Manager/GameManager.h"
 
 Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 {
@@ -10,6 +11,9 @@ Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
     Location = FVector3(0 , 0 , 0);
     Velocity = FVector3(0 , 0 , 0);
     Radian = 0;
+
+    bIsHitInvisible = false;
+    HitInvisibleTime = 0.5f;
 }
 
 // 이동 후 겹침 보정 (Monster, Player에 대해)
@@ -18,6 +22,16 @@ void Player::Update(float DeltaTime)
     if (currentWeapon != nullptr) {
         currentWeapon->Update(DeltaTime);
     }
+
+	if (bIsHitInvisible)
+	{
+		HitTimer += DeltaTime;
+		if (HitTimer >= HitInvisibleTime)
+		{
+			bIsHitInvisible = false;
+			HitTimer = 0.0f;
+		}
+	}
 }
 
 void Player::FixedUpdate(float Fixed)
@@ -78,9 +92,17 @@ void Player::OnDestroy()
 {
 }
 
-void Player::OnHit()
+void Player::OnHit(FVector3 HitForce , int Damage)
 {
+	if (bIsHitInvisible)
+	{
+		return;
+	}
 
+    CircleObject::OnHit(HitForce , Damage);
+	bIsHitInvisible = true;
+
+    GameManager::GetInstance().GetLogic()->OnPlayerHit(this->GetWorld(), Damage);
 }
 
 void Player::LevelUp()

@@ -16,6 +16,7 @@ struct PlayerState
 	int Score;
 	int Exp;
 	int Lv;
+	int Hp;
 
 	bool bIsAlive = true;
 };
@@ -51,6 +52,8 @@ public:
 	void SpawnMonsterToWorld(EWorld World);
 
 	void EndGame(EWorld DeadPlayerWorld);
+
+	void OnPlayerHit(EWorld World, int Damage);
 
 };
 

@@ -22,6 +22,7 @@
 #include "Weapon/WeaponB.h"
 
 #include "InputSystem.h"
+#include <Scene/PresetScene.h>
 
 enum class EPrimitiveType : UINT8
 {
@@ -310,6 +311,13 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         	ImGui::Text("FPS: %.3f", ImGui::GetIO().Framerate);
 
 			ImGui::Text("Current Scene: %s" , GameManager::GetInstance().GetCurrentScene()->GetName().c_str());
+
+            if (ImGui::Button("Move to Preset Scene"))
+            {
+                GameManager::GetInstance().ChangeScene<PresetScene>();
+                GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene");
+            }
+
 			if (ImGui::Button("Move to Main Game Scene"))
 			{
 				GameManager::GetInstance().ChangeScene<MainGameScene>();

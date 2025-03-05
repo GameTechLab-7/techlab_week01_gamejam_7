@@ -14,11 +14,20 @@ Monster::Monster(EWorld SelectedWorld) : CircleObject(SelectedWorld)
 	assert(Scene != nullptr);
 
 	Target = Scene->GetPlayer(SelectedWorld);
+    HitInvisibleTime = 0.2f;
 }
 
 void Monster::Update(float DeltaTime)
 {
-
+    if (bIsHitInvisible)
+    {
+        HitTimer += DeltaTime;
+        if (HitTimer >= HitInvisibleTime)
+        {
+            bIsHitInvisible = false;
+            HitTimer = 0.0f;
+        }
+    }
 }
 
 void Monster::FixedUpdate(float Fixed)
@@ -52,7 +61,8 @@ void Monster::HandleBallCollision(CircleObject* OtherBall)
         // 몬스터 밀기
         // Player 데미지
         // Player 무적
-        otherPlayer->OnHit();
+		FVector3 HitImpact = CircleObject::GetCollisionImpact(otherPlayer , this);
+        otherPlayer->OnHit(HitImpact, 1);
     }
 }
 
@@ -82,14 +92,22 @@ void Monster::OnDestroy()
 }
 
 // TODO Bullet A, B에서 넘어옴.
-void Monster::OnHit()
+void Monster::OnHit(FVector3 HitForce , int Damage)
 {
     // Monster.넉백
     // If Monster Die (Damage, 넉백 float 수치?)
     //		Monster.Destroy();
     //		Player.AddPoint
     //		Player.GetLevelPoint()
+	if (bIsHitInvisible)
+	{
+		return;
+	}
+
+    CircleObject::OnHit(HitForce , Damage);
     
+	HP -= Damage;
+
     if (IsDead()) {
         ObjectManager::GetInstance().Destroy(this);
     }
@@ -108,5 +126,5 @@ void Monster::Init(float Radius, float InitialDistance , float Speed)
 }
 
 bool Monster::IsDead() {
-    return true;
+	return HP <= 0;
 }

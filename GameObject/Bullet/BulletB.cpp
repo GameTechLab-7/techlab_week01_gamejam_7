@@ -6,7 +6,7 @@
 
 // 외부에서 멤버변수 초기화
 BulletB::BulletB(EWorld selectedWorld) : Bullet(selectedWorld) {
-
+    Damage = 1;
 }
 
 void BulletB::HandleWallCollision(const FVector3& WallNormal)
@@ -19,7 +19,8 @@ void BulletB::HandleBallCollision(CircleObject* OtherBall)
     Monster* monster = dynamic_cast< Monster* >( object );
     if (monster != nullptr)
     {
-        monster->OnHit();
+		FVector3 Impact = CircleObject::GetCollisionImpact(monster , this);
+        monster->OnHit(Impact, Damage);
     }
 }
 

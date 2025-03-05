@@ -6,13 +6,8 @@ MonsterSpawner::MonsterSpawner(SpawnerInfo Info)
 	: Info(Info)
 {
 	CurrentMonsterNum = Info.DefaultMonsterNum;
+	SpawnTime = Info.SpawnRate;
 }
-
-MonsterSpawner::~MonsterSpawner()
-{
-
-}
-
 
 void MonsterSpawner::Update(float DeltaTime)
 {
