@@ -17,6 +17,8 @@ public:
 
 	void Update(float DeltaTime);
 
+	UIObject* CreateUIObject(FVector3 Location, FVector3 Scale, const char* TexturePath, void(*OnClickMethod)() = nullptr);
+
 	template<typename Obj>
 		requires std::derived_from<Obj , UIObject>
 	Obj* RegistUIObject(EScene scene);

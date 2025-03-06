@@ -6,9 +6,11 @@
 #include "Weapon/WeaponA.h"
 #include "Weapon/WeaponB.h"
 #include "InputSystem.h"
+#include "Manager/AudioManager.h"
 
 void MainGameScene::LoadScene()
 {
+	AudioManager::GetInstance().PlayLoop(AudioType::PlayBackground);
 
 	InputHandlerInstance = std::make_unique<InputHandler>();
   
@@ -57,6 +59,8 @@ void MainGameScene::Render()
     ImGui::Text("Score  Left: %d, Right: %d" , GameManager::GetInstance().GetLogic()->GetScore(EWorld::First) , GameManager::GetInstance().GetLogic()->GetScore(EWorld::Second));
 
 	ImGui::Text("Exp  Left: %d, Right: %d", GameManager::GetInstance().GetLogic()->GetExp(EWorld::First), GameManager::GetInstance().GetLogic()->GetExp(EWorld::Second));
+
+	ImGui::Text("Player 1 HP : %d, Player 2 HP: %d", GameManager::GetInstance().GetLogic()->GetHP(EWorld::First), GameManager::GetInstance().GetLogic()->GetHP(EWorld::Second));
 
     if (GameManager::GetInstance().GetLogic()->CanUseSpecialSkill(EWorld::First))
     {

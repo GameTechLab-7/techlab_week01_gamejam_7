@@ -27,6 +27,7 @@
 #include "Weapon/WeaponA.h"
 #include "Weapon/WeaponB.h"
 
+#include "BackGround.h"
 
 // ImGui WndProc 정의
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -168,17 +169,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 #pragma region Test UI Rendering
     UIManager& uiManager = UIManager::GetInstance();
     uiManager.Initialize(&Renderer);
-
-    UIObject* ui = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Title);
-    ui->SetLocation(FVector3(0.0f , 0.5f , 0.0f));
-    ui->SetScale(FVector3(1.0f , 0.5f , 0.2f)); //왜 y,z가 x,y인지???
-    ui->SetOnClickEvent([ ] () {std::cout << "click\n"; });
-	ui->SetTexture("Assets/Texture/startButton.tga");
+    uiManager.CreateUIObject(FVector3(0.0f, -0.5f, 0.0f), FVector3(1.0f, 0.5f, 0.2f), "Assets/Texture/startButton.tga", [](){std::cout << "click\n"; });
 #pragma endregion
 
-	ObjectManager& objectManager = ObjectManager::GetInstance();
+	ObjectManager& objectManager = ObjectManager::GetInstance(); 
 	objectManager.Initialize(&Renderer);
-	
+
+
+	std::unique_ptr<BackGround> backGround = std::make_unique<BackGround>();
 	
     // Main Loop
     bool bIsExit = false;
@@ -216,14 +214,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     	// FixedTimeStep 만큼 업데이트
     	while (Accumulator >= FixedTimeStep)
     	{
-			//FixedUpdate(FixedTimeStep); //마찬가지로 ObjectManager에 있는 FixedUpdate
-
-    		// 공 충돌 처리 -> 마찬가지로 ObjectManager에서
-    		//if (CircleObject::CheckCollision(*Balls[i], *Balls[j]))
-    		//{
-    		//	Balls[i]->HandleBallCollision(*Balls[j]);
-    		//}
-
     		Accumulator -= FixedTimeStep;
     	}
 
@@ -232,6 +222,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         Renderer.Prepare();
         Renderer.PrepareShader();
 
+        backGround->Render();
     	GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
 		GameManager::GetInstance().GetCurrentScene()->Render();
         UIManager::GetInstance().Update(DeltaTime);

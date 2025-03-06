@@ -46,6 +46,7 @@ public:
 	int GetLv(EWorld World);
 	int GetScore(EWorld World);
 	int GetExp(EWorld World);
+	int GetHP(EWorld World);
 
 	void AddScore(EWorld World , int Score);
 

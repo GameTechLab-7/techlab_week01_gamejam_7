@@ -42,6 +42,7 @@
     <ClCompile Include="Weapon\WeaponBData.cpp" />
     <ClCompile Include="Weapon\WeaponAData.cpp" />
     <ClCompile Include="ResultScene.cpp" />
+    <ClCompile Include="Manager\AudioManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
@@ -85,5 +86,6 @@
     <ClInclude Include="Texture\UTexture2D.h" />
     <ClInclude Include="Weapon\WeaponAData.h" />
     <ClInclude Include="Weapon\WeaponBData.h" />
+    <ClInclude Include="Manager\AudioManager.h" />
   </ItemGroup>
 </Project>
