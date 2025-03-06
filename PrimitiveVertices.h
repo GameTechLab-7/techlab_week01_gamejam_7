@@ -4,6 +4,7 @@ struct FVertexSimple
 {
 	float x , y , z;    // Position
 	float r , g , b , a; // Color
+	float u = 0.5f, v = 0.5f;        // Texture Coordinates
 };
 
 extern FVertexSimple cube_vertices[36];

@@ -10,3 +10,8 @@ extern const int MAX_PLAYER_HP;
 extern const int MAX_MONSTER_HP;
 
 extern const int MAX_LV;
+
+extern const char* const TITLE_BACKGROUND_TEXTURE_PATH;
+extern const char* const PRESET_BACKGROUND_TEXTURE_PATH;
+extern const char* const MAIN_BACKGROUND_TEXTURE_PATH;
+extern const char* const RESULT_BACKGROUND_TEXTURE_PATH;
