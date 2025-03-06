@@ -6,6 +6,7 @@ struct FVector3
     float x, y, z;
 
     FVector3();
+    FVector3(float scalar);
     FVector3(float x , float y , float z);
 
     static float DotProduct(const FVector3& A , const FVector3& B);

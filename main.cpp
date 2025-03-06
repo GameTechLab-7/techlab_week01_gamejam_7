@@ -12,8 +12,10 @@
 #include "ImGui/imgui_impl_dx11.h"
 
 #include "URenderer.h"
+#include "InputSystem.h"
 #include "GameObject/CircleObject.h"
 #include "GameObject/Player.h"
+#include "Manager/UIManager.h"
 #include "Manager/GameManager.h"
 #include "Manager/ObjectManager.h"
 #include "Scene/MainGameScene.h"
@@ -21,19 +23,8 @@
 #include "Scene/PresetScene.h"
 #include "Math/FVector3.h"
 
-#include "InputSystem.h"
-#include <Scene/PresetScene.h>
-
 #include "Weapon/WeaponA.h"
 #include "Weapon/WeaponB.h"
-
-enum class EPrimitiveType : UINT8
-{
-	EPT_Triangle,
-	EPT_Cube,
-	EPT_Sphere,
-	EPT_Max,
-};
 
 
 // ImGui WndProc 정의
@@ -173,6 +164,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	GameManager::GetInstance().Init(&Renderer);
 
+    UIManager& uiManager = UIManager::GetInstance();
+    uiManager.Initialize(&Renderer);
+
+    UIObject* ui = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Title);
+    ui->SetLocation(FVector3(0.0f , 0.5f , 0.0f));
+    ui->SetScale(FVector3(1.0f , 0.5f , 0.2f)); //왜 y,z가 x,y인지???
+    ui->SetOnClickEvent([ ] () {std::cout << "click\n"; });
+
 	ObjectManager& objectManager = ObjectManager::GetInstance();
 	objectManager.Initialize(&Renderer);
 	
@@ -192,6 +191,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         Accumulator += DeltaTime;
 
         InputSystem::GetInstance().ExpireOnceMouse();
+
         // 메시지(이벤트) 처리
         MSG msg;
         while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
@@ -230,55 +230,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
     	GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
 		GameManager::GetInstance().GetCurrentScene()->Render();
-
-		bool isPress = false;
-
-		for(EKeyCode Ek : InputSystem::GetInstance().GetPressedKeys()) {
-			//std::cout << static_cast<uint8_t>(Ek) << " ";
-			isPress = true;
-		}
-		
-		/*if(isPress)
-			std::cout << "\n";*/
-
-        // ImGui Frame 생성
-        //ImGui_ImplDX11_NewFrame();
-        //ImGui_ImplWin32_NewFrame();
-        //ImGui::NewFrame();
-
-        //ImGui::Begin("DX11 Property Window");
-        //{
-        //    ImGui::Text("Hello, World!");
-        //    ImGui::Text("FPS: %.3f" , ImGui::GetIO().Framerate);
-
-        //    ImGui::Text("Current Scene: %s" , GameManager::GetInstance().GetCurrentScene()->GetName().c_str());
-        //    if (ImGui::Button("Title Scene")) {
-
-        //        GameManager::GetInstance().ChangeScene<TitleScene>();
-        //        GameManager::GetInstance().GetCurrentScene()->SetName("TitleScene");
-        //    }
-
-        //    if (ImGui::Button("Preset Scene")) {
-        //        GameManager::GetInstance().ChangeScene<PresetScene>();
-        //        GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene");
-        //    }
-
-        //    if (ImGui::Button("Move to Main Game Scene"))
-        //    {
-        //        GameManager::GetInstance().ChangeScene<MainGameScene>();
-        //        GameManager::GetInstance().GetCurrentScene()->SetName("MainGameScene");
-        //    }
-
-        //    MainGameScene* mainScene = GameManager::GetInstance().GetCurrentScene<MainGameScene>();
-        //    if (mainScene != nullptr) {
-        //    }
-        //        
-        //}
-        //ImGui::End();
-
-        //// ImGui 렌더링
-        //ImGui::Render();
-        //ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+        UIManager::GetInstance().Update(DeltaTime);
 
         // 현재 화면에 보여지는 버퍼와 그리기 작업을 위한 버퍼를 서로 교환
         Renderer.SwapBuffer();

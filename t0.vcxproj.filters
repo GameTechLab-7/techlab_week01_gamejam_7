@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="Shaders\ShaderW0.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="BufferCache.cpp" />
     <ClCompile Include="GameObject\CircleObject.cpp" />
     <ClCompile Include="GameObject\Monster.cpp" />
@@ -32,7 +29,10 @@
     <ClCompile Include="Weapon\WeaponC.cpp" />
     <ClCompile Include="GameObject\Bullet\BulletA.cpp" />
     <ClCompile Include="GameObject\Bullet\Bullet.cpp" />
+    <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Manager\UIManager.cpp" />
+    <ClCompile Include="UIObject\UIObject.cpp" />
     <ClCompile Include="Shaders\TextureShader.hlsl" />
     <ClCompile Include="Texture\UTexture2D.cpp" />
     <ClCompile Include="InputSystem.cpp" />
@@ -75,13 +75,15 @@
     <ClInclude Include="Weapon\WeaponC.h" />
     <ClInclude Include="GameObject\Bullet\BulletA.h" />
     <ClInclude Include="GameObject\Bullet\BulletC.h" />
+    <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Manager\UIManager.h" />
+    <ClInclude Include="UIObject\UIObject.h" />
+    <ClInclude Include="ResultScene.h" />
+    <FxCompile Include="Shaders\ShaderW0.hlsl" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Texture\UTexture2D.h" />
-    <ClInclude Include="InputSystem.h" />
-    <ClInclude Include="GameObject\Bullet\BulletB.h" />
-    <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Weapon\WeaponAData.h" />
     <ClInclude Include="Weapon\WeaponBData.h" />
-    <ClInclude Include="ResultScene.h" />
   </ItemGroup>
 </Project>

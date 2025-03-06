@@ -1,10 +1,19 @@
-#include "PrimitiveVertices.h"
+﻿#include "PrimitiveVertices.h"
 
 FVertexSimple triangle_vertices[] =
 {
 	{  0.0f,  1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 1.0f }, // Top vertex (red)
 	{  1.0f, -1.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f }, // Bottom-right vertex (green)
 	{ -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f, 1.0f }  // Bottom-left vertex (blue)
+};
+
+FVertexSimple square_vertices[ ] = {
+	{-1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f}, //top left
+	{-1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
+	{1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
+	{-1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
 };
 
 FVertexSimple cube_vertices[] =
