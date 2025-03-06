@@ -34,7 +34,7 @@ void MonsterSpawner::Update(float DeltaTime)
 
 void MonsterSpawner::Spawn(EWorld world) const
 {
-	ObjectManager::GetInstance().RegistObject<Monster>(world)->Init(0.1f * Info.MonsterScale , 1.f , 0.1f * Info.MonsterSpeed);
+	ObjectManager::GetInstance().RegistObject<Monster>(world)->Init(0.05f * Info.MonsterScale , 1.f , 0.1f * Info.MonsterSpeed);
 }
 
 void MonsterSpawner::SpawnToWorld(EWorld WorldType, int numOfMonster)
