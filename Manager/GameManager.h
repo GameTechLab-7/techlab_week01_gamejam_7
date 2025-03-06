@@ -33,7 +33,7 @@ public:
         requires std::derived_from<Scene , BaseScene>
     Scene* GetCurrentScene() const
     {
-		return static_cast< Scene* >( CurrentScene.get() );
+		return dynamic_cast< Scene* >( CurrentScene.get() );
     }
 
     void Init(URenderer* InRenderer);
@@ -45,6 +45,8 @@ public:
 
     void InitGameLogic();
     GameLogic* GetLogic() const { return Logic.get();}
+
+	EWorld DeadPlayerWorld = EWorld::First;
     
     EScene GetCurrentSceneEnum() { return CurrentScene->GetCurrentSceneEnum(); }
 

@@ -9,6 +9,8 @@ cbuffer constants : register(b0)
     float3 Offset;
     float3 Scale;
     float Radian;
+    float Padding;
+    int bIsHit;
 }
 
 struct VS_INPUT
@@ -47,6 +49,10 @@ PS_INPUT mainVS(VS_INPUT input)
 
 float4 mainPS(PS_INPUT input) : SV_TARGET
 {
-    // Output the color directly
-    return input.color;
+    if (bIsHit)
+    {
+        return float4(1.0, 0.0, 0.0, 1.0); // 빨간색 (RGBA)
+    }
+
+    return input.color; // 원래 색상 유지
 }

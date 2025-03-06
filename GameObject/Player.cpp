@@ -1,10 +1,7 @@
 ﻿#include "Player.h"
 #include "URenderer.h"
-
-// 문제 1. 벽 겹침 보정을 언제 어디서 해주냐
-
-
-// Move 이후? 뭐 어디서? 
+#include "Constant.h"
+#include "Manager/GameManager.h"
 
 Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 {
@@ -13,7 +10,15 @@ Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
     //const float y = rand() % 2 - 1;
     Location = FVector3(0 , 0 , 0);
     Velocity = FVector3(0 , 0 , 0);
+	Acceleration = FVector3(0 , 0 , 0);
+
     Radian = 0;
+
+    Texture = UTexture2D::LoadTargaFromFile("Assets/Texture/red.tga");
+    Texture->SetPrimitiveType(EObjectType::Player);
+
+    bIsHitInvisible = false;
+    HitInvisibleTime = 0.5f;
 }
 
 // 이동 후 겹침 보정 (Monster, Player에 대해)
@@ -23,24 +28,17 @@ void Player::Update(float DeltaTime)
         currentWeapon->Update(DeltaTime);
     }
 
-    // 벽
-    if (Location.x - Radius < WorldWalls[MyWorld][Left])
-    {
-        Location.x = WorldWalls[MyWorld][Left] + Radius;
-    }
-    else if (Location.x + Radius > WorldWalls[MyWorld][Right])
-    {
-        Location.x = WorldWalls[MyWorld][Right] - Radius;
-    }
-
-    if (Location.y - Radius < WorldWalls[MyWorld][Top])
-    {
-        Location.y = WorldWalls[MyWorld][Top] + Radius;
-    }
-    else if (Location.y + Radius > WorldWalls[MyWorld][Bottom])
-    {
-        Location.y = WorldWalls[MyWorld][Bottom] - Radius;
-    }
+	if (bIsHitInvisible)
+	{
+		HitTimer += DeltaTime;
+        
+		if (HitTimer >= HitInvisibleTime)
+		{
+			bIsHitInvisible = false;
+			HitTimer = 0.0f;
+            bCanMove = true;
+		}
+	}
 }
 
 void Player::FixedUpdate(float Fixed)
@@ -49,6 +47,9 @@ void Player::FixedUpdate(float Fixed)
 
 BaseWeapon* Player::GetWeapon() const
 {
+    if (currentWeapon == nullptr) {
+        return nullptr;
+    }
     return currentWeapon;
 }
 
@@ -59,27 +60,48 @@ void Player::SetWeapon(BaseWeapon* weapon)
 
 void Player::HandleWallCollision(const FVector3& WallNormal)
 {
+    if (WallNormal.x > 0.0001f) {
+        // 왼쪽
+        Location.x = WorldWalls[ MyWorld ][ Left ] + Radius;
+    }
+    else if (WallNormal.x < -0.0001f) {
+        // 오른쪽
+        Location.x = WorldWalls[ MyWorld ][ Right ] - Radius;
+    }
+
+
+    if (WallNormal.y > 0.0001f) {
+        // 아래
+        Location.y = WorldWalls[ MyWorld ][ Bottom ] + Radius;
+    }
+    else if (WallNormal.y < -0.0001f) {
+        // 위
+        Location.y = WorldWalls[ MyWorld ][ Top ] - Radius;
+    }
 }
 
 void Player::HandleBallCollision(CircleObject* OtherBall)
 {
-}
-
-
-void Player::Render(const URenderer& Renderer) const
-{
-    Renderer.UpdateConstant(Location , Radius, Radian);
-    ID3D11Buffer* buffer = Renderer.GetVertexBuffer(EObjectType::Player);
-    int NumOfVertices = Renderer.GetBufferSize(EObjectType::Player);
-    if(buffer != nullptr)
-    {
-        Renderer.RenderPrimitive(buffer, NumOfVertices);
-    }
+    CircleObject::HandleBallCollision(OtherBall);
 }
 
 void Player::Move(float DeltaTime)
 {
+    Velocity += Acceleration * DeltaTime;
+
     Location += Velocity * DeltaTime;
+    Velocity *= Drag;
+    Acceleration *= Drag;
+
+	if (Velocity.Length() < 0.0001f)
+	{
+		Velocity = FVector3(0 , 0 , 0);
+	}
+
+    if (Acceleration.Length() < 0.0001f)
+    {
+        Velocity = FVector3(0 , 0 , 0);
+    }
 }
 
 
@@ -87,12 +109,22 @@ void Player::OnDestroy()
 {
 }
 
-void Player::OnHit()
+void Player::OnHit(FVector3 HitForce , int Damage)
 {
+	if (bIsHitInvisible)
+	{
+		return;
+	}
 
+    CircleObject::OnHit(HitForce , Damage);
+	bIsHitInvisible = true;
+
+    bCanMove = false;
+    GameManager::GetInstance().GetLogic()->OnPlayerHit(this->GetWorld(), Damage);
 }
 
-void Player::LevelUp()
+// Player에서는 Logic을 알지 못하도록 값을 직접 넣어줌.
+void Player::SetLevel(const int level) const
 {
-    // !TODO : 레벨업 로직
+    currentWeapon->SetLevel(level);
 }

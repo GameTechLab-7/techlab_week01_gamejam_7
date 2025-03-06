@@ -28,12 +28,20 @@
     <ClCompile Include="Weapon\WeaponB.cpp" />
     <ClCompile Include="Weapon\WeaponC.cpp" />
     <ClCompile Include="GameObject\Bullet\BulletA.cpp" />
-    <ClCompile Include="GameObject\Bullet\BulletB.cpp" />
     <ClCompile Include="GameObject\Bullet\Bullet.cpp" />
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Manager\UIManager.cpp" />
     <ClCompile Include="UIObject\UIObject.cpp" />
+    <ClCompile Include="Shaders\TextureShader.hlsl" />
+    <ClCompile Include="Texture\UTexture2D.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Constant.h" />
+    <ClCompile Include="GameObject\Bullet\BulletB.cpp" />
+    <ClCompile Include="GameLogic.cpp" />
+    <ClCompile Include="Weapon\WeaponBData.cpp" />
+    <ClCompile Include="Weapon\WeaponAData.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
@@ -66,14 +74,16 @@
     <ClInclude Include="Weapon\WeaponB.h" />
     <ClInclude Include="Weapon\WeaponC.h" />
     <ClInclude Include="GameObject\Bullet\BulletA.h" />
-    <ClInclude Include="GameObject\Bullet\BulletB.h" />
     <ClInclude Include="GameObject\Bullet\BulletC.h" />
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Manager\UIManager.h" />
     <ClInclude Include="UIObject\UIObject.h" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="ResultScene.h" />
     <FxCompile Include="Shaders\ShaderW0.hlsl" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Texture\UTexture2D.h" />
+    <ClInclude Include="Weapon\WeaponAData.h" />
+    <ClInclude Include="Weapon\WeaponBData.h" />
   </ItemGroup>
 </Project>

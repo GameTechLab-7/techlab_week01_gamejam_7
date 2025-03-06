@@ -24,11 +24,12 @@ private:
     virtual void Update(float DeltaTime) override;
     virtual void Render() override;
     void RenderWall(class URenderer* Renderer);
+	void InitPlayer(Player* player);
 
 
 	Player* LeftPlayer;
 	Player* RightPlayer;
-    std::shared_ptr<MonsterSpawner> Spawner;
+    std::unique_ptr<MonsterSpawner> Spawner;
     
 
 public:

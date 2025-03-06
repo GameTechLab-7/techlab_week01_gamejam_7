@@ -16,6 +16,9 @@ struct PlayerState
 	int Score;
 	int Exp;
 	int Lv;
+	int Hp;
+
+	bool bIsAlive = true;
 };
 
 class GameLogic
@@ -39,16 +42,25 @@ public:
 public:
 
 	int GetPreset(EWorld World);
+	int GetLv(EWorld World);
+	int GetScore(EWorld World);
+	int GetExp(EWorld World);
 
 	void AddScore(EWorld World , int Score);
 
 	void AddExp(EWorld World , int exp);
 
+	void SetLevel(EWorld World, int lv);
 
-	void Upgrade(EWorld World);
+	void SpawnMonsterToWorld(EWorld World, int NumOfMonster);
 
+	void EndGame(EWorld DeadPlayerWorld);
 
-	void SpawnMonsterToWorld(EWorld World);
+	void OnPlayerHit(EWorld World, int Damage);
+
+	bool CanUseSpecialSkill(EWorld World);
+
+	void UseSpecialSkill(EWorld World);
 
 };
 

@@ -98,7 +98,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -132,7 +132,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -161,19 +161,44 @@
     <ClCompile Include="Math\FVector3.cpp" />
     <ClCompile Include="MonsterSpawner.cpp" />
     <ClCompile Include="PrimitiveVertices.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="Scene\BaseScene.cpp" />
     <ClCompile Include="Scene\MainGameScene.cpp" />
     <ClCompile Include="Scene\PresetScene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="Manager\UIManager.cpp" />
     <ClCompile Include="UIObject\UIObject.cpp" />
+=======
+    <ClCompile Include="Shaders\TextureShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Texture\UTexture2D.cpp" />
+>>>>>>> origin/main
     <ClCompile Include="URenderer.cpp" />
     <ClCompile Include="Weapon\BaseWeapon.cpp" />
+    <ClCompile Include="Constant.h" />
     <ClCompile Include="Weapon\WeaponA.cpp" />
+    <ClCompile Include="Weapon\WeaponAData.cpp" />
     <ClCompile Include="Weapon\WeaponB.cpp" />
+    <ClCompile Include="Weapon\WeaponBData.cpp" />
     <ClCompile Include="Weapon\WeaponC.cpp" />
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
+=======
+    <FxCompile Include="Shaders\ShaderW0.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+>>>>>>> origin/main
     <ClInclude Include="AbstractClass\Singleton.h" />
     <ClInclude Include="BufferCache.h" />
     <ClInclude Include="GameObject\Bullet\Bullet.h" />
@@ -198,23 +223,63 @@
     <ClInclude Include="Math\FVector3.h" />
     <ClInclude Include="MonsterSpawner.h" />
     <ClInclude Include="PrimitiveVertices.h" />
+    <ClInclude Include="ResultScene.h" />
     <ClInclude Include="Scene\BaseScene.h" />
     <ClInclude Include="Scene\MainGameScene.h" />
     <ClInclude Include="Scene\PresetScene.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Scene\TitleScene.h" />
+<<<<<<< HEAD
     <ClInclude Include="Manager\UIManager.h" />
     <ClInclude Include="UIObject\UIObject.h" />
+=======
+    <ClInclude Include="Texture\UTexture2D.h" />
+>>>>>>> origin/main
     <ClInclude Include="URenderer.h" />
     <ClInclude Include="Weapon\BaseWeapon.h" />
     <ClInclude Include="Weapon\WeaponA.h" />
+    <ClInclude Include="Weapon\WeaponAData.h" />
     <ClInclude Include="Weapon\WeaponB.h" />
+    <ClInclude Include="Weapon\WeaponBData.h" />
     <ClInclude Include="Weapon\WeaponC.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include="README.md" />
     <Content Include="TODO.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\ShaderW0.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+      <SubSystem>Windows</SubSystem>
+    <ClCompile Include="ResultScene.cpp" />
+    <ClCompile Include="Manager\UIManager.cpp" />
+    <ClCompile Include="UIObject\UIObject.cpp" />
+    <ClCompile Include="Shaders\TextureShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Texture\UTexture2D.cpp" />
+    <ClCompile Include="Constant.h" />
+    <ClCompile Include="Weapon\WeaponAData.cpp" />
+    <ClCompile Include="Weapon\WeaponBData.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\ShaderW0.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <ClInclude Include="ResultScene.h" />
+    <ClInclude Include="Manager\UIManager.h" />
+    <ClInclude Include="UIObject\UIObject.h" />
+    <ClInclude Include="Texture\UTexture2D.h" />
+    <ClInclude Include="Weapon\WeaponAData.h" />
+    <ClInclude Include="Weapon\WeaponBData.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\ShaderW0.hlsl">

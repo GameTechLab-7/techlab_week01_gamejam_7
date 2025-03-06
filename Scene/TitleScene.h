@@ -11,4 +11,8 @@ class TitleScene : public BaseScene
     virtual EScene GetCurrentSceneEnum() const override {
         return EScene::Title;
     }
+
+public:
+	void OnClickQuit(); // 종료
+	void OnClickStart(); // 프리셋으로 넘어가게
 };

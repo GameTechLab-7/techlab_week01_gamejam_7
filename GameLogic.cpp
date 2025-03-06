@@ -1,5 +1,6 @@
 ﻿#include "GameLogic.h"
 #include "Manager/GameManager.h"
+#include "ResultScene.h"
 
 GameLogic::GameLogic()
 {
@@ -11,13 +12,29 @@ GameLogic::~GameLogic()
 
 void GameLogic::Init()
 {
-	PlayerStates[ First ] = { 0 , 0 , 0 , 1 };
-	PlayerStates[ Second ] = { 0 , 0 , 0 , 1 };
+	PlayerStates[ First ] = { 0 , 0 , 0 , 1, 5, true };
+	PlayerStates[ Second ] = { 0 , 0 , 0 , 1, 5, true };
 }
 
 int GameLogic::GetPreset(EWorld World)
 {
 	return PlayerStates[ World ].Preset;
+}
+
+int GameLogic::GetLv(EWorld World)
+{
+	return PlayerStates[ World ].Lv;
+}
+
+
+int GameLogic::GetScore(EWorld World)
+{
+	return PlayerStates[ World ].Score;
+}
+
+int GameLogic::GetExp(EWorld World)
+{
+	return PlayerStates[ World ].Exp;
 }
 
 void GameLogic::AddScore(EWorld World , int Score)
@@ -30,12 +47,13 @@ void GameLogic::AddExp(EWorld World , int exp)
 	PlayerStates[ World ].Exp += exp;
 	if (PlayerStates[ World ].Exp >= LVUP_THRESHOLD)
 	{
-		Upgrade(World);
+		PlayerStates[ World ].Lv += 1;
 		PlayerStates[ World ].Exp -= LVUP_THRESHOLD;
+		SetLevel(World, PlayerStates[ World ].Lv);
 	}
 }
 
-void GameLogic::Upgrade(EWorld World)
+void GameLogic::SetLevel(EWorld World, int lv)
 {
 	MainGameScene* mainScene = GameManager::GetInstance().GetCurrentScene<MainGameScene>();
 
@@ -45,11 +63,11 @@ void GameLogic::Upgrade(EWorld World)
 
 	if (player != nullptr)
 	{
-		player->LevelUp();
+		player->SetLevel(lv);
 	}
 }
 
-void GameLogic::SpawnMonsterToWorld(EWorld World)
+void GameLogic::SpawnMonsterToWorld(EWorld World, int NumOfMonster = 1)
 {
 	MainGameScene* mainScene = GameManager::GetInstance().GetCurrentScene<MainGameScene>();
 	if (mainScene == nullptr)
@@ -57,7 +75,45 @@ void GameLogic::SpawnMonsterToWorld(EWorld World)
 	MonsterSpawner* spawner = mainScene->GetSpawner();
 	if (spawner != nullptr)
 	{
-		spawner->SpawnToWorld(World);
+		spawner->SpawnToWorld(World, NumOfMonster);
 	}
+}
+
+void GameLogic::EndGame(EWorld DeadPlayerWorld)
+{
+	GameManager::GetInstance().ChangeScene<ResultScene>();
+	GameManager::GetInstance().DeadPlayerWorld = DeadPlayerWorld;
+}
+
+void GameLogic::OnPlayerHit(EWorld World, int Damage)
+{
+	PlayerStates[World].Hp -= Damage;
+	if (PlayerStates[World].Hp <= 0)
+	{
+		PlayerStates[World].bIsAlive = false;
+		EndGame(World);
+	}
+}
+
+bool GameLogic::CanUseSpecialSkill(EWorld World)
+{
+	int score = GetScore(World);
+	if (score >= 10)
+	{
+		return true;
+	}
+	return false;
+}
+
+void GameLogic::UseSpecialSkill(EWorld World)
+{
+	if (!CanUseSpecialSkill(World))
+		return;
+
+	EWorld TargetWorld = World == EWorld::First ? EWorld::Second : EWorld::First;
+
+	int crrScore = GetScore(World);
+	AddScore(World, -crrScore);
+	SpawnMonsterToWorld(TargetWorld, crrScore);
 }
 

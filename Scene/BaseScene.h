@@ -1,5 +1,10 @@
 ﻿#pragma once
 #include <string>
+#include "ImGui/imgui.h"
+#include "Imgui/imgui_internal.h"
+#include "ImGui/imgui_impl_win32.h"
+#include "ImGui/imgui_impl_dx11.h"
+
 #include "Enum.h"
 
 class BaseScene
@@ -25,8 +30,8 @@ public:
 	virtual EScene GetCurrentSceneEnum() const = 0;
 
 
-
 protected:
 	std::string Name;
+
 };
 

@@ -12,25 +12,19 @@
 #include "ImGui/imgui_impl_dx11.h"
 
 #include "URenderer.h"
+#include "InputSystem.h"
 #include "GameObject/CircleObject.h"
 #include "GameObject/Player.h"
+#include "Manager/UIManager.h"
 #include "Manager/GameManager.h"
 #include "Manager/ObjectManager.h"
 #include "Scene/MainGameScene.h"
+#include "Scene/TitleScene.h"
+#include "Scene/PresetScene.h"
 #include "Math/FVector3.h"
+
 #include "Weapon/WeaponA.h"
 #include "Weapon/WeaponB.h"
-
-#include "InputSystem.h"
-#include "Manager/UIManager.h"
-
-enum class EPrimitiveType : UINT8
-{
-	EPT_Triangle,
-	EPT_Cube,
-	EPT_Sphere,
-	EPT_Max,
-};
 
 
 // ImGui WndProc 정의
@@ -88,6 +82,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void OpenDebugConsole()
 {
+#ifdef _DEBUG
 	AllocConsole(); // 콘솔 창 생성
 
 	// 표준 출력 및 입력을 콘솔과 연결
@@ -95,11 +90,14 @@ void OpenDebugConsole()
 	freopen_s((FILE**)stdin, "CONIN$", "r", stdin);
 
 	std::cout << "Debug Console Opened!" << std::endl;
+#endif // _DEBUG
 }
 
 void CloseDebugConsole()
 {
+#ifdef _DEBUG
 	FreeConsole(); // 콘솔 창 닫기
+#endif // _DEBUG
 }
 
 
@@ -177,28 +175,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	ObjectManager& objectManager = ObjectManager::GetInstance();
 	objectManager.Initialize(&Renderer);
 	
-	Player* player = objectManager.RegistObject<Player>(EWorld::First);
 	
-	WeaponA* weaponA = new WeaponA(player);
-
-	player->SetWeapon(weaponA);
-	player->SetVelocity(FVector3{ 1, 0, 0 });
-	// player 자체에서 바인딩?
-
-
-	Player* playerB = objectManager.RegistObject<Player>(EWorld::Second);
-
-	WeaponB* weaponB = new WeaponB(playerB);
-
-	playerB->SetWeapon(weaponB);
-	playerB->SetVelocity(FVector3{ 1, 0, 0 });
-
-	//DirectX::
-	float spawnCooldown = 1.f;
-	float timer = 0.f;
-
-	//int NumOfBalls = 1;
-
     // Main Loop
     bool bIsExit = false;
     while (bIsExit == false)
@@ -212,7 +189,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
         // 누적 시간 추가
         Accumulator += DeltaTime;
-		timer += DeltaTime;
 
         InputSystem::GetInstance().ExpireOnceMouse();
 
@@ -233,34 +209,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
             }
         }
 
-    	
-#pragma region Test Code
-    	// 게 임 로직 - Update, FixedUpdate, 플레이어 경험치, point, 
-		// 웨폰 + 레벨 시스템 + 레벨 증가 등
-
-		// 플레이어, 웨폰 클래스
-
-		// 몬스터, 잡다한 충돌
-
-        //if (InputSystem::GetInstance().GetMouseDown()) {
-        //    std::cout << "GetMouseDown" << "\n";
-        //}
-
-		//std::cout << timer << '\n';
-    	if (timer > spawnCooldown) {
-    		timer = 0.f;
-    		player->SetAngle(player->GetAngle() + 0.5f);
-    		player->SetVelocity(-player->GetVelocity());
-
-			playerB->SetAngle(playerB->GetAngle() + 0.5f);
-			playerB->SetVelocity(-playerB->GetVelocity());
-    		//std::cout << player->GetAngle() << '\n';
-    		// new랑 position, velocity, radius
-    		// objectManager.RegistObject<Player>(First);
-    		// objectManager.RegistObject<Player>(Second);
-    	}
-#pragma endregion
-
     	// FixedTimeStep 만큼 업데이트
     	while (Accumulator >= FixedTimeStep)
     	{
@@ -275,21 +223,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     		Accumulator -= FixedTimeStep;
     	}
 
-#pragma region Test Code
-		//std::cout << timer << '\n';
-		//if (timer > spawnCooldown) {
-		//	timer = 0.f;
-		//	player->SetAngle(player->GetAngle() + 0.5f);
-		//	player->SetVelocity(-player->GetVelocity());
-		//	std::cout << player->GetAngle() << '\n';
-		////	auto objecta = new Player(EWorld::First);
-		////	auto objectb = new Player(EWorld::Second);
-		////	// new랑 position, velocity, radius
-		////	objectManager.RegistObject(objecta);
-		////	objectManager.RegistObject(objectb);
-		//}
-
-#pragma endregion
 
         // 렌더링 준비 작업
         Renderer.Prepare();
@@ -298,39 +231,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     	GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
 		GameManager::GetInstance().GetCurrentScene()->Render();
         UIManager::GetInstance().Update(DeltaTime);
-
-		bool isPress = false;
-
-		for(EKeyCode Ek : InputSystem::GetInstance().GetPressedKeys()) {
-			std::cout << static_cast<uint8_t>(Ek) << " ";
-			isPress = true;
-		}
-		
-		if(isPress)
-			std::cout << "\n";
-
-        // ImGui Frame 생성
-        ImGui_ImplDX11_NewFrame();
-        ImGui_ImplWin32_NewFrame();
-        ImGui::NewFrame();
-
-        ImGui::Begin("DX11 Property Window");
-        {
-            ImGui::Text("Hello, World!");
-        	ImGui::Text("FPS: %.3f", ImGui::GetIO().Framerate);
-
-			ImGui::Text("Current Scene: %s" , GameManager::GetInstance().GetCurrentScene()->GetName().c_str());
-			if (ImGui::Button("Move to Main Game Scene"))
-			{
-				GameManager::GetInstance().ChangeScene<MainGameScene>();
-				GameManager::GetInstance().GetCurrentScene()->SetName("MainGameScene");
-			}
-        }
-        ImGui::End();
-
-        // ImGui 렌더링
-        ImGui::Render();
-        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
         // 현재 화면에 보여지는 버퍼와 그리기 작업을 위한 버퍼를 서로 교환
         Renderer.SwapBuffer();

@@ -17,12 +17,9 @@ void GameManager::Init(URenderer* InRenderer)
 	std::cout << "GameManager Init" << std::endl;
 }
 
+
 void GameManager::InitGameLogic()
-{
-	if (Logic)
-	{
-		return;
-	}
+{	
 
 	Logic = std::make_unique<GameLogic>();
 	Logic->Init();

@@ -1,21 +1,21 @@
-#pragma once
+﻿#pragma once
 
 #include "Weapon/BaseWeapon.h"
 #include "Manager/ObjectManager.h"
 #include "GameObject/Bullet/BulletA.h"
 #include "Enum.h"
+#include "Weapon/WeaponAData.h"
 
 
 // 기본 무기
 class WeaponA : public BaseWeapon {
 public:
-	float ShootCooldown;
-	float BulletSize;
-	float BulletSpeed;
+	WeaponAData WeaponData;
 
 	WeaponA(Player* player);
 
 	virtual void Update(float tick) override;
+	virtual void SetLevel(const int level) override;
 
 private:
 	float Timer;
