@@ -11,6 +11,17 @@ void UIManager::Update(float DeltaTime) {
 	ProcessRender();
 }
 
+UIObject* UIManager::CreateUIObject(FVector3 Location, FVector3 Scale, const char* TexturePath, void(*OnClickMethod)())
+{
+    UIObject* ui = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Title);
+    ui->SetLocation(Location);
+    ui->SetScale(Scale); //왜 y,z가 x,y인지???
+    ui->SetTexture(TexturePath);
+    ui->SetOnClickEvent(OnClickMethod);
+
+    return ui;
+}
+
 void UIManager::ProcessUpdate(float DeltaTime)
 {
     EScene sceneEnum = GameManager::GetInstance().GetCurrentSceneEnum();
