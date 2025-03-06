@@ -61,4 +61,6 @@ void GameManager::ChangeScene()
     }
     CurrentScene = std::make_unique<Scene>();
     CurrentScene->LoadScene();
+
+	std::cout << "Change Scene to " << typeid( Scene ).name() << std::endl;
 }

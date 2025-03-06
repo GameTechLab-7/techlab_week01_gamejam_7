@@ -3,6 +3,7 @@
 #include "Scene/MainGameScene.h"
 #include "Manager/GameManager.h"
 #include "Player.h"
+#include "GlobalData.h"
 
 #include <iostream>
 #include <cassert>
@@ -18,7 +19,7 @@ Monster::Monster(EWorld SelectedWorld) : CircleObject(SelectedWorld)
 
 	Target = Scene->GetPlayer(SelectedWorld);
 	Texture->SetPrimitiveType(EObjectType::Enemy);
-    HitInvisibleTime = 0.2f;
+    HitInvisibleTime = MONSTER_HIT_INVISIBLE_TIME;
 
     Drag = 0.5f;
 	Acceleration = FVector3(0 , 0 , 0);

@@ -6,7 +6,7 @@
 
 // 외부에서 멤버변수 초기화
 BulletB::BulletB(EWorld selectedWorld) : Bullet(selectedWorld) {
-    Damage = 1;
+    Damage = 2;
 }
 
 void BulletB::HandleWallCollision(const FVector3& WallNormal)
