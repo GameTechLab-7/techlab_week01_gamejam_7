@@ -91,6 +91,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 void OpenDebugConsole()
 {
+#ifdef _DEBUG
 	AllocConsole(); // 콘솔 창 생성
 
 	// 표준 출력 및 입력을 콘솔과 연결
@@ -98,11 +99,14 @@ void OpenDebugConsole()
 	freopen_s((FILE**)stdin, "CONIN$", "r", stdin);
 
 	std::cout << "Debug Console Opened!" << std::endl;
+#endif // _DEBUG
 }
 
 void CloseDebugConsole()
 {
+#ifdef _DEBUG
 	FreeConsole(); // 콘솔 창 닫기
+#endif // _DEBUG
 }
 
 

@@ -52,10 +52,23 @@ void MainGameScene::Render()
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
-    ImGui::Begin("Preset Scene");
+    ImGui::Begin("Main Game Scene");
 
     ImGui::Text("Score  Left: %d, Right: %d" , GameManager::GetInstance().GetLogic()->GetScore(EWorld::First) , GameManager::GetInstance().GetLogic()->GetScore(EWorld::Second));
 
+	ImGui::Text("Exp  Left: %d, Right: %d", GameManager::GetInstance().GetLogic()->GetExp(EWorld::First), GameManager::GetInstance().GetLogic()->GetExp(EWorld::Second));
+
+    if (GameManager::GetInstance().GetLogic()->CanUseSpecialSkill(EWorld::First))
+    {
+        ImGui::Text("Player 1 Can Use Special Skill! Press E!");
+    }
+
+	if (GameManager::GetInstance().GetLogic()->CanUseSpecialSkill(EWorld::Second))
+	{
+        ImGui::Text("Player 2 Can Use Special Skill! Press U!");
+	}
+
+#ifdef _DEBUG
 
     if (ImGui::Button("Left use 10 Score")) {
         GameManager::GetInstance().GetLogic()->SpawnMonsterToWorld(EWorld::Second , 100);
@@ -169,6 +182,7 @@ void MainGameScene::Render()
     if (ImGui::SliderInt("Monster Increase Num" , &MonsterIncreaseNum , 1 , 10)) {
         spawner->SetMonsterIncreaseNum(MonsterIncreaseNum);
     }
+#endif // DEBUG
 
     ImGui::End();
     ImGui::Render();

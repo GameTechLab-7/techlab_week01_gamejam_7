@@ -32,6 +32,11 @@ int GameLogic::GetScore(EWorld World)
 	return PlayerStates[ World ].Score;
 }
 
+int GameLogic::GetExp(EWorld World)
+{
+	return PlayerStates[ World ].Exp;
+}
+
 void GameLogic::AddScore(EWorld World , int Score)
 {
 	PlayerStates[ World ].Score += Score;
@@ -88,5 +93,27 @@ void GameLogic::OnPlayerHit(EWorld World, int Damage)
 		PlayerStates[World].bIsAlive = false;
 		EndGame(World);
 	}
+}
+
+bool GameLogic::CanUseSpecialSkill(EWorld World)
+{
+	int score = GetScore(World);
+	if (score >= 10)
+	{
+		return true;
+	}
+	return false;
+}
+
+void GameLogic::UseSpecialSkill(EWorld World)
+{
+	if (!CanUseSpecialSkill(World))
+		return;
+
+	EWorld TargetWorld = World == EWorld::First ? EWorld::Second : EWorld::First;
+
+	int crrScore = GetScore(World);
+	AddScore(World, -crrScore);
+	SpawnMonsterToWorld(TargetWorld, crrScore);
 }
 

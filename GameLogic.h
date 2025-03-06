@@ -44,6 +44,7 @@ public:
 	int GetPreset(EWorld World);
 	int GetLv(EWorld World);
 	int GetScore(EWorld World);
+	int GetExp(EWorld World);
 
 	void AddScore(EWorld World , int Score);
 
@@ -56,6 +57,10 @@ public:
 	void EndGame(EWorld DeadPlayerWorld);
 
 	void OnPlayerHit(EWorld World, int Damage);
+
+	bool CanUseSpecialSkill(EWorld World);
+
+	void UseSpecialSkill(EWorld World);
 
 };
 
