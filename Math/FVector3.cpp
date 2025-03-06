@@ -8,6 +8,11 @@ FVector3::FVector3()
 {
 }
 
+FVector3::FVector3(float scalar)
+	: x(scalar), y(scalar), z(scalar)
+{
+}
+
 FVector3::FVector3(float x, float y, float z)
 	: x(x), y(y), z(z)
 {
