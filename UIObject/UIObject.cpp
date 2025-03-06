@@ -1,9 +1,11 @@
 ﻿#include "UIObject.h"
 
+#include "Manager/ResourceManager.h"
+
 UIObject::UIObject(EScene currentScene) {
     MyScene = currentScene;
 
-    Texture = UTexture2D::LoadTargaFromFile("Assets/Texture/default.tga");
+    Texture = ResourceManager::GetInstance().LoadTargaFromFile("Assets/Texture/default.tga");
     Texture->SetPrimitiveType(EObjectType::UI);
 }
 
@@ -14,4 +16,10 @@ void UIObject::Render(const URenderer& Renderer) const {
 
 void UIObject::Update(float DeltaTime) {
 
+}
+
+void UIObject::SetTexture(const char* FileName)
+{
+    Texture = ResourceManager::GetInstance().LoadTargaFromFile(FileName);
+    Texture->SetPrimitiveType(EObjectType::UI);
 }

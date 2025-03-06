@@ -15,6 +15,7 @@ public:
 	
 	void SetLocation(const FVector3& NewLocation) { Location = NewLocation; }
 	void SetScale(const FVector3& NewScale) { Scale = NewScale; }
+	void SetTexture(const char* FileName);
 
 	FVector3 GetLocation() { return Location; }
 	FVector3 GetScale() { return Scale; }
@@ -22,7 +23,7 @@ public:
 	void OnClick() { if(OnClickEvent != nullptr) OnClickEvent(); }
 	void SetOnClickEvent(void(*Fn)()) { OnClickEvent = Fn; }
 private:
-	std::unique_ptr<UTexture2D> Texture;
+	std::shared_ptr<UTexture2D> Texture;
 
 	FVector3 Location;
 	FVector3 Scale;

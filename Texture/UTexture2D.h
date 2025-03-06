@@ -21,9 +21,10 @@ private:
         unsigned char Data2;
     };
 
+    friend class ResourceManager;
+
 public:
     UTexture2D() = default;
-    static std::unique_ptr<UTexture2D> LoadTargaFromFile(const char* FileName);
 
     void Render(const URenderer& Renderer) const;
 
@@ -34,6 +35,8 @@ public:
     void SetPrimitiveType(EObjectType NewPrimitiveType) { PrimitiveType = NewPrimitiveType; }
 
 private:
+    static UTexture2D* LoadTargaFromFile(const char* FileName);
+
     /**
      * Targa 이미지 파일을 불러옵니다.
      * @return Targa Data

@@ -159,6 +159,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
+    <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Math\FVector3.cpp" />
     <ClCompile Include="MonsterSpawner.cpp" />
     <ClCompile Include="PrimitiveVertices.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\ObjectManager.h" />
+    <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Math\FVector3.h" />
     <ClInclude Include="MonsterSpawner.h" />
     <ClInclude Include="PrimitiveVertices.h" />

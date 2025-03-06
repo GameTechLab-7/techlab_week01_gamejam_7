@@ -1,8 +1,10 @@
 ﻿#include "Player.h"
 #include "URenderer.h"
 #include "Constant.h"
-#include "Manager/GameManager.h"
 #include "GlobalData.h"
+#include "Manager/GameManager.h"
+#include "Manager/ResourceManager.h"
+
 Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 {
     Radius = 0.05f;
@@ -14,7 +16,7 @@ Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 
     Radian = 0;
 
-    Texture = UTexture2D::LoadTargaFromFile("Assets/Texture/red.tga");
+    Texture = ResourceManager::GetInstance().LoadTargaFromFile("Assets/Texture/red.tga");
     Texture->SetPrimitiveType(EObjectType::Player);
 
     bIsHitInvisible = false;
