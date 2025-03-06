@@ -30,34 +30,22 @@ ID3D11Buffer* BufferCache::GetBuffer(EObjectType Type)
 ID3D11Buffer* BufferCache::CreateVertexBuffer(EObjectType Type)
 {
 	ID3D11Buffer* buffer = nullptr;
-	int size = 0;
 	switch (Type)
 	{
 	case EObjectType::Player:
-	{
-		//플레이어 버텍스 버퍼 생성 -> 플레이어는 구
-		size = BufferSize[ Type ] = std::size(sphere_vertices);
-		buffer = GameManager::GetInstance().GetRenderer()->CreateVertexBuffer(sphere_vertices , sizeof(FVertexSimple) * size);
-		break;
-	}
+		[[fallthrough]];
 	case EObjectType::Enemy:
-	{
-		//적 버텍스 버퍼 생성
-		size = BufferSize[ Type ] = std::size(sphere_vertices);
-		buffer = GameManager::GetInstance().GetRenderer()->CreateVertexBuffer(sphere_vertices , sizeof(FVertexSimple) * size);
-		break;
-	}
+		[[fallthrough]];
 	case EObjectType::Bullet:
 	{
 		//총알 버텍스 버퍼 생성
-		size = BufferSize[ Type ] = std::size(sphere_vertices);
+		const int size = BufferSize[ Type ] = std::size(sphere_vertices);
 		buffer = GameManager::GetInstance().GetRenderer()->CreateVertexBuffer(sphere_vertices , sizeof(FVertexSimple) * size);
 		break;
 	}
 	case EObjectType::UI:
 	{
-		
-		size = BufferSize[ Type ] = std::size(square_vertices);
+		const int size = BufferSize[ Type ] = std::size(square_vertices);
 		buffer = GameManager::GetInstance().GetRenderer()->CreateVertexBuffer(square_vertices , sizeof(FVertexSimple) * size);
 		break;
 	}
