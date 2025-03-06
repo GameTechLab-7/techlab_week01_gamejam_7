@@ -157,6 +157,7 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Manager\AudioManager.cpp" />
     <ClCompile Include="Manager\GameManager.cpp" />
     <ClCompile Include="Manager\ObjectManager.cpp" />
     <ClCompile Include="Manager\ResourceManager.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Manager\AudioManager.h" />
     <ClInclude Include="Manager\GameManager.h" />
     <ClInclude Include="Manager\ObjectManager.h" />
     <ClInclude Include="Manager\ResourceManager.h" />
