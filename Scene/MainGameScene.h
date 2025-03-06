@@ -7,7 +7,7 @@
 class Player;
 class MonsterSpawner;
 
-class MainGameScene : public BaseScene
+class MainGameScene : public Scene<MainGame>
 {
 
 public:
@@ -35,8 +35,4 @@ private:
 public:
     Player* GetPlayer(EWorld WorldType) const;
 	MonsterSpawner* GetSpawner() const { return Spawner.get(); }
-    
-    virtual EScene GetCurrentSceneEnum() const override {
-        return EScene::MainGame;
-    }
 };

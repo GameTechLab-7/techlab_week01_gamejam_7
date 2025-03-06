@@ -35,3 +35,10 @@ protected:
 
 };
 
+template <EScene SceneType>
+class Scene : public BaseScene {
+public:
+	virtual EScene GetCurrentSceneEnum() const override {
+		return SceneType;
+	}
+};

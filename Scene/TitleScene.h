@@ -2,15 +2,11 @@
 #include "BaseScene.h"
 
 
-class TitleScene : public BaseScene
+class TitleScene : public Scene<Title>
 {
     virtual void LoadScene() override;
     virtual void ExitScene() override;
     virtual void Render() override;
-
-    virtual EScene GetCurrentSceneEnum() const override {
-        return EScene::Title;
-    }
 
 public:
 	void OnClickQuit(); // 종료
