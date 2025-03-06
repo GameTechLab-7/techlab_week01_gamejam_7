@@ -11,9 +11,9 @@ void UIManager::Update(float DeltaTime) {
 	ProcessRender();
 }
 
-UIObject* UIManager::CreateUIObject(FVector3 Location, FVector3 Scale, const char* TexturePath, void(*OnClickMethod)())
+UIObject* UIManager::CreateUIObject(FVector3 Location, FVector3 Scale, const char* TexturePath, EScene scene, void(*OnClickMethod)())
 {
-    UIObject* ui = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Title);
+    UIObject* ui = UIManager::GetInstance().RegistUIObject<UIObject>(scene);
     ui->SetLocation(Location);
     ui->SetScale(Scale); //왜 y,z가 x,y인지???
     ui->SetTexture(TexturePath);

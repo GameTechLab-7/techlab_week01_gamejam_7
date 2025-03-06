@@ -54,14 +54,14 @@ void PresetScene::Render()
 			ImGui::EndCombo();
 		}
 
-		if (ImGui::Button("Start"))
-		{
-			GameManager::GetInstance().GetLogic()->SetPreset(First , Player1Preset);
-			GameManager::GetInstance().GetLogic()->SetPreset(Second , Player2Preset);
+		//if (ImGui::Button("Start"))
+		//{
+		//	GameManager::GetInstance().GetLogic()->SetPreset(First , Player1Preset);
+		//	GameManager::GetInstance().GetLogic()->SetPreset(Second , Player2Preset);
 
-			GameManager::GetInstance().ChangeScene<MainGameScene>();
-			GameManager::GetInstance().GetCurrentScene()->SetName("MainGameScene");
-		}
+		//	GameManager::GetInstance().ChangeScene<MainGameScene>();
+		//	GameManager::GetInstance().GetCurrentScene()->SetName("MainGameScene");
+		//}
 	}
 	ImGui::End();
 	ImGui::Render();

@@ -23,16 +23,16 @@ void ResultScene::Render()
 	{
 		ImGui::Text("Winner is %s" , GameManager::GetInstance().DeadPlayerWorld == EWorld::First ? "Player2" : "Player1");
 
-		if (ImGui::Button("ReStart"))
-		{
-			GameManager::GetInstance().ChangeScene<PresetScene>();
-			GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene");
-		}
+		//if (ImGui::Button("ReStart"))
+		//{
+		//	GameManager::GetInstance().ChangeScene<PresetScene>();
+		//	GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene");
+		//}
 
-		if (ImGui::Button("Quit"))
-		{
-			PostQuitMessage(0);
-		}
+		//if (ImGui::Button("Quit"))
+		//{
+		//	PostQuitMessage(0);
+		//}
 	}
 
 	ImGui::End();

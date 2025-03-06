@@ -169,45 +169,25 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 #pragma region Test UI Rendering
     UIManager& uiManager = UIManager::GetInstance();
     uiManager.Initialize(&Renderer);
-    uiManager.CreateUIObject(FVector3(0.0f, -0.5f, 0.0f), FVector3(1.0f, 0.5f, 0.2f), "Assets/Texture/startButton.tga", [](){std::cout << "click\n"; });
-#pragma endregion
-
-
-    UIObject* ui = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Title);
-    ui->SetLocation(FVector3(0.0f , 0.5f , 0.0f));
-    ui->SetScale(FVector3(1.0f , 0.5f , 0.2f)); //왜 y,z가 x,y인지???
-    ui->SetOnClickEvent([ ] () {
-    	GameManager::GetInstance().ChangeScene<PresetScene>();
-		GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene");
-    });
-
-    UIObject* ui1 = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Preset);
-    ui1->SetLocation(FVector3(0.0f, 0.5f, 0.0f));
-    ui1->SetScale(FVector3(1.0f, 0.5f, 0.2f)); //왜 y,z가 x,y인지???
-    ui1->SetOnClickEvent([ ] () {
+    uiManager.CreateUIObject(FVector3(0.0f, -0.5f, 0.0f), FVector3(1.0f, 0.5f, 0.2f), "Assets/Texture/startButton1.tga", Title, [ ] () {
+        GameManager::GetInstance().ChangeScene<PresetScene>();
+        GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene"); 
+        });
+    uiManager.CreateUIObject(FVector3(0.0f, -0.5f, 0.0f), FVector3(1.0f, 0.5f, 0.2f), "Assets/Texture/startButton2.tga", Preset, [ ] () {
         GameManager::GetInstance().ChangeScene<MainGameScene>();
         GameManager::GetInstance().GetCurrentScene()->SetName("MainGameScene");
-    });
-
-    UIObject* ui2 = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Result);
-    ui2->SetLocation(FVector3(0.0f, 0.5f, 0.0f));
-    ui2->SetScale(FVector3(1.0f, 0.5f, 0.2f)); //왜 y,z가 x,y인지???
-    ui2->SetOnClickEvent([ ] () {
+        });
+    uiManager.CreateUIObject(FVector3(0.0f, 0.5f, 0.0f), FVector3(1.0f, 0.5f, 0.2f), "Assets/Texture/reStartButton.tga", Result, [ ] () {
         GameManager::GetInstance().ChangeScene<TitleScene>();
         GameManager::GetInstance().GetCurrentScene()->SetName("TitleScene");
-    });
-
-    UIObject* ui3 = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Result); //quit
-    ui3->SetLocation(FVector3(0.0f, -0.5f, 0.0f));
-    ui3->SetScale(FVector3(1.0f, 0.5f, 0.2f)); //왜 y,z가 x,y인지???
-    ui3->SetOnClickEvent([ ] () {
+        });
+    uiManager.CreateUIObject(FVector3(0.0f, -0.5f, 0.0f), FVector3(1.0f, 0.5f, 0.2f), "Assets/Texture/quit.tga", Result, [](){
         PostQuitMessage(0);
-    });
-
+        });
+#pragma endregion
 
 	ObjectManager& objectManager = ObjectManager::GetInstance(); 
 	objectManager.Initialize(&Renderer);
-
 
 	std::unique_ptr<BackGround> backGround = std::make_unique<BackGround>();
 	

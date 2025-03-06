@@ -20,21 +20,21 @@ void TitleScene::Render()
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::Begin("Title Scene");
-	{
-		if (ImGui::Button("Start")) 
-		{
-			GameManager::GetInstance().ChangeScene<PresetScene>();
-			GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene");
-		}
+	//ImGui::Begin("Title Scene");
+	//{
+	//	if (ImGui::Button("Start")) 
+	//	{
+	//		GameManager::GetInstance().ChangeScene<PresetScene>();
+	//		GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene");
+	//	}
 
-		if (ImGui::Button("Quit"))
-		{
-			PostQuitMessage(0);
-		}
-	}
+	//	if (ImGui::Button("Quit"))
+	//	{
+	//		PostQuitMessage(0);
+	//	}
+	//}
 
-	ImGui::End();
+	//ImGui::End();
 
 	// ImGui 렌더링
 	ImGui::Render();
