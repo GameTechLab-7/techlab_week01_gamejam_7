@@ -58,6 +58,8 @@ void MainGameScene::Render()
 
 	ImGui::Text("Exp  Left: %d, Right: %d", GameManager::GetInstance().GetLogic()->GetExp(EWorld::First), GameManager::GetInstance().GetLogic()->GetExp(EWorld::Second));
 
+	ImGui::Text("Player 1 HP : %d, Player 2 HP: %d", GameManager::GetInstance().GetLogic()->GetHP(EWorld::First), GameManager::GetInstance().GetLogic()->GetHP(EWorld::Second));
+
     if (GameManager::GetInstance().GetLogic()->CanUseSpecialSkill(EWorld::First))
     {
         ImGui::Text("Player 1 Can Use Special Skill! Press E!");

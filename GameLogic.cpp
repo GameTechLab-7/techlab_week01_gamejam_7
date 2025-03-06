@@ -41,6 +41,11 @@ int GameLogic::GetExp(EWorld World)
 	return PlayerStates[ World ].Exp;
 }
 
+int GameLogic::GetHP(EWorld World)
+{
+	return  PlayerStates[ World ].Hp;
+}
+
 void GameLogic::AddScore(EWorld World , int Score)
 {
 	PlayerStates[ World ].Score += Score;
