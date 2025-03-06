@@ -22,6 +22,7 @@
 #include "Weapon/WeaponB.h"
 
 #include "InputSystem.h"
+#include "Manager/UIManager.h"
 
 enum class EPrimitiveType : UINT8
 {
@@ -165,6 +166,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	GameManager::GetInstance().Init(&Renderer);
 
+    UIManager& uiManager = UIManager::GetInstance();
+    uiManager.Initialize(&Renderer);
+
+    UIObject* ui = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Title);
+    ui->SetLocation(FVector3(0.0f , 0.5f , 0.0f));
+    ui->SetScale(FVector3(1.0f , 0.5f , 0.2f)); //왜 y,z가 x,y인지???
+    ui->SetOnClickEvent([ ] () {std::cout << "click\n"; });
+
 	ObjectManager& objectManager = ObjectManager::GetInstance();
 	objectManager.Initialize(&Renderer);
 	
@@ -233,9 +242,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 		// 몬스터, 잡다한 충돌
 
-        if (InputSystem::GetInstance().GetMouseDown()) {
-            std::cout << "GetMouseDown" << "\n";
-        }
+        //if (InputSystem::GetInstance().GetMouseDown()) {
+        //    std::cout << "GetMouseDown" << "\n";
+        //}
 
 		//std::cout << timer << '\n';
     	if (timer > spawnCooldown) {
@@ -288,6 +297,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
     	GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
 		GameManager::GetInstance().GetCurrentScene()->Render();
+        UIManager::GetInstance().Update(DeltaTime);
 
 		bool isPress = false;
 

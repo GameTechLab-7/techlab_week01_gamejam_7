@@ -1,6 +1,6 @@
-#pragma once
+﻿#pragma once
 #include <string>
-
+#include "Enum.h"
 
 class BaseScene
 {
@@ -22,8 +22,11 @@ public:
 	std::string GetName() const { return Name; }
 	void SetName(const char* name) { Name = name; }
 
+	virtual EScene GetCurrentSceneEnum() const = 0;
+
+
+
 protected:
 	std::string Name;
-
 };
 

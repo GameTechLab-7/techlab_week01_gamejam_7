@@ -165,17 +165,13 @@
     <ClCompile Include="Scene\MainGameScene.cpp" />
     <ClCompile Include="Scene\PresetScene.cpp" />
     <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="Manager\UIManager.cpp" />
+    <ClCompile Include="UIObject\UIObject.cpp" />
     <ClCompile Include="URenderer.cpp" />
     <ClCompile Include="Weapon\BaseWeapon.cpp" />
     <ClCompile Include="Weapon\WeaponA.cpp" />
     <ClCompile Include="Weapon\WeaponB.cpp" />
     <ClCompile Include="Weapon\WeaponC.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="Shaders\ShaderW0.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
@@ -207,6 +203,8 @@
     <ClInclude Include="Scene\PresetScene.h" />
     <ClInclude Include="Enum.h" />
     <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="Manager\UIManager.h" />
+    <ClInclude Include="UIObject\UIObject.h" />
     <ClInclude Include="URenderer.h" />
     <ClInclude Include="Weapon\BaseWeapon.h" />
     <ClInclude Include="Weapon\WeaponA.h" />
@@ -217,6 +215,11 @@
     <Content Include=".gitignore" />
     <Content Include="README.md" />
     <Content Include="TODO.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\ShaderW0.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

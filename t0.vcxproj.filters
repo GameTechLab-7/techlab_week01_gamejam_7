@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <FxCompile Include="Shaders\ShaderW0.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="BufferCache.cpp" />
     <ClCompile Include="GameObject\CircleObject.cpp" />
     <ClCompile Include="GameObject\Monster.cpp" />
@@ -33,6 +30,10 @@
     <ClCompile Include="GameObject\Bullet\BulletA.cpp" />
     <ClCompile Include="GameObject\Bullet\BulletB.cpp" />
     <ClCompile Include="GameObject\Bullet\Bullet.cpp" />
+    <ClCompile Include="GameLogic.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
+    <ClCompile Include="Manager\UIManager.cpp" />
+    <ClCompile Include="UIObject\UIObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractClass\Singleton.h" />
@@ -67,5 +68,12 @@
     <ClInclude Include="GameObject\Bullet\BulletA.h" />
     <ClInclude Include="GameObject\Bullet\BulletB.h" />
     <ClInclude Include="GameObject\Bullet\BulletC.h" />
+    <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="InputSystem.h" />
+    <ClInclude Include="Manager\UIManager.h" />
+    <ClInclude Include="UIObject\UIObject.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\ShaderW0.hlsl" />
   </ItemGroup>
 </Project>

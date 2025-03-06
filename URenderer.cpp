@@ -4,7 +4,7 @@
 struct alignas( 16 ) URenderer::FConstants
 {
     FVector3 Offset;
-    float Scale;
+    FVector3 Scale;
     float Radian;
 };
 
@@ -48,6 +48,11 @@ void URenderer::CreateShader()
 
     // 셰이더 컴파일 및 생성
     D3DCompileFromFile(L"Shaders/ShaderW0.hlsl" , nullptr , nullptr , "mainVS" , "vs_5_0" , 0 , 0 , &VertexShaderCSO , nullptr);
+    //if (FAILED(hr)) {
+    //    std::cout << "Shader compile Error: " << ( char* ) ErrorCSO->GetBufferPointer() << "\n";
+    //    ErrorCSO->Release();
+    //}
+
     Device->CreateVertexShader(VertexShaderCSO->GetBufferPointer() , VertexShaderCSO->GetBufferSize() , nullptr , &SimpleVertexShader);
 
     D3DCompileFromFile(L"Shaders/ShaderW0.hlsl" , nullptr , nullptr , "mainPS" , "ps_5_0" , 0 , 0 , &PixelShaderCSO , nullptr);
@@ -144,6 +149,11 @@ void URenderer::PrepareViewport(EWorld World) const
 
 }
 
+void URenderer::PrepareUIViewport() const {
+    DeviceContext->RSSetViewports(1 , &UIViewPort);
+    DeviceContext->RSSetState(RasterizerState);
+}
+
 /** 셰이더를 준비 합니다. */
 void URenderer::PrepareShader() const
 {
@@ -206,7 +216,7 @@ void URenderer::ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const
 }
 
 /** Constant Data를 업데이트 합니다. */
-void URenderer::UpdateConstant(const FVector3& Offset , float Scale, float Radian) const
+void URenderer::UpdateConstant(const FVector3& Offset , FVector3 Scale, float Radian) const
 {
     if (!ConstantBuffer) return;
 
@@ -220,6 +230,25 @@ void URenderer::UpdateConstant(const FVector3& Offset , float Scale, float Radia
         FConstants* Constants = static_cast< FConstants* >( ConstantBufferMSR.pData );
         Constants->Offset = Offset;
         Constants->Scale = Scale;
+        Constants->Radian = Radian;
+    }
+    DeviceContext->Unmap(ConstantBuffer , 0);
+}
+
+void URenderer::UpdateConstant(const FVector3& Offset , float Scale , float Radian) const
+{
+    if (!ConstantBuffer) return;
+
+    D3D11_MAPPED_SUBRESOURCE ConstantBufferMSR;
+
+    // 상수 버퍼를 CPU 메모리에 매핑
+    // D3D11_MAP_WRITE_DISCARD는 이전 내용을 무시하고 새로운 데이터로 덮어쓰기 위해 사용
+    DeviceContext->Map(ConstantBuffer , 0 , D3D11_MAP_WRITE_DISCARD , 0 , &ConstantBufferMSR);
+    {
+        // 매핑된 메모리를 FConstants 구조체로 캐스팅
+        FConstants* Constants = static_cast< FConstants* >( ConstantBufferMSR.pData );
+        Constants->Offset = Offset;
+        Constants->Scale = FVector3(Scale,Scale,Scale);
         Constants->Radian = Radian;
     }
     DeviceContext->Unmap(ConstantBuffer , 0);
@@ -275,19 +304,24 @@ void URenderer::CreateDeviceAndSwapChain(HWND hWindow)
     // 생성된 SwapChain의 정보 가져오기
     SwapChain->GetDesc(&SwapChainDesc);
 
-        // 뷰포트 정보 설정
-        viewports.insert({ EWorld::First, {
-            -( static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f ), 0.0f,
-            static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
-            0.0f, 1.0f
-        } });
+    // 뷰포트 정보 설정
+    viewports.insert({ EWorld::First, {
+        -( static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f ), 0.0f,
+        static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
+        0.0f, 1.0f
+    } });
 
-        viewports.insert({ EWorld::Second, {
-            static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f, 0.0f,
-            static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
-            0.0f, 1.0f
-        } });
-    }
+    viewports.insert({ EWorld::Second, {
+        static_cast< float >( SwapChainDesc.BufferDesc.Width ) / 2.0f, 0.0f,
+        static_cast< float >( SwapChainDesc.BufferDesc.Width ), static_cast< float >( SwapChainDesc.BufferDesc.Height ),
+        0.0f, 1.0f
+    } });
+
+    UIViewPort = { 0.0f , 0.0f ,
+            static_cast< float >( SwapChainDesc.BufferDesc.Width ) , static_cast< float >( SwapChainDesc.BufferDesc.Height ) ,
+            0.0f , 1.0f };
+
+}
 
 /** Direct3D Device 및 SwapChain을 해제합니다.  */
 void URenderer::ReleaseDeviceAndSwapChain()
@@ -372,6 +406,7 @@ ID3D11Buffer* URenderer::GetVertexBuffer(EObjectType Type) const
     {
         return nullptr;
     }
+
     return Cache->GetBuffer(Type);
 }
 

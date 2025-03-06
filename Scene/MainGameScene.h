@@ -34,4 +34,8 @@ private:
 public:
     Player* GetPlayer(EWorld WorldType) const;
 	MonsterSpawner* GetSpawner() const { return Spawner.get(); }
+    
+    virtual EScene GetCurrentSceneEnum() const override {
+        return EScene::MainGame;
+    }
 };
