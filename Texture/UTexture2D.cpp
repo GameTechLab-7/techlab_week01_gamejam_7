@@ -16,9 +16,9 @@ void UTexture2D::Render(const URenderer& Renderer) const
     Renderer.RenderPrimitive(Renderer.GetVertexBuffer(PrimitiveType), Renderer.GetBufferSize(PrimitiveType));
 }
 
-std::unique_ptr<UTexture2D> UTexture2D::LoadTargaFromFile(const char* FileName)
+UTexture2D* UTexture2D::LoadTargaFromFile(const char* FileName)
 {
-    auto Texture = std::make_unique<UTexture2D>();
+    UTexture2D* Texture = new UTexture2D();
     Texture->CreateShaderResource(Texture->LoadTarga(FileName));
     return Texture;
 }
