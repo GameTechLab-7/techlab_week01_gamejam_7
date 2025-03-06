@@ -1,7 +1,7 @@
 cbuffer Constants : register(b0)
 {
     float3 Offset;
-    float Scale;
+    float3 Scale;
     float Radian;
 }
 
@@ -35,8 +35,8 @@ PS_INPUT TextureShaderVS(VS_INPUT Input)
 
     // 크기 조절, 회전, 이동 모두 적용
     Output.Position = float4(
-        RotatedXY * Scale + Offset.xy,
-        Input.Position.z * Scale + Offset.z,
+        RotatedXY * Scale.xy + Offset.xy,
+        Input.Position.z * Scale.z + Offset.z,
         Input.Position.w
     );
 
