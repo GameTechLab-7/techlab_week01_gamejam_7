@@ -167,13 +167,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
     UIManager& uiManager = UIManager::GetInstance();
     uiManager.Initialize(&Renderer);
+    uiManager.CreateUIObject(FVector3(0.0f, -0.5f, 0.0f), FVector3(1.0f, 0.5f, 0.2f), "Assets/Texture/startButton.tga", [](){std::cout << "click\n"; });
 
-    UIObject* ui = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Title);
-    ui->SetLocation(FVector3(0.0f , 0.5f , 0.0f));
-    ui->SetScale(FVector3(1.0f , 0.5f , 0.2f)); //왜 y,z가 x,y인지???
-    ui->SetOnClickEvent([ ] () {std::cout << "click\n"; });
-
-	ObjectManager& objectManager = ObjectManager::GetInstance();
+	ObjectManager& objectManager = ObjectManager::GetInstance(); 
 	objectManager.Initialize(&Renderer);
 
 
