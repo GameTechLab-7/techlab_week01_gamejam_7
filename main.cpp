@@ -18,6 +18,7 @@
 #include "Manager/UIManager.h"
 #include "Manager/GameManager.h"
 #include "Manager/ObjectManager.h"
+#include "Manager/ResourceManager.h"
 #include "Scene/MainGameScene.h"
 #include "Scene/TitleScene.h"
 #include "Scene/PresetScene.h"
@@ -165,8 +166,12 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	GameManager::GetInstance().Init(&Renderer);
 
+#pragma region Test UI Rendering
     UIManager& uiManager = UIManager::GetInstance();
     uiManager.Initialize(&Renderer);
+    uiManager.CreateUIObject(FVector3(0.0f, -0.5f, 0.0f), FVector3(1.0f, 0.5f, 0.2f), "Assets/Texture/startButton.tga", [](){std::cout << "click\n"; });
+#pragma endregion
+
 
     UIObject* ui = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Title);
     ui->SetLocation(FVector3(0.0f , 0.5f , 0.0f));
@@ -199,8 +204,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         PostQuitMessage(0);
     });
 
-	ObjectManager& objectManager = ObjectManager::GetInstance();
+
+	ObjectManager& objectManager = ObjectManager::GetInstance(); 
 	objectManager.Initialize(&Renderer);
+
 
 	std::unique_ptr<BackGround> backGround = std::make_unique<BackGround>();
 	
@@ -240,14 +247,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     	// FixedTimeStep 만큼 업데이트
     	while (Accumulator >= FixedTimeStep)
     	{
-			//FixedUpdate(FixedTimeStep); //마찬가지로 ObjectManager에 있는 FixedUpdate
-
-    		// 공 충돌 처리 -> 마찬가지로 ObjectManager에서
-    		//if (CircleObject::CheckCollision(*Balls[i], *Balls[j]))
-    		//{
-    		//	Balls[i]->HandleBallCollision(*Balls[j]);
-    		//}
-
     		Accumulator -= FixedTimeStep;
     	}
 

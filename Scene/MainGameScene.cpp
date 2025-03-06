@@ -6,9 +6,11 @@
 #include "Weapon/WeaponA.h"
 #include "Weapon/WeaponB.h"
 #include "InputSystem.h"
+#include "Manager/AudioManager.h"
 
 void MainGameScene::LoadScene()
 {
+	AudioManager::GetInstance().PlayLoop(AudioType::PlayBackground);
 
 	InputHandlerInstance = std::make_unique<InputHandler>();
   
@@ -206,8 +208,8 @@ Player* MainGameScene::GetPlayer(EWorld WorldType) const
 
 
 FVertexSimple LineVertices[ ] = {
-	{1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
-	{1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
+	{1.0f, -1.0f, 0.0f, 1.0f, -1.0f},
+	{1.0f, 1.0f, 0.0f, 1.0f, 1.0f},
 };
 
 void MainGameScene::RenderWall(URenderer* Renderer) {
