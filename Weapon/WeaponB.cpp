@@ -7,7 +7,7 @@ WeaponB::WeaponB(Player* player) : BaseWeapon(player) {
 	SetLevel(1);
 	Radian = 0.f;
 
-	SpawnBullet(WeaponData.NumOfBullets);
+	//SpawnBullet(WeaponData.NumOfBullets);
 };
 
 // 보유중인 Bullet은 Object
