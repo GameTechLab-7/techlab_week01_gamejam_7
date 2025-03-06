@@ -20,12 +20,12 @@ void UIManager::ProcessUpdate(float DeltaTime)
     for (auto& Object : UIObjectsMap.at((int)sceneEnum))
     {
         if (InputSystem::GetInstance().GetMouseDown()) {
-            if (CheckMouseInBound(InputSystem::GetInstance().GetMouseDownRatioPos() , Object.get()->GetLocation(), Object.get()->GetScale())) {
+            if (CheckMouseInBound(InputSystem::GetInstance().GetMouseDownRatioPos() , Object->GetLocation(), Object->GetScale())) {
                 //위치 확인해서 펑션 ㄱㄱ
-                Object.get()->OnClick();
+                Object->OnClick();
             }
         }
-        Object.get()->Update(DeltaTime);
+        Object->Update(DeltaTime);
     }
 }
 
@@ -57,6 +57,6 @@ void UIManager::ProcessRender() const
     
     for (const auto Object : UIObjectsMap.at(( int ) sceneEnum))
     {
-        Object.get()->Render(*Renderer);
+        Object->Render(*Renderer);
     }
 }
