@@ -171,7 +171,33 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     UIObject* ui = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Title);
     ui->SetLocation(FVector3(0.0f , 0.5f , 0.0f));
     ui->SetScale(FVector3(1.0f , 0.5f , 0.2f)); //왜 y,z가 x,y인지???
-    ui->SetOnClickEvent([ ] () {std::cout << "click\n"; });
+    ui->SetOnClickEvent([ ] () {
+    	GameManager::GetInstance().ChangeScene<PresetScene>();
+		GameManager::GetInstance().GetCurrentScene()->SetName("PresetScene");
+    });
+
+    UIObject* ui1 = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Preset);
+    ui1->SetLocation(FVector3(0.0f, 0.5f, 0.0f));
+    ui1->SetScale(FVector3(1.0f, 0.5f, 0.2f)); //왜 y,z가 x,y인지???
+    ui1->SetOnClickEvent([ ] () {
+        GameManager::GetInstance().ChangeScene<MainGameScene>();
+        GameManager::GetInstance().GetCurrentScene()->SetName("MainGameScene");
+    });
+
+    UIObject* ui2 = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Result);
+    ui2->SetLocation(FVector3(0.0f, 0.5f, 0.0f));
+    ui2->SetScale(FVector3(1.0f, 0.5f, 0.2f)); //왜 y,z가 x,y인지???
+    ui2->SetOnClickEvent([ ] () {
+        GameManager::GetInstance().ChangeScene<TitleScene>();
+        GameManager::GetInstance().GetCurrentScene()->SetName("TitleScene");
+    });
+
+    UIObject* ui3 = UIManager::GetInstance().RegistUIObject<UIObject>(EScene::Result); //quit
+    ui3->SetLocation(FVector3(0.0f, -0.5f, 0.0f));
+    ui3->SetScale(FVector3(1.0f, 0.5f, 0.2f)); //왜 y,z가 x,y인지???
+    ui3->SetOnClickEvent([ ] () {
+        PostQuitMessage(0);
+    });
 
 	ObjectManager& objectManager = ObjectManager::GetInstance();
 	objectManager.Initialize(&Renderer);
