@@ -1,10 +1,11 @@
 ﻿#include "CircleObject.h"
 #include "URenderer.h"
+#include "Manager/ResourceManager.h"
 
 
 CircleObject::CircleObject(EWorld SelectedWorld)
     : MyWorld(SelectedWorld)
-	, Texture(UTexture2D::LoadTargaFromFile("Assets/Texture/default.tga"))
+	, Texture(ResourceManager::GetInstance().LoadTargaFromFile("Assets/Texture/default.tga"))
 {
 }
 

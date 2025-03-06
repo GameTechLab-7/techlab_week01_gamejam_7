@@ -59,7 +59,7 @@ public:
 
 protected:
 	EWorld MyWorld;
-	std::unique_ptr<UTexture2D> Texture;
+	std::shared_ptr<UTexture2D> Texture;
 
 	FVector3 Location;
 	FVector3 Velocity;
