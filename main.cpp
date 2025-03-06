@@ -26,6 +26,7 @@
 #include "Weapon/WeaponA.h"
 #include "Weapon/WeaponB.h"
 
+#include "BackGround.h"
 
 // ImGui WndProc 정의
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -174,6 +175,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
 	ObjectManager& objectManager = ObjectManager::GetInstance();
 	objectManager.Initialize(&Renderer);
+
+
+	std::unique_ptr<BackGround> backGround = std::make_unique<BackGround>();
+	
     // Main Loop
     bool bIsExit = false;
     while (bIsExit == false)
@@ -218,6 +223,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         Renderer.Prepare();
         Renderer.PrepareShader();
 
+        backGround->Render();
     	GameManager::GetInstance().GetCurrentScene()->Update(DeltaTime);
 		GameManager::GetInstance().GetCurrentScene()->Render();
         UIManager::GetInstance().Update(DeltaTime);
