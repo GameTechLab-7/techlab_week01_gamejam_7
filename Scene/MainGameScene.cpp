@@ -6,9 +6,11 @@
 #include "Weapon/WeaponA.h"
 #include "Weapon/WeaponB.h"
 #include "InputSystem.h"
+#include "Manager/AudioManager.h"
 
 void MainGameScene::LoadScene()
 {
+	AudioManager::GetInstance().PlayLoop(AudioType::PlayBackground);
 
 	InputHandlerInstance = std::make_unique<InputHandler>();
   

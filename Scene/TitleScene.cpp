@@ -2,10 +2,12 @@
 #include <Windows.h>
 #include "Scene/PresetScene.h"
 #include "Manager/GameManager.h"
+#include "Manager/AudioManager.h"
 
 
 void TitleScene::LoadScene()
 {
+	AudioManager::GetInstance().PlayLoop(AudioType::TitleBackground);
 }
 
 void TitleScene::ExitScene()

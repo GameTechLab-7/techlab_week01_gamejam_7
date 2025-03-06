@@ -1,9 +1,11 @@
 ﻿#include "PresetScene.h"
 #include "Manager/GameManager.h"
+#include "Manager/AudioManager.h"
 
 
 void PresetScene::LoadScene()
 {
+	AudioManager::GetInstance().PlayLoop(AudioType::PresetBackground);
 	GameManager::GetInstance().InitGameLogic();
 }
 

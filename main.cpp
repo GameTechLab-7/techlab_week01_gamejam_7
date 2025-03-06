@@ -176,6 +176,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	ObjectManager& objectManager = ObjectManager::GetInstance();
 	objectManager.Initialize(&Renderer);
 
+
 	std::unique_ptr<BackGround> backGround = std::make_unique<BackGround>();
 	
     // Main Loop
@@ -214,14 +215,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     	// FixedTimeStep 만큼 업데이트
     	while (Accumulator >= FixedTimeStep)
     	{
-			//FixedUpdate(FixedTimeStep); //마찬가지로 ObjectManager에 있는 FixedUpdate
-
-    		// 공 충돌 처리 -> 마찬가지로 ObjectManager에서
-    		//if (CircleObject::CheckCollision(*Balls[i], *Balls[j]))
-    		//{
-    		//	Balls[i]->HandleBallCollision(*Balls[j]);
-    		//}
-
     		Accumulator -= FixedTimeStep;
     	}
 
