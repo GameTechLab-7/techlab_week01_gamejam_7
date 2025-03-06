@@ -2,10 +2,10 @@
 #include "URenderer.h"
 #include "Constant.h"
 #include "Manager/GameManager.h"
-
+#include "GlobalData.h"
 Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
 {
-    Radius = 0.1f;
+    Radius = 0.05f;
     //const float x = rand() % 1 - MyWorld;
     //const float y = rand() % 2 - 1;
     Location = FVector3(0 , 0 , 0);
@@ -18,7 +18,7 @@ Player::Player(EWorld selectedWorld) : CircleObject(selectedWorld)
     Texture->SetPrimitiveType(EObjectType::Player);
 
     bIsHitInvisible = false;
-    HitInvisibleTime = 0.5f;
+    HitInvisibleTime = PLAYER_HIT_INVISIBLE_TIME;
 }
 
 // 이동 후 겹침 보정 (Monster, Player에 대해)

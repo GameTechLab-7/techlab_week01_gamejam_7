@@ -5,8 +5,8 @@
 #include "GameObject/Player.h"
 #include "Manager/ObjectManager.h"
 #include "MonsterSpawner.h"
+#include "GlobalData.h"
 
-const int LVUP_THRESHOLD = 100;
 
 class GameManager;
 
@@ -25,6 +25,7 @@ class GameLogic
 {
 private:
 	std::unordered_map<EWorld , PlayerState> PlayerStates;
+	int LvUpThreshold = BASE_LVUP_THRESHOLD;
 
 public:
 	GameLogic();

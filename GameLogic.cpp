@@ -1,6 +1,8 @@
 ﻿#include "GameLogic.h"
 #include "Manager/GameManager.h"
 #include "ResultScene.h"
+#include "GlobalData.h"
+#include "math.h"
 
 GameLogic::GameLogic()
 {
@@ -12,8 +14,10 @@ GameLogic::~GameLogic()
 
 void GameLogic::Init()
 {
-	PlayerStates[ First ] = { 0 , 0 , 0 , 1, 5, true };
-	PlayerStates[ Second ] = { 0 , 0 , 0 , 1, 5, true };
+	PlayerStates[ First ] = { 0 , 0 , 0 , 1, MAX_PLAYER_HP, true };
+	PlayerStates[ Second ] = { 0 , 0 , 0 , 1, MAX_PLAYER_HP, true };
+
+	LvUpThreshold = BASE_LVUP_THRESHOLD;
 }
 
 int GameLogic::GetPreset(EWorld World)
@@ -45,10 +49,11 @@ void GameLogic::AddScore(EWorld World , int Score)
 void GameLogic::AddExp(EWorld World , int exp)
 {
 	PlayerStates[ World ].Exp += exp;
-	if (PlayerStates[ World ].Exp >= LVUP_THRESHOLD)
+	if (PlayerStates[ World ].Exp >= LvUpThreshold)
 	{
-		PlayerStates[ World ].Lv += 1;
-		PlayerStates[ World ].Exp -= LVUP_THRESHOLD;
+		PlayerStates[ World ].Lv = min(PlayerStates[ World ].Lv + 1, MAX_LV);
+		PlayerStates[ World ].Exp -= LvUpThreshold;
+		LvUpThreshold += LVUP_THRESHOLD_INCREASE;
 		SetLevel(World, PlayerStates[ World ].Lv);
 	}
 }

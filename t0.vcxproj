@@ -147,6 +147,7 @@
     <ClCompile Include="GameObject\Monster.cpp" />
     <ClCompile Include="GameObject\Player.cpp" />
     <ClCompile Include="GameLogic.cpp" />
+    <ClCompile Include="GlobalData.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -168,12 +169,6 @@
     <ClCompile Include="Scene\TitleScene.cpp" />
     <ClCompile Include="Manager\UIManager.cpp" />
     <ClCompile Include="UIObject\UIObject.cpp" />
-    <ClCompile Include="Shaders\TextureShader.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Texture\UTexture2D.cpp" />
     <ClCompile Include="URenderer.cpp" />
     <ClCompile Include="Weapon\BaseWeapon.cpp" />
@@ -195,6 +190,7 @@
     <ClInclude Include="GameObject\Monster.h" />
     <ClInclude Include="GameObject\Player.h" />
     <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="GlobalData.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
