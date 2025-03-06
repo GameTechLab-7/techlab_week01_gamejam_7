@@ -30,5 +30,5 @@ enum EScene :uint8_t {
 	Title,
 	Preset,
 	MainGame,
-	End,
+	Result,
 };
