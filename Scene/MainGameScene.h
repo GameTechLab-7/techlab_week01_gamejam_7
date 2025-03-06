@@ -7,7 +7,7 @@
 class Player;
 class MonsterSpawner;
 
-class MainGameScene : public BaseScene
+class MainGameScene : public Scene<MainGame>
 {
 
 public:

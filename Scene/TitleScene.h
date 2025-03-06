@@ -2,7 +2,7 @@
 #include "BaseScene.h"
 
 
-class TitleScene : public BaseScene
+class TitleScene : public Scene<Title>
 {
     virtual void LoadScene() override;
     virtual void ExitScene() override;

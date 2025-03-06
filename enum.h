@@ -1,19 +1,18 @@
 ﻿#pragma once
 #include <cstdint>
 
-
 enum EWorld : uint8_t
 {
 	First,
 	Second,
 };
 
-
 enum class EObjectType : uint8_t
 {
 	Player = 0,
 	Enemy,
 	Bullet,
+	UI,
 
 	Max,
 };
@@ -25,4 +24,11 @@ enum Direction : uint8_t
 	Right ,
 	Top ,
 	Bottom ,
+};
+
+enum EScene :uint8_t {
+	Title,
+	Preset,
+	MainGame,
+	Result,
 };

@@ -5,6 +5,7 @@
 #include "ImGui/imgui_impl_win32.h"
 #include "ImGui/imgui_impl_dx11.h"
 
+#include "Enum.h"
 
 class BaseScene
 {
@@ -26,8 +27,18 @@ public:
 	std::string GetName() const { return Name; }
 	void SetName(const char* name) { Name = name; }
 
+	virtual EScene GetCurrentSceneEnum() const = 0;
+
+
 protected:
 	std::string Name;
 
 };
 
+template <EScene SceneType>
+class Scene : public BaseScene {
+public:
+	virtual EScene GetCurrentSceneEnum() const override {
+		return SceneType;
+	}
+};

@@ -2,7 +2,7 @@
 #include "Scene/BaseScene.h"
 
 class ResultScene :
-    public BaseScene
+    public Scene<Result>
 {
     // BaseScene을(를) 통해 상속됨
     void LoadScene() override;

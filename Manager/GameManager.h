@@ -48,6 +48,8 @@ public:
 
 	EWorld DeadPlayerWorld = EWorld::First;
     
+    EScene GetCurrentSceneEnum() { return CurrentScene->GetCurrentSceneEnum(); }
+
 };
 
 template <typename Scene>

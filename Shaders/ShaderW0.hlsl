@@ -7,7 +7,7 @@
 cbuffer constants : register(b0)
 {
     float3 Offset;
-    float Scale;
+    float3 Scale;
     float Radian;
     float Padding;
     int bIsHit;
@@ -35,8 +35,8 @@ PS_INPUT mainVS(VS_INPUT input)
     float c = cos(Radian);
     float s = sin(Radian);
     
-    float x = (input.position.x * c - input.position.y * s) * Scale + Offset.x;
-    float y = (input.position.x * s + input.position.y * c) * Scale + Offset.y;
+    float x = (input.position.x * c - input.position.y * s) * Scale.x + Offset.x;
+    float y = (input.position.x * s + input.position.y * c) * Scale.y + Offset.y;
         
     // 상수버퍼를 통해 넘겨 받은 Scale을 곱하고 Offset을 더해서 픽셀쉐이더로 넘김
     output.position = float4(x, y, input.position.z, input.position.w);

@@ -41,6 +41,8 @@ public:
     /** 셰이더를 준비 합니다. */
     void PrepareShader() const;
     void PrepareViewport(EWorld World) const;
+    void PrepareUIViewport() const;
+
     
     ID3D11Buffer* CreateVertexBuffer(const FVertexSimple* Vertices, UINT ByteWidth) const;
 
@@ -55,7 +57,8 @@ public:
     void ReleaseVertexBuffer(ID3D11Buffer* pBuffer) const;
 
     /** Constant Data를 업데이트 합니다. */
-    void UpdateConstant(const FVector3& Offset, float Scale, float Radian, bool bIsHit = false) const;
+    void UpdateConstant(const FVector3& Offset , FVector3 Scale , float Radian) const;
+    void UpdateConstant(const FVector3& Offset, float Scale, float Radian) const;
 
 public:
     /*버텍스버퍼 가져오기*/
@@ -101,6 +104,7 @@ protected:
     FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f }; // 화면을 초기화(clear)할 때 사용할 색상 (RGBA)
 
     std::unordered_map<EWorld , D3D11_VIEWPORT> viewports;  // 렌더링 영역을 정의하는 뷰포트 정보
+    D3D11_VIEWPORT UIViewPort;
 
     // Texture를 렌더링할 때 사용되는 변수들
     ID3D11VertexShader* TextureVertexShader = nullptr;      // Vertex 데이터를 처리하는 Vertex 셰이더
