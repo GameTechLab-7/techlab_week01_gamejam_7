@@ -3,7 +3,8 @@
 struct FVertexSimple
 {
 	float x , y , z;    // Position
-	float r , g , b , a; // Color
+	float u, v;
+	// float r , g , b , a; // Color
 };
 
 extern FVertexSimple cube_vertices[36];

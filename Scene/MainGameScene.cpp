@@ -204,8 +204,8 @@ Player* MainGameScene::GetPlayer(EWorld WorldType) const
 
 
 FVertexSimple LineVertices[ ] = {
-	{1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
-	{1.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f},
+	{1.0f, -1.0f, 0.0f, 1.0f, -1.0f},
+	{1.0f, 1.0f, 0.0f, 1.0f, 1.0f},
 };
 
 void MainGameScene::RenderWall(URenderer* Renderer) {
