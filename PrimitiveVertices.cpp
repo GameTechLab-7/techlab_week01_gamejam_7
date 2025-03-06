@@ -8,12 +8,13 @@ FVertexSimple triangle_vertices[] =
 };
 
 FVertexSimple square_vertices[ ] = {
-	{-1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f}, //top left
-	{-1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
-	{1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
-	{1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
-	{1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
-	{-1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f},
+	// Position (x, y, z), Color (r, g, b, a), Texture Coordinates (u, v)
+	{-1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f}, // Bottom-left
+	{-1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f}, // Top-left
+	{ 1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f}, // Top-right
+	{ 1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f}, // Top-right (duplicate)
+	{ 1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f}, // Bottom-right
+	{-1.0f, -1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f}  // Bottom-left (duplicate)
 };
 
 FVertexSimple cube_vertices[] =
